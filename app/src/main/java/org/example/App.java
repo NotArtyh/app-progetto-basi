@@ -3,12 +3,45 @@
  */
 package org.example;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import org.example.database.DatabaseManager;
+import org.example.model.Model;
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+
+public class App {
+    public static void main(String[] args) throws Exception {
+        // var connection = DatabaseManager.remoteConnection("BEL", "root",
+        // "cazzineri");
+        // Statement st = connection.createStatement();
+        // ResultSet rs = st.executeQuerry.
+
+        String sql = "select * from DATI_ANAGRAFICI";
+
+        String url = "jdbc:mysql://100.66.102.13:3306/BEL";
+        String username = "root";
+        String password = "cazzineri";
+
+        Connection con = DriverManager.getConnection(url, username, password);
+        java.sql.Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        while (rs.next()) {
+            StringBuilder row = new StringBuilder();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = metaData.getColumnName(i);
+                String columnValue = rs.getString(i);
+                row.append(columnName).append(": ").append(columnValue);
+                if (i < columnCount)
+                    row.append(", ");
+            }
+            System.out.println(row.toString());
+        }
     }
 }
