@@ -1,55 +1,13 @@
 package org.example;
 
-import org.example.database.DatabaseManager;
-import org.example.model.Model;
+import java.util.Scanner;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-public class App {
-    public static void main(String[] args) throws SQLException {
-        // Basic sql querry
-        String sql = "select * from DATI_ANAGRAFICI";
-
-        // We first test if we can connect to the db
-        if (!DatabaseManager.testConnection()) {
-            System.out.println("Exiting due to connection failure");
-            return;
-        }
-        
-        Connection connection = DatabaseManager.getConnection();
-
-        // We should actually prepare it to avoid sql injection
-        // [todo] add to DatabaseManager method for preparing a statement
-        Statement statement = connection.createStatement(); 
-        ResultSet result = statement.executeQuery(sql);
-
-        ResultSetMetaData metaData = result.getMetaData();
-        int columnCount = metaData.getColumnCount();
-
-        // We loop over the result to print the outcome of said sql querry
-        while (result.next()) {
-            StringBuilder row = new StringBuilder();
-            for (int i = 1; i <= columnCount; i++) {
-                String columnName = metaData.getColumnName(i);
-                String columnValue = result.getString(i);
-                row.append(columnName).append(": ").append(columnValue);
-                if (i < columnCount)
-                    row.append(", ");
-            }
-            System.out.println(row.toString());
-        }
-    }
-}
-
-
+import org.example.controller.UserController;
+import org.example.database.UserDAO;
+import org.example.view.UserView;
 
 
 // Main Application
-import java.util.Scanner;
 
 public class App {
     
@@ -71,13 +29,20 @@ public class App {
                 
                 switch (choice) {
                     case 1:
-                        System.out.print("Enter name: ");
-                        String name = scanner.nextLine();
-                        System.out.print("Enter email: ");
-                        String email = scanner.nextLine();
-                        System.out.print("Enter age: ");
-                        int age = scanner.nextInt();
-                        userController.createUser(name, email, age);
+                        System.out.print("Enter first int parameter: ");
+                        int param1 = scanner.nextInt();
+                        System.out.print("Enter second int parameter: ");
+                        int param2 = scanner.nextInt();
+                        System.out.print("Enter third int parameter: ");
+                        int param3 = scanner.nextInt();
+                        scanner.nextLine(); // consume newline
+                        System.out.print("Enter first string parameter: ");
+                        String param4 = scanner.nextLine();
+                        System.out.print("Enter second string parameter: ");
+                        String param5 = scanner.nextLine();
+                        System.out.print("Enter third string parameter: ");
+                        String param6 = scanner.nextLine();
+                        userController.createUser(param1, param2, param3, param4, param5, param6);
                         break;
                         
                     case 2:
@@ -91,16 +56,23 @@ public class App {
                         break;
                         
                     case 4:
-                        System.out.print("Enter user ID to update: ");
+                        System.out.print("Enter first int parameter (user ID to update): ");
                         int updateId = scanner.nextInt();
-                        scanner.nextLine();
-                        System.out.print("Enter new name: ");
-                        String newName = scanner.nextLine();
-                        System.out.print("Enter new email: ");
-                        String newEmail = scanner.nextLine();
-                        System.out.print("Enter new age: ");
-                        int newAge = scanner.nextInt();
-                        userController.updateUser(updateId, newName, newEmail, newAge);
+                        System.out.print("Enter second int parameter: ");
+                        int param21 = scanner.nextInt();
+                        System.out.print("Enter third int parameter: ");
+                        int param31 = scanner.nextInt();
+                        scanner.nextLine(); // consume newline
+                        System.out.print("Enter first string parameter: ");
+                        String param41 = scanner.nextLine();
+                        System.out.print("Enter second string parameter: ");
+                        String param51 = scanner.nextLine();
+                        System.out.print("Enter third string parameter: ");
+                        String param61 = scanner.nextLine();
+                        System.out.print("Enter fourth int parameter: ");
+                        int param11 = scanner.nextInt();
+                        scanner.nextLine(); // consume newline
+                        userController.updateUser(updateId, param21, param31, param11, param41, param51, param61);
                         break;
                         
                     case 5:

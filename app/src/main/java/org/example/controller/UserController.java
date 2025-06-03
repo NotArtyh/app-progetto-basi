@@ -1,17 +1,18 @@
-package controller;
+package org.example.controller;
 
-import dao.UserDAO;
-import model.User;
-import view.UserView;
 import java.sql.SQLException;
 import java.util.List;
+
+import org.example.database.UserDAO;
+import org.example.model.User;
+import org.example.view.UserView;
 
 /**
  * User Controller Class
  * Handles business logic and coordinates between Model and View
  */
 public class UserController {
-    private User userDAO;
+    private UserDAO userDAO;
     private UserView userView;
     
     /**
@@ -22,6 +23,12 @@ public class UserController {
     public UserController(UserDAO userDAO, UserView userView) {
         this.userDAO = userDAO;
         this.userView = userView;
+        /**
+         * Validate email format using a simple regex
+         * @param email Email address to validate
+         * @return true if email is valid, false otherwise
+         */
+        
     }
     
     /**
@@ -272,4 +279,9 @@ public class UserController {
             userView.displayError("Error retrieving user statistics");
         }
     }
+
+    private boolean isValidEmail(String email) {
+            // Simple regex for demonstration; consider using more robust validation if needed
+            return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+        }
 }

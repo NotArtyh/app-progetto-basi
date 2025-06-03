@@ -1,8 +1,10 @@
 package org.example.database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-public class DatabaseManager {
+public class DatabaseConnection {
     
     private static final String URL = "jdbc:mysql://100.66.102.13:3306/BEL";
     private static final String USERNAME = "root";
@@ -23,3 +25,4 @@ public class DatabaseManager {
         }
     }
 }
+

@@ -1,7 +1,8 @@
-package view;
+package org.example.view;
 
-import model.User;
 import java.util.List;
+
+import org.example.model.User;
 
 /**
  * User View Class

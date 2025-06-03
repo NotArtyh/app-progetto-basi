@@ -1,5 +1,4 @@
 package org.example.model;
-package model;
 
 /**
  * User Entity Class
