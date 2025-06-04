@@ -3,12 +3,10 @@ package org.example;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-
 import org.example.database.*;
 import org.example.view.*;
 import org.example.controller.*;
 import org.example.model.*;
-
 
 /**
  * Main Application with Swing GUI
@@ -23,11 +21,10 @@ public class App {
 
     private PersonalDataDAO personalDataDAO;
     private PersonalDataController personalDataController;
-    
+
     private InventoryDAO inventoryDAO;
     private InventoryController inventoryController;
-    
-    
+
     public App() {
         // Initialize components
         userDAO = new UserDAO();
@@ -117,13 +114,15 @@ public class App {
                 return;
 
             String password = UserView.getUserInput("Enter Password:");
-            if (password == null || password.trim().isEmpty()) return;
-            
+            if (password == null || password.trim().isEmpty())
+                return;
+
             // Call controller method
-            personalDataController.createPersonalData(nome, cognome, sesso, telefono, stato_residenza, provincia, cap, via, civico);
+            personalDataController.createPersonalData(nome, cognome, sesso, telefono, stato_residenza, provincia, cap,
+                    via, civico);
             inventoryController.createInventory();
-            //userController.createUser(username, email, password);
-            
+            // userController.createUser(username, email, password);
+
         } catch (NumberFormatException e) {
             UserView.displayError("Invalid number format. Please enter valid integers for ID fields.");
         } catch (Exception e) {

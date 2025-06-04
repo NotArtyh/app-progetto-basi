@@ -9,9 +9,15 @@ public class Inventory {
     private boolean pubblico;
     private boolean tipo;
 
-    //Default Constructor
-    public Inventory() {}
-    
+    public Inventory() {
+        this.pubblico = true;
+        this.tipo = true;
+    }
+
+    public Inventory(boolean pubblico, boolean tipo) {
+        this.pubblico = pubblico;
+        this.tipo = tipo;
+    }
 
     public Inventory(int inventoryId, boolean pubblico, boolean tipo) {
         this.inventoryId = inventoryId;
