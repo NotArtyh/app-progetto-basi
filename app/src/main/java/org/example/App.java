@@ -56,16 +56,34 @@ public class App {
      */
     private void handleRegisterUser() {
         try {
-            // Get user input through dialogs
-            String userIdStr = UserView.getUserInput("Enter User ID (integer):");
-            if (userIdStr == null || userIdStr.trim().isEmpty()) return;
+           
+            String nome = UserView.getUserInput("Enter Nome:");
+            if (nome == null || nome.trim().isEmpty()) return;
+
+            String cognome = UserView.getUserInput("Enter Cognome:");
+            if (cognome == null || cognome.trim().isEmpty()) return;
             
-            String personaIdStr = UserView.getUserInput("Enter Persona ID (integer):");
-            if (personaIdStr == null || personaIdStr.trim().isEmpty()) return;
-            
-            String inventoryIdStr = UserView.getUserInput("Enter Inventory ID (integer):");
-            if (inventoryIdStr == null || inventoryIdStr.trim().isEmpty()) return;
-            
+            String sesso = UserView.getUserInput("Enter Sesso (M/F):");
+            if (sesso == null || sesso.trim().isEmpty()) return;
+
+            String telefono = UserView.getUserInput("Enter Numero di Telefono:");
+            if (telefono == null || telefono.trim().isEmpty()) return;
+
+            String stato_residenza = UserView.getUserInput("Enter Stato di Residenza:");
+            if (stato_residenza == null || stato_residenza.trim().isEmpty()) return;
+
+            String provincia = UserView.getUserInput("Enter Provincia:");
+            if (provincia == null || provincia.trim().isEmpty()) return;
+
+            String cap = UserView.getUserInput("Enter CAP:");
+            if (cap == null || cap.trim().isEmpty()) return;
+
+            String via = UserView.getUserInput("Enter Via:");
+            if (via == null || via.trim().isEmpty()) return;
+
+            String civico = UserView.getUserInput("Enter Numero civico:");
+            if (civico == null || civico.trim().isEmpty()) return;
+
             String username = UserView.getUserInput("Enter Username:");
             if (username == null || username.trim().isEmpty()) return;
             
@@ -75,10 +93,7 @@ public class App {
             String password = UserView.getUserInput("Enter Password:");
             if (password == null || password.trim().isEmpty()) return;
             
-            // Parse integers
-            int userId = Integer.parseInt(userIdStr.trim());
-            int personaId = Integer.parseInt(personaIdStr.trim());
-            int inventoryId = Integer.parseInt(inventoryIdStr.trim());
+            // DA SISTEMARE IL MODO IN CUI LA REGISTRAZIONE NON CREA ID 
             
             // Call controller method
             userController.createUser(userId, personaId, inventoryId, username, email, password);

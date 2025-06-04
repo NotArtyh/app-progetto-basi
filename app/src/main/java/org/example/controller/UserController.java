@@ -78,9 +78,6 @@ public class UserController {
         }
     }
     
-
-
-    
     /**
      * Display all users in table format
      */
@@ -94,8 +91,6 @@ public class UserController {
             userView.displayError("Unexpected error: " + e.getMessage());
         }
     }
-    
-
     
     /**
      * Update user information
@@ -149,9 +144,7 @@ public class UserController {
             userView.displayError("Unexpected error: " + e.getMessage());
         }
     }
-    
 
-    
     /**
      * Authenticate user
      * @param username Username
@@ -174,43 +167,6 @@ public class UserController {
             
         } catch (SQLException e) {
             userView.displayError("Error during authentication: " + e.getMessage());
-        } catch (Exception e) {
-            userView.displayError("Unexpected error: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Get user statistics
-     */
-    public void displayUserStatistics() {
-        try {
-            List<User> allUsers = userDAO.getAllUsers();
-            
-            if (allUsers.isEmpty()) {
-                userView.displayMessage("No users in the system.");
-                return;
-            }
-            
-            // Calculate statistics
-            int totalUsers = allUsers.size();
-            int maxLevel = allUsers.stream().mapToInt(User::getLivello).max().orElse(0);
-            int minLevel = allUsers.stream().mapToInt(User::getLivello).min().orElse(0);
-            double avgLevel = allUsers.stream().mapToInt(User::getLivello).average().orElse(0.0);
-            
-            StringBuilder stats = new StringBuilder();
-            stats.append("══════════════════════════════════════\n");
-            stats.append("           USER STATISTICS\n");
-            stats.append("══════════════════════════════════════\n");
-            stats.append("Total Users: ").append(totalUsers).append("\n");
-            stats.append("Highest Level: ").append(maxLevel).append("\n");
-            stats.append("Lowest Level: ").append(minLevel).append("\n");
-            stats.append(String.format("Average Level: %.2f%n", avgLevel));
-            stats.append("══════════════════════════════════════\n");
-            
-            userView.displayMessage(stats.toString());
-            
-        } catch (SQLException e) {
-            userView.displayError("Error retrieving user statistics: " + e.getMessage());
         } catch (Exception e) {
             userView.displayError("Unexpected error: " + e.getMessage());
         }

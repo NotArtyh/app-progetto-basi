@@ -49,8 +49,13 @@ public class PersonalData{
     public int getPersonaId() { 
         return personaId; 
     }
+    public void setPersonaId(int personaId) { 
+        this.personaId = personaId; 
+    }
     
-    
+
+
+
     public String getNome() {
         return nome;
     }
