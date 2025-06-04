@@ -42,5 +42,6 @@ public class App {
             }
             System.out.println(row.toString());
         }
+        result.close();
     }
 }
