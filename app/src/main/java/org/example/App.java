@@ -132,7 +132,6 @@ public class App {
         } catch (Exception e) {
             UserView.displayError("Error during user registration: " + e.getMessage());
         }
-        result.close();
     }
 
     /**
