@@ -20,7 +20,7 @@ public class PersonalDataDAO {
      * @throws SQLException if database operation fails
      */
     public void createPerson(PersonalData person) throws SQLException {
-        String sql = "INSERT INTO DATI_ANAGRAFICI (Nome , Cognome , Sesso , Telefono , Stato , Provincia , CAP, Via_Viale_Piazza, Numero_civico) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ?)";
+        String sql = "INSERT INTO DATI_ANAGRAFICI (Nome , Cognome , Sesso , Telefono , Stato_residenza , Provincia , CAP, Via_Viale_Piazza, Numero_civico) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -37,13 +37,13 @@ public class PersonalDataDAO {
     
             int rowsAffected = stmt.executeUpdate();
             
-            if (rowsAffected > 0) {
-                try (ResultSet rs = stmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        person.setPersonaId(rs.getInt(1));
-                    }
-                }
-            }
+            // if (rowsAffected > 0) {
+            //     try (ResultSet rs = stmt.getGeneratedKeys()) {
+            //         if (rs.next()) {
+            //             person.setPersonaId(rs.getInt(1));
+            //         }
+            //     }
+            // }
         }
     }
 }

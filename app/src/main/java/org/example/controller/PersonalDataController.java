@@ -19,16 +19,17 @@ public class PersonalDataController {
      * @param personalDataDAO Data Access Object for person
      * @param personalDataView View for personal data interface
      */
+    public PersonalDataController(PersonalDataDAO personalDataDAO, UserView personalDataView) {
+        this.personalDataDAO = personalDataDAO;
+        this.personalDataView = personalDataView;
+    }
 
-    
     /**
      * Create a new person
      */
 
     public void createPersonalData(String nome, String cognome, String sesso, String telefono, String stato, String provincia, String cap, String via, String civico) {
         try {
-            
-            
             // Validate input
             if (nome == null || nome.trim().isEmpty()) {
                 personalDataView.displayError("nome cannot be empty.");
