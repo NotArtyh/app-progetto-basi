@@ -19,7 +19,7 @@ public class PersonalDataController {
      * @param personalDataDAO Data Access Object for person
      * @param personalDataView View for personal data interface
      */
-    
+
     
     /**
      * Create a new person
@@ -79,13 +79,11 @@ public class PersonalDataController {
             }
         
             
-            // Create personaldata
+            // Create person
             PersonalData person;
 
-            // Assuming the correct constructor is: PersonalData(int id, String nome, String cognome, String sesso, String telefono, String provincia, String stato, String cap, String via, String civico)
-            // If id is auto-generated, you can pass 0 or -1 as a placeholder
-            person = new PersonalData(0, nome, cognome, sesso, telefono, provincia, stato, cap, via, civico);
-            
+        
+            person = new PersonalData(nome, cognome, sesso, telefono, provincia, stato, cap, via, civico);
             
             personalDataDAO.createPerson(person);
             personalDataView.displayMessage("User created successfully with ID: " + person.getPersonaId());

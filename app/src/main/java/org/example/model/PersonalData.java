@@ -33,12 +33,13 @@ public class PersonalData{
         this.civico = civico;
     }
     
-    //Without personaId (for creating new data)
-    public PersonalData(String nome,  String cognome, String sesso, String telefono, String stato_residenza, String cap, String via, String civico) {
+    // Constructor without personaId (for creating new data)
+    public PersonalData(String nome,  String cognome, String sesso, String telefono, String provincia, String stato_residenza, String cap, String via, String civico) {
         this.nome = nome;
         this.cognome = cognome;
         this.sesso = sesso;
         this.telefono = telefono;
+        this.provincia = provincia;
         this.stato_residenza = stato_residenza;
         this.cap = cap;
         this.via = via;

@@ -111,7 +111,6 @@ public class App {
         }
     }
     
-    
     /**
      * Handle view all users (table format)
      */
