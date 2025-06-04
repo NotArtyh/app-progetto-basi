@@ -3,11 +3,12 @@ package org.example;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import org.example.controller.UserController;
-import org.example.controller.PersonalDataController;
-import org.example.database.UserDAO;
-import org.example.database.PersonalDataDAO;
-import org.example.view.UserView;
+
+import org.example.database.*;
+import org.example.view.*;
+import org.example.controller.*;
+import org.example.model.*;
+
 
 /**
  * Main Application with Swing GUI
@@ -15,13 +16,18 @@ import org.example.view.UserView;
  */
 public class App {
 
-    private UserDAO userDAO;
     private UserView UserView;
-    private PersonalDataDAO personalDataDAO;
 
+    private UserDAO userDAO;
     private UserController userController;
-    private PersonalDataController personalDataController;
 
+    private PersonalDataDAO personalDataDAO;
+    private PersonalDataController personalDataController;
+    
+    private InventoryDAO inventoryDAO;
+    private InventoryController inventoryController;
+    
+    
     public App() {
         // Initialize components
         userDAO = new UserDAO();
@@ -109,14 +115,18 @@ public class App {
                 return;
 
             String password = UserView.getUserInput("Enter Password:");
-            if (password == null || password.trim().isEmpty())
-                return;
-
+            if (password == null || password.trim().isEmpty()) return;
+            
+            String pubblicoInput = UserView.getUserInput("Segna come pubblico o privato (0-1):");
+            if (pubblicoInput == null || pubblicoInput.trim().isEmpty()) return;
+            Boolean pubblico = pubblicoInput.trim().equals("1");
+            
+            
             // Call controller method
-            personalDataController.createPersonalData(nome, cognome, sesso, telefono, stato_residenza, provincia, cap,
-                    via, civico);
-            // userController.createUser(username, email, password);
-
+            personalDataController.createPersonalData(nome, cognome, sesso, telefono, stato_residenza, provincia, cap, via, civico);
+            //inventoryController.createInventory(pubblico);
+            //userController.createUser(username, email, password);
+            
         } catch (NumberFormatException e) {
             UserView.displayError("Invalid number format. Please enter valid integers for ID fields.");
         } catch (Exception e) {
