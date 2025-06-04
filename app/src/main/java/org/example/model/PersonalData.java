@@ -10,6 +10,7 @@ public class PersonalData{
     private String cognome;
     private String sesso;
     private String telefono;
+    private String provincia;
     private String stato_residenza;
     private String cap;
     private String via;
@@ -19,12 +20,13 @@ public class PersonalData{
     public PersonalData() {}
     
     // Full Constructor (for existing data)
-    public PersonalData(int personaId, String nome,  String cognome, String sesso, String telefono, String stato_residenza, String cap, String via, String civico) {
+    public PersonalData(int personaId, String nome,  String cognome, String sesso, String telefono, String provincia, String stato_residenza, String cap, String via, String civico) {
         this.personaId = personaId;
         this.nome = nome;
         this.cognome = cognome;
         this.sesso = sesso;
         this.telefono = telefono;
+        this.provincia = provincia;
         this.stato_residenza = stato_residenza;
         this.cap = cap;
         this.via = via;
@@ -81,9 +83,19 @@ public class PersonalData{
         this.telefono = telefono;
     }
 
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+
     public String getStato_residenza() {
         return stato_residenza;
     }
+
 
     public void setStato_residenza(String stato_residenza) {
         this.stato_residenza = stato_residenza;
@@ -114,7 +126,7 @@ public class PersonalData{
     }
 
   
-        @Override
+
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
