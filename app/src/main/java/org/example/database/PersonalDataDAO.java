@@ -20,21 +20,20 @@ public class PersonalDataDAO {
      * @throws SQLException if database operation fails
      */
     public void createPerson(PersonalData person) throws SQLException {
-        String sql = "INSERT INTO DATI_ANAGRAFICI (Persona_id, Nome , Cognome , Sesso , Telefono , Stato , Provincia , CAP, Via_Viale_Piazza, Numero_civico) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ?)";
+        String sql = "INSERT INTO DATI_ANAGRAFICI (Nome , Cognome , Sesso , Telefono , Stato , Provincia , CAP, Via_Viale_Piazza, Numero_civico) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             
-            stmt.setInt(1, person.getPersonaId());
-            stmt.setString(2, person.getNome());
-            stmt.setString(3, person.getCognome());
-            stmt.setString(4, person.getSesso());
-            stmt.setString(5, person.getTelefono());
-            stmt.setString(6, person.getStato_residenza());
-            stmt.setString(7, person.getProvincia());
-            stmt.setString(8, person.getCap());
-            stmt.setString(9, person.getVia());
-            stmt.setString(10, person.getCivico());
+            stmt.setString(1, person.getNome());
+            stmt.setString(2, person.getCognome());
+            stmt.setString(3, person.getSesso());
+            stmt.setString(4, person.getTelefono());
+            stmt.setString(5, person.getStato_residenza());
+            stmt.setString(6, person.getProvincia());
+            stmt.setString(7, person.getCap());
+            stmt.setString(8, person.getVia());
+            stmt.setString(9, person.getCivico());
     
             int rowsAffected = stmt.executeUpdate();
             

@@ -4,7 +4,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.example.controller.UserController;
+import org.example.controller.PersonalDataController;
 import org.example.database.UserDAO;
+import org.example.database.PersonalDataDAO;
 import org.example.view.UserView;
 
 /**
@@ -15,7 +17,11 @@ public class App {
     
     private UserDAO userDAO;
     private UserView UserView;
+    private PersonalDataDAO personalDataDAO;
+
+
     private UserController userController;
+    private PersonalDataController personalDataController;
     
     public App() {
         // Initialize components
@@ -72,7 +78,7 @@ public class App {
             String stato_residenza = UserView.getUserInput("Enter Stato di Residenza:");
             if (stato_residenza == null || stato_residenza.trim().isEmpty()) return;
 
-            String provincia = UserView.getUserInput("Enter Provincia:");
+            String provincia = UserView.getUserInput("Enter Provincia (es. PU):");
             if (provincia == null || provincia.trim().isEmpty()) return;
 
             String cap = UserView.getUserInput("Enter CAP:");
@@ -93,10 +99,10 @@ public class App {
             String password = UserView.getUserInput("Enter Password:");
             if (password == null || password.trim().isEmpty()) return;
             
-            // DA SISTEMARE IL MODO IN CUI LA REGISTRAZIONE NON CREA ID 
             
             // Call controller method
-            userController.createUser(userId, personaId, inventoryId, username, email, password);
+            personalDataController.createPersonalData(nome, cognome, sesso, telefono, stato_residenza, provincia, cap, via, civico);
+            //userController.createUser(username, email, password);
             
         } catch (NumberFormatException e) {
             UserView.displayError("Invalid number format. Please enter valid integers for ID fields.");

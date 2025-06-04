@@ -1,37 +1,31 @@
 package org.example.controller;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import org.example.database.PersonalDataDAO;
 import org.example.model.PersonalData;
-import org.example.view.PersonalDataView;
+import org.example.view.UserView;
 
 /**
- * PerosonalData Controller Class
+ * PersonalData Controller Class
  * Handles business logic and coordinates between Model and View
  */
 public class PersonalDataController {
     private PersonalDataDAO personalDataDAO;
-    private PersonalDataView personalDataView;
+    private UserView personalDataView;
     
     /**
      * Constructor
      * @param personalDataDAO Data Access Object for person
      * @param personalDataView View for personal data interface
      */
-    public PersonalDataController(PersonalDataDAO personalDataDAO, PersonalDataView personalDataView) {
-        this.personalDataDAO = personalDataDAO;
-        this.personalDataView = personalDataView;
-    }
-
-    }
+    
     
     /**
      * Create a new person
      */
 
-    public void createPersonalData(int personaId, String nome, String cognome, String sesso, String telefono, String stato, String provincia, String cap, String via, String civico) {
+    public void createPersonalData(String nome, String cognome, String sesso, String telefono, String stato, String provincia, String cap, String via, String civico) {
         try {
             
             
@@ -42,7 +36,7 @@ public class PersonalDataController {
             }
 
             // Validate input
-            if (cognome == null || congome.trim().isEmpty()) {
+            if (cognome == null || cognome.trim().isEmpty()) {
                 personalDataView.displayError("cognome cannot be empty.");
                 return;
             }
@@ -88,11 +82,13 @@ public class PersonalDataController {
             // Create personaldata
             PersonalData person;
 
-            person = new PersonalData(nome, cognome, sesso, telefono, provincia, stato, cap, via, civico);
+            // Assuming the correct constructor is: PersonalData(int id, String nome, String cognome, String sesso, String telefono, String provincia, String stato, String cap, String via, String civico)
+            // If id is auto-generated, you can pass 0 or -1 as a placeholder
+            person = new PersonalData(0, nome, cognome, sesso, telefono, provincia, stato, cap, via, civico);
             
             
             personalDataDAO.createPerson(person);
-            personalDataView.displayMessage("User created successfully with ID: " + user.getPersonaId());
+            personalDataView.displayMessage("User created successfully with ID: " + person.getPersonaId());
             
         } catch (SQLException e) {
             personalDataView.displayError("Error creating user: " + e.getMessage());
@@ -100,7 +96,7 @@ public class PersonalDataController {
             personalDataView.displayError("Unexpected error: " + e.getMessage());
         }
     }
-    
+}
 
     
 
