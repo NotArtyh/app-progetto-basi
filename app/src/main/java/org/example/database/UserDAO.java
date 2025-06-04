@@ -23,7 +23,7 @@ public class UserDAO {
      * @throws SQLException if database operation fails
      */
     public void createUser(User user) throws SQLException {
-        String sql = "INSERT INTO DATI_UTENTE (Persona_id, Inventory_id, Livello, Username, PasswordUte, Email) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO DATI_UTENTE (Persona_id, Inventory_id, Livello, Username, PasswordUtente, Email) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -32,7 +32,7 @@ public class UserDAO {
             stmt.setInt(2, user.getInventoryId());
             stmt.setInt(3, user.getLivello());
             stmt.setString(4, user.getUsername());
-            stmt.setString(5, user.getPasswordUte());
+            stmt.setString(5, user.getPasswordUtente());
             stmt.setString(6, user.getEmail());
             
             int rowsAffected = stmt.executeUpdate();
@@ -69,7 +69,7 @@ public class UserDAO {
                         rs.getInt("Inventory_id"),
                         rs.getInt("Livello"),
                         rs.getString("Username"),
-                        rs.getString("PasswordUte"),
+                        rs.getString("PasswordUtente"),
                         rs.getString("Email")
                     );
                 }
@@ -100,7 +100,7 @@ public class UserDAO {
                         rs.getInt("Inventory_id"),
                         rs.getInt("Livello"),
                         rs.getString("Username"),
-                        rs.getString("PasswordUte"),
+                        rs.getString("PasswordUtente"),
                         rs.getString("Email")
                     );
                 }
@@ -129,7 +129,7 @@ public class UserDAO {
                     rs.getInt("Inventory_id"),
                     rs.getInt("Livello"),
                     rs.getString("Username"),
-                    rs.getString("PasswordUte"),
+                    rs.getString("PasswordUtente"),
                     rs.getString("Email")
                 ));
             }
@@ -160,7 +160,7 @@ public class UserDAO {
                         rs.getInt("Inventory_id"),
                         rs.getInt("Livello"),
                         rs.getString("Username"),
-                        rs.getString("PasswordUte"),
+                        rs.getString("PasswordUtente"),
                         rs.getString("Email")
                     ));
                 }
@@ -175,7 +175,7 @@ public class UserDAO {
      * @throws SQLException if database operation fails
      */
     public void updateUser(User user) throws SQLException {
-        String sql = "UPDATE DATI_UTENTE SET Persona_id = ?, Inventory_id = ?, Livello = ?, Username = ?, PasswordUte = ?, Email = ? WHERE User_id = ?";
+        String sql = "UPDATE DATI_UTENTE SET Persona_id = ?, Inventory_id = ?, Livello = ?, Username = ?, PasswordUtente = ?, Email = ? WHERE User_id = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -184,7 +184,7 @@ public class UserDAO {
             stmt.setInt(2, user.getInventoryId());
             stmt.setInt(3, user.getLivello());
             stmt.setString(4, user.getUsername());
-            stmt.setString(5, user.getPasswordUte());
+            stmt.setString(5, user.getPasswordUtente());
             stmt.setString(6, user.getEmail());
             stmt.setInt(7, user.getUserId());
             
@@ -234,7 +234,7 @@ public class UserDAO {
      * @throws SQLException if database operation fails
      */
     public boolean authenticateUser(String username, String password) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM DATI_UTENTE WHERE Username = ? AND PasswordUte = ?";
+        String sql = "SELECT COUNT(*) FROM DATI_UTENTE WHERE Username = ? AND PasswordUtente = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

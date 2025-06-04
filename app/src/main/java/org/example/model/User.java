@@ -10,30 +10,30 @@ public class User {
     private int inventoryId;
     private int livello;
     private String username;
-    private String passwordUte;
+    private String PasswordUtente;
     private String email;
     
     // Default Constructor
     public User() {}
     
     // Constructor without userId (for creating new users)
-    public User(int personaId, int inventoryId, int livello, String username, String passwordUte, String email) {
+    public User(int personaId, int inventoryId, int livello, String username, String PasswordUtente, String email) {
         this.personaId = personaId;
         this.inventoryId = inventoryId;
         this.livello = livello;
         this.username = username;
-        this.passwordUte = passwordUte;
+        this.PasswordUtente = PasswordUtente;
         this.email = email;
     }
     
     // Full Constructor (for existing users)
-    public User(int userId, int personaId, int inventoryId, int livello, String username, String passwordUte, String email) {
+    public User(int userId, int personaId, int inventoryId, int livello, String username, String PasswordUtente, String email) {
         this.userId = userId;
         this.personaId = personaId;
         this.inventoryId = inventoryId;
         this.livello = livello;
         this.username = username;
-        this.passwordUte = passwordUte;
+        this.PasswordUtente = PasswordUtente;
         this.email = email;
     }
     
@@ -78,12 +78,12 @@ public class User {
         this.username = username; 
     }
     
-    public String getPasswordUte() { 
-        return passwordUte; 
+    public String getPasswordUtente() { 
+        return PasswordUtente; 
     }
     
-    public void setPasswordUte(String passwordUte) { 
-        this.passwordUte = passwordUte; 
+    public void setPasswordUtente(String PasswordUtente) { 
+        this.PasswordUtente = PasswordUtente; 
     }
     
     public String getEmail() { 

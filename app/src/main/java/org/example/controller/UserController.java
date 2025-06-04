@@ -23,24 +23,18 @@ public class UserController {
     public UserController(UserDAO userDAO, UserView userView) {
         this.userDAO = userDAO;
         this.userView = userView;
-        /**
-         * Validate email format using a simple regex
-         * @param email Email address to validate
-         * @return true if email is valid, false otherwise
-         */
-        
     }
     
     /**
      * Create a new user
+     * @param userId User ID (if 0, will be auto-generated)
      * @param personaId Persona ID
      * @param inventoryId Inventory ID
-     * @param livello Level
      * @param username Username
-     * @param password Password
      * @param email Email
+     * @param password Password
      */
-    public void createUser(int personaId, int inventoryId, int livello, String username, String password, String email) {
+    public void createUser(int userId, int personaId, int inventoryId, String username, String email, String password) {
         try {
             // Check if username already exists
             if (userDAO.usernameExists(username)) {
@@ -59,60 +53,33 @@ public class UserController {
                 return;
             }
             
-            User user = new User(personaId, inventoryId, livello, username, password, email);
+            if (password == null || password.trim().isEmpty()) {
+                userView.displayError("Password cannot be empty.");
+                return;
+            }
+            
+            // Create user with default level 1
+            User user;
+            if (userId == 0) {
+                // Auto-generate ID
+                user = new User(personaId, inventoryId, 1, username, password, email);
+            } else {
+                // Use provided ID
+                user = new User(userId, personaId, inventoryId, 1, username, password, email);
+            }
+            
             userDAO.createUser(user);
             userView.displayMessage("User created successfully with ID: " + user.getUserId());
             
         } catch (SQLException e) {
             userView.displayError("Error creating user: " + e.getMessage());
+        } catch (Exception e) {
+            userView.displayError("Unexpected error: " + e.getMessage());
         }
     }
     
-    /**
-     * Display user by ID
-     * @param userId User ID to search for
-     */
-    public void displayUser(int userId) {
-        try {
-            User user = userDAO.getUserById(userId);
-            if (user != null) {
-                userView.displayUser(user);
-            } else {
-                userView.displayWarning("User not found with ID: " + userId);
-            }
-        } catch (SQLException e) {
-            userView.displayError("Error retrieving user: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Display user by username
-     * @param username Username to search for
-     */
-    public void displayUserByUsername(String username) {
-        try {
-            User user = userDAO.getUserByUsername(username);
-            if (user != null) {
-                userView.displayUser(user);
-            } else {
-                userView.displayWarning("User not found with username: " + username);
-            }
-        } catch (SQLException e) {
-            userView.displayError("Error retrieving user: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Display all users
-     */
-    public void displayAllUsers() {
-        try {
-            List<User> users = userDAO.getAllUsers();
-            userView.displayUsers(users);
-        } catch (SQLException e) {
-            userView.displayError("Error retrieving users: " + e.getMessage());
-        }
-    }
+
+
     
     /**
      * Display all users in table format
@@ -123,26 +90,12 @@ public class UserController {
             userView.displayUsersTable(users);
         } catch (SQLException e) {
             userView.displayError("Error retrieving users: " + e.getMessage());
+        } catch (Exception e) {
+            userView.displayError("Unexpected error: " + e.getMessage());
         }
     }
     
-    /**
-     * Display users by level
-     * @param livello Level to filter by
-     */
-    public void displayUsersByLevel(int livello) {
-        try {
-            List<User> users = userDAO.getUsersByLevel(livello);
-            if (users.isEmpty()) {
-                userView.displayWarning("No users found at level " + livello);
-            } else {
-                userView.displayMessage("Users at level " + livello + ":");
-                userView.displayUsers(users);
-            }
-        } catch (SQLException e) {
-            userView.displayError("Error retrieving users by level: " + e.getMessage());
-        }
-    }
+
     
     /**
      * Update user information
@@ -151,10 +104,10 @@ public class UserController {
      * @param inventoryId New Inventory ID
      * @param livello New Level
      * @param username New Username
-     * @param password New Password
      * @param email New Email
+     * @param password New Password
      */
-    public void updateUser(int userId, int personaId, int inventoryId, int livello, String username, String password, String email) {
+    public void updateUser(int userId, int personaId, int inventoryId, int livello, String username, String email, String password) {
         try {
             // Check if user exists
             User existingUser = userDAO.getUserById(userId);
@@ -181,57 +134,23 @@ public class UserController {
                 return;
             }
             
+            if (password == null || password.trim().isEmpty()) {
+                userView.displayError("Password cannot be empty.");
+                return;
+            }
+            
             User user = new User(userId, personaId, inventoryId, livello, username, password, email);
             userDAO.updateUser(user);
             userView.displayMessage("User updated successfully");
             
         } catch (SQLException e) {
             userView.displayError("Error updating user: " + e.getMessage());
+        } catch (Exception e) {
+            userView.displayError("Unexpected error: " + e.getMessage());
         }
     }
     
-    /**
-     * Level up a user (increase level by 1)
-     * @param userId User ID
-     */
-    public void levelUpUser(int userId) {
-        try {
-            User user = userDAO.getUserById(userId);
-            if (user != null) {
-                int oldLevel = user.getLivello();
-                int newLevel = oldLevel + 1;
-                
-                userDAO.updateUserLevel(userId, newLevel);
-                userView.displayLevelUp(user.getUsername(), oldLevel, newLevel);
-                
-            } else {
-                userView.displayWarning("User not found with ID: " + userId);
-            }
-        } catch (SQLException e) {
-            userView.displayError("Error updating user level: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Delete a user
-     * @param userId User ID to delete
-     */
-    public void deleteUser(int userId) {
-        try {
-            // Check if user exists before deleting
-            User user = userDAO.getUserById(userId);
-            if (user == null) {
-                userView.displayWarning("User not found with ID: " + userId);
-                return;
-            }
-            
-            userDAO.deleteUser(userId);
-            userView.displayMessage("User '" + user.getUsername() + "' deleted successfully");
-            
-        } catch (SQLException e) {
-            userView.displayError("Error deleting user: " + e.getMessage());
-        }
-    }
+
     
     /**
      * Authenticate user
@@ -240,11 +159,23 @@ public class UserController {
      */
     public void authenticateUser(String username, String password) {
         try {
+            if (username == null || username.trim().isEmpty()) {
+                userView.displayError("Username cannot be empty.");
+                return;
+            }
+            
+            if (password == null || password.trim().isEmpty()) {
+                userView.displayError("Password cannot be empty.");
+                return;
+            }
+            
             boolean isAuthenticated = userDAO.authenticateUser(username, password);
             userView.displayAuthenticationResult(username, isAuthenticated);
             
         } catch (SQLException e) {
             userView.displayError("Error during authentication: " + e.getMessage());
+        } catch (Exception e) {
+            userView.displayError("Unexpected error: " + e.getMessage());
         }
     }
     
@@ -266,22 +197,32 @@ public class UserController {
             int minLevel = allUsers.stream().mapToInt(User::getLivello).min().orElse(0);
             double avgLevel = allUsers.stream().mapToInt(User::getLivello).average().orElse(0.0);
             
-            System.out.println("\n" + "═".repeat(40));
-            System.out.println("           USER STATISTICS");
-            System.out.println("═".repeat(40));
-            System.out.println("Total Users: " + totalUsers);
-            System.out.println("Highest Level: " + maxLevel);
-            System.out.println("Lowest Level: " + minLevel);
-            System.out.printf("Average Level: %.2f%n", avgLevel);
-            System.out.println("═".repeat(40));
+            StringBuilder stats = new StringBuilder();
+            stats.append("══════════════════════════════════════\n");
+            stats.append("           USER STATISTICS\n");
+            stats.append("══════════════════════════════════════\n");
+            stats.append("Total Users: ").append(totalUsers).append("\n");
+            stats.append("Highest Level: ").append(maxLevel).append("\n");
+            stats.append("Lowest Level: ").append(minLevel).append("\n");
+            stats.append(String.format("Average Level: %.2f%n", avgLevel));
+            stats.append("══════════════════════════════════════\n");
+            
+            userView.displayMessage(stats.toString());
             
         } catch (SQLException e) {
-            userView.displayError("Error retrieving user statistics");
+            userView.displayError("Error retrieving user statistics: " + e.getMessage());
+        } catch (Exception e) {
+            userView.displayError("Unexpected error: " + e.getMessage());
         }
     }
 
+    /**
+     * Validate email format using a simple regex
+     * @param email Email address to validate
+     * @return true if email is valid, false otherwise
+     */
     private boolean isValidEmail(String email) {
-            // Simple regex for demonstration; consider using more robust validation if needed
-            return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
-        }
+        // Simple regex for demonstration; consider using more robust validation if needed
+        return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    }
 }

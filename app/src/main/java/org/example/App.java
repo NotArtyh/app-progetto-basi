@@ -1,101 +1,166 @@
 package org.example;
 
-import java.util.Scanner;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import org.example.controller.UserController;
 import org.example.database.UserDAO;
 import org.example.view.UserView;
 
-
-// Main Application
-
+/**
+ * Main Application with Swing GUI
+ * Updated to use the new Swing-based user interface
+ */
 public class App {
     
-    public static void main(String[] args) {
+    private UserDAO userDAO;
+    private UserView UserView;
+    private UserController userController;
+    
+    public App() {
         // Initialize components
-        UserDAO userDAO = new UserDAO();
-        UserView userView = new UserView();
-        UserController userController = new UserController(userDAO, userView);
+        userDAO = new UserDAO();
+        UserView = new UserView();
+        userController = new UserController(userDAO, UserView);
         
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
-        
-        while (running) {
-            userView.displayMenu();
+        // Set up the action listener to handle button clicks
+        UserView.setActionListener(new UserView.UserActionListener() {
             
-            try {
-                int choice = scanner.nextInt();
-                scanner.nextLine(); // consume newline
-                
-                switch (choice) {
-                    case 1:
-                        System.out.print("Enter first int parameter: ");
-                        int param1 = scanner.nextInt();
-                        System.out.print("Enter second int parameter: ");
-                        int param2 = scanner.nextInt();
-                        System.out.print("Enter third int parameter: ");
-                        int param3 = scanner.nextInt();
-                        scanner.nextLine(); // consume newline
-                        System.out.print("Enter first string parameter: ");
-                        String param4 = scanner.nextLine();
-                        System.out.print("Enter second string parameter: ");
-                        String param5 = scanner.nextLine();
-                        System.out.print("Enter third string parameter: ");
-                        String param6 = scanner.nextLine();
-                        userController.createUser(param1, param2, param3, param4, param5, param6);
-                        break;
-                        
-                    case 2:
-                        System.out.print("Enter user ID: ");
-                        int id = scanner.nextInt();
-                        userController.displayUser(id);
-                        break;
-                        
-                    case 3:
-                        userController.displayAllUsers();
-                        break;
-                        
-                    case 4:
-                        System.out.print("Enter first int parameter (user ID to update): ");
-                        int updateId = scanner.nextInt();
-                        System.out.print("Enter second int parameter: ");
-                        int param21 = scanner.nextInt();
-                        System.out.print("Enter third int parameter: ");
-                        int param31 = scanner.nextInt();
-                        scanner.nextLine(); // consume newline
-                        System.out.print("Enter first string parameter: ");
-                        String param41 = scanner.nextLine();
-                        System.out.print("Enter second string parameter: ");
-                        String param51 = scanner.nextLine();
-                        System.out.print("Enter third string parameter: ");
-                        String param61 = scanner.nextLine();
-                        System.out.print("Enter fourth int parameter: ");
-                        int param11 = scanner.nextInt();
-                        scanner.nextLine(); // consume newline
-                        userController.updateUser(updateId, param21, param31, param11, param41, param51, param61);
-                        break;
-                        
-                    case 5:
-                        System.out.print("Enter user ID to delete: ");
-                        int deleteId = scanner.nextInt();
-                        userController.deleteUser(deleteId);
-                        break;
-                        
-                    case 6:
-                        running = false;
-                        System.out.println("Goodbye!");
-                        break;
-                        
-                    default:
-                        System.out.println("Invalid option. Please try again.");
-                }
-                
-            } catch (Exception e) {
-                System.err.println("Invalid input. Please try again.");
-                scanner.nextLine(); // clear invalid input
+            @Override
+            public void onRegisterUser() {
+                handleRegisterUser();
             }
-        }
+            
+            @Override
+            public void onViewAllUsersTable() {
+                handleViewAllUsersTable();
+            }
+            
+            @Override
+            public void onAuthenticateUser() {
+                handleAuthenticateUser();
+            }
+            
+            @Override
+            public void onExit() {
+                handleExit();
+            }
+        });
         
-        scanner.close();
+        // Show the GUI
+        UserView.show();
+    }
+    
+    /**
+     * Handle user registration
+     */
+    private void handleRegisterUser() {
+        try {
+            // Get user input through dialogs
+            String userIdStr = UserView.getUserInput("Enter User ID (integer):");
+            if (userIdStr == null || userIdStr.trim().isEmpty()) return;
+            
+            String personaIdStr = UserView.getUserInput("Enter Persona ID (integer):");
+            if (personaIdStr == null || personaIdStr.trim().isEmpty()) return;
+            
+            String inventoryIdStr = UserView.getUserInput("Enter Inventory ID (integer):");
+            if (inventoryIdStr == null || inventoryIdStr.trim().isEmpty()) return;
+            
+            String username = UserView.getUserInput("Enter Username:");
+            if (username == null || username.trim().isEmpty()) return;
+            
+            String email = UserView.getUserInput("Enter Email:");
+            if (email == null || email.trim().isEmpty()) return;
+            
+            String password = UserView.getUserInput("Enter Password:");
+            if (password == null || password.trim().isEmpty()) return;
+            
+            // Parse integers
+            int userId = Integer.parseInt(userIdStr.trim());
+            int personaId = Integer.parseInt(personaIdStr.trim());
+            int inventoryId = Integer.parseInt(inventoryIdStr.trim());
+            
+            // Call controller method
+            userController.createUser(userId, personaId, inventoryId, username, email, password);
+            
+        } catch (NumberFormatException e) {
+            UserView.displayError("Invalid number format. Please enter valid integers for ID fields.");
+        } catch (Exception e) {
+            UserView.displayError("Error during user registration: " + e.getMessage());
+        }
+    }
+    
+    
+    /**
+     * Handle view all users (table format)
+     */
+    private void handleViewAllUsersTable() {
+        try {
+            userController.displayAllUsersTable();
+        } catch (Exception e) {
+            UserView.displayError("Error displaying users table: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Handle user authentication
+     */
+    private void handleAuthenticateUser() {
+        try {
+            String username = UserView.getUserInput("Enter Username:");
+            if (username == null || username.trim().isEmpty()) return;
+            
+            String password = UserView.getUserInput("Enter Password:");
+            if (password == null || password.trim().isEmpty()) return;
+            
+            userController.authenticateUser(username, password);
+            
+        } catch (Exception e) {
+            UserView.displayError("Error during authentication: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Handle application exit
+     */
+    private void handleExit() {
+        boolean confirmed = UserView.showConfirmation("Are you sure you want to exit?");
+        
+        if (confirmed) {
+            UserView.displayGoodbye();
+            // Give time for goodbye message to be seen
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            UserView.close();
+        }
+    }
+    
+    /**
+     * Main method - Entry point of the application
+     */
+    public static void main(String[] args) {
+        // Set system look and feel for better appearance
+               try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.err.println("Could not set system look and feel: " + e.getMessage());
+        }
+
+        
+        // Run the GUI application on the Event Dispatch Thread
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    new App();
+                } catch (Exception e) {
+                    System.err.println("Error starting application: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
