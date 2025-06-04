@@ -27,7 +27,7 @@ public class InventoryController {
         Inventory inv;
 
         try {
-            inv = new Inventory();
+            inv = new Inventory(true, true);
 
             invDAO.createInventory(inv);
             invView.displayMessage("Inventory created successfully with ID: " + inv.getInventoryId());

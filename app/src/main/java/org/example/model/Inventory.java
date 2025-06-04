@@ -9,11 +9,6 @@ public class Inventory {
     private boolean pubblico;
     private boolean tipo;
 
-    public Inventory() {
-        this.pubblico = true;
-        this.tipo = true;
-    }
-
     public Inventory(boolean pubblico, boolean tipo) {
         this.pubblico = pubblico;
         this.tipo = tipo;

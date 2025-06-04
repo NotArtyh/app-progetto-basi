@@ -31,14 +31,15 @@ public class InventoryDAO {
             stmt.setBoolean(1, inv.isPubblico());
             stmt.setBoolean(2, inv.isTipo());
 
-            // int rowsAffected = stmt.executeUpdate();
-            // if (rowsAffected > 0) {
-            // try (ResultSet rs = stmt.getGeneratedKeys()) {
-            // if (rs.next()) {
-            // inv.setInventoryId(rs.getInt(1));
-            // }
-            // }
-            // }
+            int rowsAffected = stmt.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        inv.setInventoryId(rs.getInt(1));
+                    }
+                }
+            }
         }
     }
 }
