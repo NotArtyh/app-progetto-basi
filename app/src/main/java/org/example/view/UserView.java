@@ -3,12 +3,12 @@ package org.example.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -19,17 +19,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
-import org.example.model.User;
 
 /**
  * User View Swing Class
@@ -43,11 +39,12 @@ public class UserView {
     private JScrollPane scrollPane;
     private DefaultTableModel tableModel;
     private JTable userTable;
+    private int currentPage = 1;
+    private final int totalPages = 5; // Change as needed based on user count
     
     // Interface per gestire le azioni dei bottoni
     public interface UserActionListener {
         void onRegisterUser();
-        void onViewAllUsersTable();
         void onAuthenticateUser();
         void onExit();
     }
@@ -56,6 +53,7 @@ public class UserView {
     public interface FormActionListener {
         void onRegisterSubmit(RegistrationData data);
         void onLoginSubmit(String username, String password);
+        void onLogout();
     }
     
     // Data class for registration form
@@ -84,6 +82,10 @@ public class UserView {
     private UserActionListener actionListener;
     private FormActionListener formActionListener;
     
+    // Homepage components
+    private JFrame homepageFrame;
+    private String currentUsername;
+    
     /**
      * Constructor - Initialize the GUI
      */
@@ -110,7 +112,7 @@ public class UserView {
      */
     private void initializeGUI() {
         // Create main frame
-        mainFrame = new JFrame("User Management System");
+        mainFrame = new JFrame("MUSIC TRADES COLLECTION");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1500, 1100);
         mainFrame.setLocationRelativeTo(null);
@@ -124,7 +126,7 @@ public class UserView {
         
         // Create main panel
         mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
+        mainPanel.setBorder(new EmptyBorder(250, 300, 350, 300));
         
         // Create components
         createHeaderPanel();
@@ -141,16 +143,21 @@ public class UserView {
      * Create header panel with title
      */
     private void createHeaderPanel() {
-        JPanel headerPanel = new JPanel();
-        headerPanel.setBackground(new Color(51, 122, 183));
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(159, 172, 255));
         
-        JLabel titleLabel = new JLabel("SCHERMATA INGRESSO UTENTE");
-        titleLabel.setFont(new Font("Calibri", Font.BOLD, 28));
+        JLabel titleLabel = new JLabel("User Sign-In Screen");
+        titleLabel.setFont(new Font("Calibri", Font.BOLD, 36));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         
-        headerPanel.add(titleLabel);
-        headerPanel.setPreferredSize(new Dimension(0, 60));
+        // Center the label both horizontally and vertically
+        JPanel centeringPanel = new JPanel(new GridBagLayout());
+        centeringPanel.setBackground(new Color(159, 172, 255));
+        centeringPanel.add(titleLabel);
+        
+        headerPanel.add(centeringPanel, BorderLayout.CENTER);
+        headerPanel.setPreferredSize(new Dimension(0, 100));
         
         mainPanel.add(headerPanel, BorderLayout.NORTH);
     }
@@ -159,23 +166,24 @@ public class UserView {
      * Create button panel with all action buttons
      */
     private void createButtonPanel() {
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        buttonPanel.setBorder(BorderFactory.createTitledBorder("Actions"));
-        buttonPanel.setPreferredSize(new Dimension(0, 150));
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 10, 10));
+        buttonPanel.setPreferredSize(new Dimension(300, 50));
         
         // Create buttons
         JButton[] buttons = {
-            createStyledButton("REGISTRAZIONE UTENTE", "👤"),
-            createStyledButton("View Users Table", "📊"),
-            createStyledButton("LOGIN UTENTE", "🔐"),
-            createStyledButton("ESCI", "🚪")
+            createStyledButton("User Registration", "👤"),
+            createStyledButton("User login", "🔐"),
+            createStyledButton("Exit", "🚪")
         };
-        
+
+        // Increase text size and center text for each button
+        for (JButton button : buttons) {
+            button.setFont(new Font("Arial", Font.BOLD, 28));
+        }
         // Add action listeners
         buttons[0].addActionListener(e -> showRegistrationWindow());
-        buttons[1].addActionListener(e -> { if (actionListener != null) actionListener.onViewAllUsersTable(); });
-        buttons[2].addActionListener(e -> showLoginWindow());
-        buttons[3].addActionListener(e -> { if (actionListener != null) actionListener.onExit(); });
+        buttons[1].addActionListener(e -> showLoginWindow());
+        buttons[2].addActionListener(e -> { if (actionListener != null) actionListener.onExit(); });
         
         // Add buttons to panel
         for (JButton button : buttons) {
@@ -189,15 +197,15 @@ public class UserView {
      * Show registration window with form fields
      */
     private void showRegistrationWindow() {
-        JDialog registrationDialog = new JDialog(mainFrame, "Registrazione Utente", true);
-        registrationDialog.setSize(500, 600);
+        JDialog registrationDialog = new JDialog(mainFrame, "User Registration", true);
+        registrationDialog.setSize(900, 800);
         registrationDialog.setLocationRelativeTo(mainFrame);
         
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         
         // Header
-        JLabel headerLabel = new JLabel("REGISTRAZIONE NUOVO UTENTE");
+        JLabel headerLabel = new JLabel("NEW USER REGISTRATION");
         headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
         headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         headerLabel.setOpaque(true);
@@ -249,8 +257,8 @@ public class UserView {
         
         // Button panel
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
-        JButton submitButton = new JButton("Registra");
-        JButton cancelButton = new JButton("Annulla");
+        JButton submitButton = new JButton("Register");
+        JButton cancelButton = new JButton("Cancel");
         
         submitButton.setBackground(new Color(40, 167, 69));
         submitButton.setForeground(Color.WHITE);
@@ -275,7 +283,7 @@ public class UserView {
             if (!valid) {
                 JOptionPane.showMessageDialog(registrationDialog, 
                     "Errori nella compilazione:\n" + errors.toString(), 
-                    "Errore", JOptionPane.ERROR_MESSAGE);
+                    "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -304,8 +312,9 @@ public class UserView {
         
         cancelButton.addActionListener(e -> registrationDialog.dispose());
         
-        buttonPanel.add(submitButton);
         buttonPanel.add(cancelButton);
+        buttonPanel.add(submitButton);
+        
         
         // Add components to main panel
         mainPanel.add(headerLabel, BorderLayout.NORTH);
@@ -324,15 +333,15 @@ public class UserView {
      * Show login window with username and password fields
      */
     private void showLoginWindow() {
-        JDialog loginDialog = new JDialog(mainFrame, "Login Utente", true);
-        loginDialog.setSize(400, 250);
+        JDialog loginDialog = new JDialog(mainFrame, "User login", true);
+        loginDialog.setSize(600, 400);
         loginDialog.setLocationRelativeTo(mainFrame);
         
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         
         // Header
-        JLabel headerLabel = new JLabel("LOGIN UTENTE");
+        JLabel headerLabel = new JLabel("USER LOGIN");
         headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
         headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         headerLabel.setOpaque(true);
@@ -376,7 +385,7 @@ public class UserView {
         // Button panel
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         JButton loginButton = new JButton("Login");
-        JButton cancelButton = new JButton("Annulla");
+        JButton cancelButton = new JButton("Cancel");
         
         loginButton.setBackground(new Color(40, 167, 69));
         loginButton.setForeground(Color.WHITE);
@@ -393,7 +402,7 @@ public class UserView {
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(loginDialog, 
                     "Username e Password sono obbligatori!", 
-                    "Errore", JOptionPane.ERROR_MESSAGE);
+                    "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -406,8 +415,8 @@ public class UserView {
         
         cancelButton.addActionListener(e -> loginDialog.dispose());
         
-        buttonPanel.add(loginButton);
         buttonPanel.add(cancelButton);
+        buttonPanel.add(loginButton);
         
         // Add components to main panel
         mainPanel.add(headerLabel, BorderLayout.NORTH);
@@ -434,75 +443,20 @@ public class UserView {
      */
     private void createOutputPanel() {
         JPanel outputPanel = new JPanel(new BorderLayout());
-        outputPanel.setBorder(BorderFactory.createTitledBorder("Output"));
-        
+       
         // Text area for general output
         outputArea = new JTextArea();
         outputArea.setFont(new Font("Courier New", Font.PLAIN, 12));
         outputArea.setEditable(false);
         outputArea.setBackground(new Color(248, 248, 248));
         
-        scrollPane = new JScrollPane(outputArea);
-        scrollPane.setPreferredSize(new Dimension(0, 300));
-        
-        // Table for user data
-        String[] columnNames = {"User ID", "Persona ID", "Inventory ID", "Level", "Username", "Email"};
-        tableModel = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Make table read-only
-            }
-        };
-        
-        userTable = new JTable(tableModel);
-        userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        userTable.getTableHeader().setBackground(new Color(51, 122, 183));
-        userTable.getTableHeader().setForeground(Color.WHITE);
-        userTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
         
         JScrollPane tableScrollPane = new JScrollPane(userTable);
         tableScrollPane.setPreferredSize(new Dimension(0, 300));
         
-        // Tabbed pane to switch between text output and table
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Text Output", scrollPane);
-        tabbedPane.addTab("Table View", tableScrollPane);
-        
-        outputPanel.add(tabbedPane, BorderLayout.CENTER);
         mainPanel.add(outputPanel, BorderLayout.SOUTH);
     }
     
-    /**
-     * Display users in table format
-     */
-    public void displayUsersTable(List<User> users) {
-        // Clear existing data
-        tableModel.setRowCount(0);
-        
-        if (users.isEmpty()) {
-            displayMessage("No users found.");
-            return;
-        }
-        
-        // Add users to table
-        for (User user : users) {
-            Object[] rowData = {
-                user.getUserId(),
-                user.getPersonaId(),
-                user.getInventoryId(),
-                user.getLivello(),
-                user.getUsername(),
-                user.getEmail()
-            };
-            tableModel.addRow(rowData);
-        }
-        
-        // Switch to table tab
-        JTabbedPane tabbedPane = (JTabbedPane) ((JPanel) mainPanel.getComponent(2)).getComponent(0);
-        tabbedPane.setSelectedIndex(1);
-        
-        displayMessage("Table updated with " + users.size() + " users.");
-    }
     
     /**
      * Display success message
@@ -567,10 +521,9 @@ public class UserView {
         if (success) {
             String message = "✓ Authentication successful!\n  Welcome back, " + username + "!\n";
             appendToOutput(message);
-            JOptionPane.showMessageDialog(mainFrame, 
-                "Welcome back, " + username + "!", 
-                "Authentication Successful", 
-                JOptionPane.INFORMATION_MESSAGE);
+            
+            // Show homepage instead of just a message
+            showHomepage(username);
         } else {
             String message = "✗ Authentication failed!\n  Invalid username or password.\n";
             appendToOutput(message);
@@ -578,6 +531,361 @@ public class UserView {
                 "Invalid username or password.", 
                 "Authentication Failed", 
                 JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     *  Display vetrina page
+     **/
+    private void showVetrinaPage() {
+        JFrame vetrinaFrame = new JFrame("Vetrina");
+        vetrinaFrame.setSize(1200, 800);
+        vetrinaFrame.setLocationRelativeTo(null);
+        vetrinaFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        JLabel titleLabel = new JLabel("Vetrina - User Inventories");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        JPanel usersPanel = new JPanel(new GridLayout(5, 1, 10, 10)); // 5 utenti per pagina
+
+        // Method to populate users for the selected page
+        Runnable populateUsers = () -> {
+            usersPanel.removeAll();
+            for (int i = 1; i <= 5; i++) {
+                int userNumber = (currentPage - 1) * 5 + i;
+
+                JPanel userPanel = new JPanel(new BorderLayout());
+                userPanel.setBorder(BorderFactory.createTitledBorder("User " + userNumber));
+
+                JPanel itemsPanel = new JPanel(new GridLayout(4, 5, 5, 5)); // 20 items per utente
+                for (int j = 1; j <= 20; j++) {
+                    JLabel itemLabel = new JLabel("Item " + j, SwingConstants.CENTER);
+                    itemLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                    itemsPanel.add(itemLabel);
+                }
+
+                userPanel.add(itemsPanel, BorderLayout.CENTER);
+                usersPanel.add(userPanel);
+            }
+            usersPanel.revalidate();
+            usersPanel.repaint();
+        };
+
+        JScrollPane scrollPane = new JScrollPane(usersPanel);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Bottom pagination panel
+        JPanel paginationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        for (int i = 1; i <= totalPages; i++) {
+            int pageNum = i;
+            JButton pageButton = new JButton(String.valueOf(i));
+            pageButton.addActionListener(e -> {
+                currentPage = pageNum;
+                populateUsers.run();
+            });
+            paginationPanel.add(pageButton);
+        }
+
+        mainPanel.add(paginationPanel, BorderLayout.SOUTH);
+
+        vetrinaFrame.add(mainPanel);
+
+        // Initialize with page 1
+        currentPage = 1;
+        populateUsers.run();
+
+        vetrinaFrame.setVisible(true);
+    }
+
+
+    /**
+     * Show inventory page
+     */
+    private void showInventoryPage() {
+        JFrame inventoryFrame = new JFrame("My Inventory");
+        inventoryFrame.setSize(1000, 700);
+        inventoryFrame.setLocationRelativeTo(null);
+        inventoryFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        JLabel titleLabel = new JLabel("My Inventory");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Placeholder items list (replace with real data from inventory later)
+        JPanel itemsPanel = new JPanel(new GridLayout(0, 5, 10, 10)); // Dynamic rows, 5 columns
+
+        for (int i = 1; i <= 30; i++) {
+            JLabel itemLabel = new JLabel("Item " + i, SwingConstants.CENTER);
+            itemLabel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+            itemLabel.setPreferredSize(new Dimension(150, 100));
+            itemsPanel.add(itemLabel);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(itemsPanel);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        inventoryFrame.add(mainPanel);
+        inventoryFrame.setVisible(true);
+    }
+
+
+
+
+    public void showHomepage(String username) {
+        this.currentUsername = username;
+        
+        // Hide main frame
+        mainFrame.setVisible(false);
+        
+        // Create homepage frame
+        homepageFrame = new JFrame("Homepage");
+        homepageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        homepageFrame.setSize(1500, 1000);
+        homepageFrame.setLocationRelativeTo(null);
+        homepageFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
+        // Main panel
+        JPanel homepageMainPanel = new JPanel(new BorderLayout());
+        
+        // Top bar with user info and logout
+        JPanel topBar = createTopBar(username);
+        homepageMainPanel.add(topBar, BorderLayout.NORTH);
+        
+        // Content area
+        JPanel contentPanel = createHomepageContent();
+        homepageMainPanel.add(contentPanel, BorderLayout.CENTER);
+        
+        homepageFrame.add(homepageMainPanel);
+        homepageFrame.setVisible(true);
+    }
+    
+    /**
+     * Create top bar with user info and logout button
+     */
+    private JPanel createTopBar(String username) {
+        JPanel topBar = new JPanel(new BorderLayout());
+        topBar.setBackground(new Color(51, 122, 183));
+        topBar.setBorder(new EmptyBorder(10, 20, 10, 20));
+        topBar.setPreferredSize(new Dimension(0, 80));
+        
+        // Left side - Welcome message
+        JLabel welcomeLabel = new JLabel("Welcome in MUSIC TRADES COLLECTION!");
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        welcomeLabel.setForeground(Color.WHITE);
+        
+        // Right side - User info and logout
+        JPanel rightPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        rightPanel.setOpaque(false);
+        
+        // User info
+        JLabel userLabel = new JLabel("User: " + username);
+        userLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        userLabel.setForeground(Color.WHITE);
+        userLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        
+        // Logout button
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setFont(new Font("Arial", Font.BOLD, 12));
+        logoutButton.setBackground(new Color(189, 48, 62)); // Red color
+        logoutButton.setForeground(Color.WHITE);
+        logoutButton.setFocusPainted(false);
+        logoutButton.setOpaque(true); // Ensure background color is applied
+        logoutButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        logoutButton.addActionListener(e -> handleLogout());
+        logoutButton.setUI(new javax.swing.plaf.basic.BasicButtonUI()); // Force UI to respect background color
+
+        
+        rightPanel.add(userLabel);
+        rightPanel.add(logoutButton);
+        
+        topBar.add(welcomeLabel, BorderLayout.WEST);
+        topBar.add(rightPanel, BorderLayout.EAST);
+        
+        return topBar;
+    }
+    
+    /**
+     * Create homepage content
+     */
+    private JPanel createHomepageContent() {
+        JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
+        contentPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
+        contentPanel.setBackground(new Color(202, 207, 240));
+        
+        // Dashboard header
+        JLabel dashboardLabel = new JLabel("Dashboard");
+        dashboardLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        dashboardLabel.setForeground(new Color(52, 58, 64));
+        dashboardLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        // Cards panel
+        JPanel cardsPanel = new JPanel(new GridLayout(1, 3, 20, 20));
+        cardsPanel.setOpaque(false);
+        
+        // Create dashboard cards
+        JPanel vetrinaCard = createDashboardCard("👀", "Vetrina", "View all other users' items and propose new trades", new Color(40, 167, 69));
+       
+        // Add mouse listener to vetrinaCard to show vetrina page
+        vetrinaCard.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+            showVetrinaPage();
+            }
+        });
+        JPanel inventoryCard = createDashboardCard("👤", "My Inventory", "View and edit your inventory", new Color(23, 162, 184));
+       
+        // Add mouse listener to inventoryCard to show inventory page
+        inventoryCard.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+            showInventoryPage();
+            }
+        });
+
+
+        JPanel profileCard = createDashboardCard("⚙️", "My profile", "Show your personal data and your trade offers", new Color(255, 193, 7));
+
+        // Change background color for each card
+        vetrinaCard.setBackground(new Color(220, 255, 220)); // Light green background
+        inventoryCard.setBackground(new Color(220, 240, 255)); // Light blue background
+        profileCard.setBackground(new Color(255, 245, 220)); // Light yellow background
+
+        // Add hover effect to reset background color
+        for (JPanel card : new JPanel[]{vetrinaCard, inventoryCard, profileCard}) {
+            card.addMouseListener(new java.awt.event.MouseAdapter() {
+            private Color originalColor = card.getBackground();
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                card.setBackground(new Color(248, 249, 250)); // Hover color
+                card.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                card.setBackground(originalColor); // Reset to original color
+                card.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
+            });
+        }
+
+        // Center icon, title, and description for each card
+        for (JPanel card : new JPanel[]{vetrinaCard, inventoryCard, profileCard}) {
+            JPanel headerPanel = (JPanel) card.getComponent(0);
+            headerPanel.setLayout(new GridLayout(2, 1, 0, 5)); // Adjust layout for centering
+            
+            JLabel iconLabel = (JLabel) headerPanel.getComponent(0);
+            iconLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center icon
+            iconLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Increase icon size
+            
+            JLabel titleLabel = (JLabel) headerPanel.getComponent(1);
+            titleLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center title
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 50)); // Increase title size
+            
+            JLabel descLabel = (JLabel) card.getComponent(1);
+            descLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            descLabel.setFont(new Font("Arial", Font.PLAIN, 30)); // Center description
+        }
+        cardsPanel.add(vetrinaCard);
+        cardsPanel.add(inventoryCard);
+        cardsPanel.add(profileCard);
+        
+        
+        
+        contentPanel.add(dashboardLabel, BorderLayout.NORTH);
+        contentPanel.add(cardsPanel, BorderLayout.CENTER);
+     
+        
+        return contentPanel;
+        }
+    /**
+     * Create dashboard card
+     */
+    private JPanel createDashboardCard(String icon, String title, String description, Color color) {
+        JPanel card = new JPanel(new BorderLayout(10, 10));
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(222, 226, 230), 1),
+            new EmptyBorder(20, 20, 20, 20)
+        ));
+        
+        // Icon and title
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setOpaque(false);
+        
+        JLabel iconLabel = new JLabel(icon);
+        iconLabel.setFont(new Font("Arial", Font.PLAIN, 48));
+        iconLabel.setForeground(color);
+        
+        JLabel titleLabel = new JLabel(title);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(52, 58, 64));
+        
+        headerPanel.add(iconLabel, BorderLayout.WEST);
+        headerPanel.add(titleLabel, BorderLayout.CENTER);
+        
+        // Description
+        JLabel descLabel = new JLabel(description);
+        descLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        descLabel.setForeground(new Color(108, 117, 125));
+        
+        card.add(headerPanel, BorderLayout.NORTH);
+        card.add(descLabel, BorderLayout.CENTER);
+        
+        // Add hover effect
+        card.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                card.setBackground(new Color(248, 249, 250));
+                card.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            }
+            
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                card.setBackground(Color.WHITE);
+                card.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
+        });
+        
+        return card;
+    }
+    
+    
+    /**
+     * Handle logout action
+     */
+    private void handleLogout() {
+        boolean confirmed = showConfirmation("Are you sure you want to logout?");
+        
+        if (confirmed) {
+            // Close homepage
+            if (homepageFrame != null) {
+                homepageFrame.dispose();
+                homepageFrame = null;
+            }
+            
+            // Show main frame again
+            mainFrame.setVisible(true);
+            
+            // Clear current user
+            currentUsername = null;
+            
+            // Display logout message
+            displayMessage("Logged out successfully.");
+            
+            // Notify the form action listener
+            if (formActionListener != null) {
+                formActionListener.onLogout();
+            }
         }
     }
 

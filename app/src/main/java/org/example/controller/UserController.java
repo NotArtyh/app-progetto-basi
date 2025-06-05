@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import org.example.database.UserDAO;
 import org.example.model.User;
@@ -73,19 +72,6 @@ public class UserController {
         }
     }
 
-    /**
-     * Display all users in table format
-     */
-    public void displayAllUsersTable() {
-        try {
-            List<User> users = userDAO.getAllUsers();
-            userView.displayUsersTable(users);
-        } catch (SQLException e) {
-            userView.displayError("Error retrieving users: " + e.getMessage());
-        } catch (Exception e) {
-            userView.displayError("Unexpected error: " + e.getMessage());
-        }
-    }
 
     /**
      * Update user information

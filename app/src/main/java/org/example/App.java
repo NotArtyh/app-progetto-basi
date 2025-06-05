@@ -45,11 +45,6 @@ public class App {
             }
 
             @Override
-            public void onViewAllUsersTable() {
-                handleViewAllUsersTable();
-            }
-
-            @Override
             public void onAuthenticateUser() {
                 // This will now show the login window
                 // The actual authentication logic is handled in the form listener
@@ -72,6 +67,11 @@ public class App {
             @Override
             public void onLoginSubmit(String username, String password) {
                 handleLoginSubmit(username, password);
+            }
+
+            @Override
+            public void onLogout() {
+                handleLogout();
             }
         });
 
@@ -183,16 +183,14 @@ public class App {
     }
 
     /**
-     * Handle view all users (table format)
+     * Handle logout
      */
-    private void handleViewAllUsersTable() {
-        try {
-            userController.displayAllUsersTable();
-        } catch (Exception e) {
-            UserView.displayError("Error displaying users table: " + e.getMessage());
-        }
+    private void handleLogout() {
+        UserView.displayMessage("User logged out successfully.");
+        // Additional logout logic can be added here if needed
     }
 
+  
     /**
      * Handle application exit
      */
