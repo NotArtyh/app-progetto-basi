@@ -8,11 +8,13 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -127,21 +129,45 @@ public class UserView {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            // Use default look and feel if system L&F fails
+            // Ignore and use default
         }
 
-        // Create main panel
-        mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(new EmptyBorder(250, 300, 350, 300));
+        // Create split container (left = image, right = UI)
+        JPanel contentPanel = new JPanel(new GridLayout(1, 2)); // 1 row, 2 columns
 
-        // Create components
+        // ⬅️ Left side: image panel
+        JLabel imageLabel = new JLabel();
+        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/images/landing.png"));
+
+        double scaleFactor = 0.45;
+        int scaledWidth = (int) (originalIcon.getIconWidth() * scaleFactor);
+        int scaledHeight = (int) (originalIcon.getIconHeight() * scaleFactor);
+
+        Image scaledImage = originalIcon.getImage().getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+        imageLabel.setIcon(new ImageIcon(scaledImage));
+        contentPanel.add(imageLabel);
+
+        // ➡️ Right side: your existing layout
+        mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(100, 80, 100, 80)); // Tighter vertical and horizontal padding
+        mainPanel.setPreferredSize(new Dimension(600, 600));
+
+        // Create your components
         createHeaderPanel();
         createButtonPanel();
         createOutputPanel();
 
-        mainFrame.add(mainPanel);
+        JPanel rightContainer = new JPanel(new GridBagLayout());
+        rightContainer.add(mainPanel);
+        contentPanel.add(rightContainer);
 
-        // Show welcome message
+        // Add to frame and show
+        mainFrame.add(contentPanel);
+        mainFrame.setVisible(true);
+
+        // Optional: show welcome message
         displayWelcome();
     }
 
@@ -175,7 +201,7 @@ public class UserView {
         JButton exitButton = createStyledButton("Exit", "🚪");
 
         // Set font size
-        Font buttonFont = new Font("Roboto", Font.PLAIN, 24);
+        Font buttonFont = new Font("Roboto", Font.PLAIN, 16);
         registrationButton.setFont(buttonFont);
         loginButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
