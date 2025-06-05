@@ -22,20 +22,19 @@ public class InventoryController {
     /**
      * Create a new inventory
      */
-    public void createInventory() {
-        // Create Inventory
-        Inventory inv;
-
+    public int createInventory() {
         try {
-            inv = new Inventory(true, true);
+            Inventory inv = new Inventory(true, true);
 
             invDAO.createInventory(inv);
             invView.displayMessage("Inventory created successfully with ID: " + inv.getInventoryId());
-
+            return inv.getInventoryId();
         } catch (SQLException e) {
             invView.displayError("Error creating user: " + e.getMessage());
+            return -1;
         } catch (Exception e) {
             invView.displayError("Unexpected error: " + e.getMessage());
+            return -1;
         }
     }
 }

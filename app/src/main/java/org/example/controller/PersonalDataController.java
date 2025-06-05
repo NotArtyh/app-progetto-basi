@@ -13,10 +13,16 @@ import org.example.view.UserView;
 public class PersonalDataController {
     private PersonalDataDAO personalDataDAO;
     private UserView personalDataView;
-    
+    private PersonalData currentPersonalData = null;
+
+    public PersonalData getCurrentPersonalData() {
+        return currentPersonalData;
+    }
+
     /**
      * Constructor
-     * @param personalDataDAO Data Access Object for person
+     * 
+     * @param personalDataDAO  Data Access Object for person
      * @param personalDataView View for personal data interface
      */
     public PersonalDataController(PersonalDataDAO personalDataDAO, UserView personalDataView) {
@@ -27,75 +33,22 @@ public class PersonalDataController {
     /**
      * Create a new person
      */
-
-    public void createPersonalData(String nome, String cognome, String sesso, String telefono, String stato, String provincia, String cap, String via, String civico) {
+    public int createPersonalData(String nome, String cognome, String sesso, String telefono, String stato,
+            String provincia, String cap, String via, String civico) {
         try {
-            // Validate input
-            if (nome == null || nome.trim().isEmpty()) {
-                personalDataView.displayError("nome cannot be empty.");
-                return;
-            }
+            // Create person with the provied params - params have already been checked
+            PersonalData person = new PersonalData(nome, cognome, sesso, telefono, provincia, stato, cap, via, civico);
 
-            // Validate input
-            if (cognome == null || cognome.trim().isEmpty()) {
-                personalDataView.displayError("cognome cannot be empty.");
-                return;
-            }
-            
-            if (sesso == null || sesso.trim().isEmpty()) {
-                personalDataView.displayError("sesso cannot be empty.");
-                return;
-            }
-
-            if (telefono == null || telefono.trim().isEmpty()) {
-                personalDataView.displayError("telefono cannot be empty.");
-                return;
-            }
-            
-            if (stato == null || stato.trim().isEmpty()) {
-                personalDataView.displayError("stato cannot be empty.");
-                return;
-            }
-            
-            if (provincia == null || provincia.trim().isEmpty()) {
-                personalDataView.displayError("provincia cannot be empty.");
-                return;
-            }
-            
-            if (cap == null || cap.trim().isEmpty()) {
-                personalDataView.displayError("cap cannot be empty.");
-                return;
-            }
-
-
-            if (via == null || via.trim().isEmpty()) {
-                personalDataView.displayError("via cannot be empty.");
-                return;
-            }
-            
-
-            if (civico == null || civico.trim().isEmpty()) {
-                personalDataView.displayError("civico cannot be empty.");
-                return;
-            }
-        
-            
-            // Create person
-            PersonalData person;
-
-        
-            person = new PersonalData(nome, cognome, sesso, telefono, provincia, stato, cap, via, civico);
-            
             personalDataDAO.createPerson(person);
             personalDataView.displayMessage("User created successfully with ID: " + person.getPersonaId());
-            
+            return person.getPersonaId();
         } catch (SQLException e) {
             personalDataView.displayError("Error creating user: " + e.getMessage());
+            return -1;
         } catch (Exception e) {
             personalDataView.displayError("Unexpected error: " + e.getMessage());
+            return -1;
         }
     }
+
 }
-
-    
-
