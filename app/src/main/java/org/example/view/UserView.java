@@ -261,11 +261,11 @@ public class UserView {
         JButton cancelButton = new JButton("Cancel");
         
         submitButton.setBackground(new Color(40, 167, 69));
-        submitButton.setForeground(Color.WHITE);
+        submitButton.setForeground(Color.BLACK);
         submitButton.setFont(new Font("Arial", Font.BOLD, 12));
         
         cancelButton.setBackground(new Color(220, 53, 69));
-        cancelButton.setForeground(Color.WHITE);
+        cancelButton.setForeground(Color.BLACK);
         cancelButton.setFont(new Font("Arial", Font.BOLD, 12));
         
         submitButton.addActionListener(e -> {
@@ -388,11 +388,11 @@ public class UserView {
         JButton cancelButton = new JButton("Cancel");
         
         loginButton.setBackground(new Color(40, 167, 69));
-        loginButton.setForeground(Color.WHITE);
+        loginButton.setForeground(Color.BLACK);
         loginButton.setFont(new Font("Arial", Font.BOLD, 12));
         
         cancelButton.setBackground(new Color(220, 53, 69));
-        cancelButton.setForeground(Color.WHITE);
+        cancelButton.setForeground(Color.BLACK);
         cancelButton.setFont(new Font("Arial", Font.BOLD, 12));
         
         loginButton.addActionListener(e -> {
