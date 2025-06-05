@@ -4,19 +4,25 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -46,7 +52,37 @@ public class UserView {
         void onExit();
     }
     
+    // New interface for form submissions
+    public interface FormActionListener {
+        void onRegisterSubmit(RegistrationData data);
+        void onLoginSubmit(String username, String password);
+    }
+    
+    // Data class for registration form
+    public static class RegistrationData {
+        public String nome, cognome, sesso, telefono, stato_residenza;
+        public String provincia, cap, via, civico, username, email, password;
+        
+        public RegistrationData(String nome, String cognome, String sesso, String telefono,
+                              String stato_residenza, String provincia, String cap, String via,
+                              String civico, String username, String email, String password) {
+            this.nome = nome;
+            this.cognome = cognome;
+            this.sesso = sesso;
+            this.telefono = telefono;
+            this.stato_residenza = stato_residenza;
+            this.provincia = provincia;
+            this.cap = cap;
+            this.via = via;
+            this.civico = civico;
+            this.username = username;
+            this.email = email;
+            this.password = password;
+        }
+    }
+    
     private UserActionListener actionListener;
+    private FormActionListener formActionListener;
     
     /**
      * Constructor - Initialize the GUI
@@ -60,6 +96,13 @@ public class UserView {
      */
     public void setActionListener(UserActionListener listener) {
         this.actionListener = listener;
+    }
+    
+    /**
+     * Set the form action listener for form submissions
+     */
+    public void setFormActionListener(FormActionListener listener) {
+        this.formActionListener = listener;
     }
     
     /**
@@ -129,9 +172,9 @@ public class UserView {
         };
         
         // Add action listeners
-        buttons[0].addActionListener(e -> { if (actionListener != null) actionListener.onRegisterUser(); });
+        buttons[0].addActionListener(e -> showRegistrationWindow());
         buttons[1].addActionListener(e -> { if (actionListener != null) actionListener.onViewAllUsersTable(); });
-        buttons[2].addActionListener(e -> { if (actionListener != null) actionListener.onAuthenticateUser(); });
+        buttons[2].addActionListener(e -> showLoginWindow());
         buttons[3].addActionListener(e -> { if (actionListener != null) actionListener.onExit(); });
         
         // Add buttons to panel
@@ -140,6 +183,239 @@ public class UserView {
         }
         
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
+    }
+    
+    /**
+     * Show registration window with form fields
+     */
+    private void showRegistrationWindow() {
+        JDialog registrationDialog = new JDialog(mainFrame, "Registrazione Utente", true);
+        registrationDialog.setSize(500, 600);
+        registrationDialog.setLocationRelativeTo(mainFrame);
+        
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        
+        // Header
+        JLabel headerLabel = new JLabel("REGISTRAZIONE NUOVO UTENTE");
+        headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        headerLabel.setOpaque(true);
+        headerLabel.setBackground(new Color(51, 122, 183));
+        headerLabel.setForeground(Color.WHITE);
+        headerLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
+        // Form panel
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        
+        // Create form fields
+        JTextField nomeField = new JTextField(20);
+        JTextField cognomeField = new JTextField(20);
+        JTextField sessoField = new JTextField(20);
+        JTextField telefonoField = new JTextField(20);
+        JTextField statoResidenzaField = new JTextField(20);
+        JTextField provinciaField = new JTextField(20);
+        JTextField capField = new JTextField(20);
+        JTextField viaField = new JTextField(20);
+        JTextField civicoField = new JTextField(20);
+        JTextField usernameField = new JTextField(20);
+        JTextField emailField = new JTextField(20);
+        JPasswordField passwordField = new JPasswordField(20);
+        
+        // Add fields to form
+        String[] labels = {"Nome:", "Cognome:", "Sesso (M/F):", "Telefono:", "Stato Residenza:", 
+                          "Provincia:", "CAP:", "Via:", "Civico:", "Username:", "Email:", "Password:"};
+        JTextField[] fields = {nomeField, cognomeField, sessoField, telefonoField, statoResidenzaField,
+                              provinciaField, capField, viaField, civicoField, usernameField, emailField, passwordField};
+        
+        for (int i = 0; i < labels.length; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = i;
+            gbc.gridwidth = 1;
+            JLabel label = new JLabel(labels[i]);
+            label.setFont(new Font("Arial", Font.PLAIN, 12));
+            formPanel.add(label, gbc);
+            
+            gbc.gridx = 1;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.weightx = 1.0;
+            formPanel.add(fields[i], gbc);
+            gbc.weightx = 0;
+            gbc.fill = GridBagConstraints.NONE;
+        }
+        
+        // Button panel
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        JButton submitButton = new JButton("Registra");
+        JButton cancelButton = new JButton("Annulla");
+        
+        submitButton.setBackground(new Color(40, 167, 69));
+        submitButton.setForeground(Color.WHITE);
+        submitButton.setFont(new Font("Arial", Font.BOLD, 12));
+        
+        cancelButton.setBackground(new Color(220, 53, 69));
+        cancelButton.setForeground(Color.WHITE);
+        cancelButton.setFont(new Font("Arial", Font.BOLD, 12));
+        
+        submitButton.addActionListener(e -> {
+            // Validate fields
+            boolean valid = true;
+            StringBuilder errors = new StringBuilder();
+            
+            for (int i = 0; i < fields.length; i++) {
+                if (fields[i].getText().trim().isEmpty()) {
+                    valid = false;
+                    errors.append("- ").append(labels[i].replace(":", "")).append(" è obbligatorio\n");
+                }
+            }
+            
+            if (!valid) {
+                JOptionPane.showMessageDialog(registrationDialog, 
+                    "Errori nella compilazione:\n" + errors.toString(), 
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Create registration data and submit
+            RegistrationData data = new RegistrationData(
+                nomeField.getText().trim(),
+                cognomeField.getText().trim(),
+                sessoField.getText().trim(),
+                telefonoField.getText().trim(),
+                statoResidenzaField.getText().trim(),
+                provinciaField.getText().trim(),
+                capField.getText().trim(),
+                viaField.getText().trim(),
+                civicoField.getText().trim(),
+                usernameField.getText().trim(),
+                emailField.getText().trim(),
+                new String(passwordField.getPassword())
+            );
+            
+            if (formActionListener != null) {
+                formActionListener.onRegisterSubmit(data);
+            }
+            
+            registrationDialog.dispose();
+        });
+        
+        cancelButton.addActionListener(e -> registrationDialog.dispose());
+        
+        buttonPanel.add(submitButton);
+        buttonPanel.add(cancelButton);
+        
+        // Add components to main panel
+        mainPanel.add(headerLabel, BorderLayout.NORTH);
+        
+        JScrollPane scrollPane = new JScrollPane(formPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        registrationDialog.add(mainPanel);
+        registrationDialog.setVisible(true);
+    }
+    
+    /**
+     * Show login window with username and password fields
+     */
+    private void showLoginWindow() {
+        JDialog loginDialog = new JDialog(mainFrame, "Login Utente", true);
+        loginDialog.setSize(400, 250);
+        loginDialog.setLocationRelativeTo(mainFrame);
+        
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        
+        // Header
+        JLabel headerLabel = new JLabel("LOGIN UTENTE");
+        headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        headerLabel.setOpaque(true);
+        headerLabel.setBackground(new Color(51, 122, 183));
+        headerLabel.setForeground(Color.WHITE);
+        headerLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
+        // Form panel
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        
+        JTextField usernameField = new JTextField(20);
+        JPasswordField passwordField = new JPasswordField(20);
+        
+        // Username
+        gbc.gridx = 0; gbc.gridy = 0;
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        formPanel.add(usernameLabel, gbc);
+        
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        formPanel.add(usernameField, gbc);
+        
+        // Password
+        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        formPanel.add(passwordLabel, gbc);
+        
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        formPanel.add(passwordField, gbc);
+        
+        // Button panel
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        JButton loginButton = new JButton("Login");
+        JButton cancelButton = new JButton("Annulla");
+        
+        loginButton.setBackground(new Color(40, 167, 69));
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFont(new Font("Arial", Font.BOLD, 12));
+        
+        cancelButton.setBackground(new Color(220, 53, 69));
+        cancelButton.setForeground(Color.WHITE);
+        cancelButton.setFont(new Font("Arial", Font.BOLD, 12));
+        
+        loginButton.addActionListener(e -> {
+            String username = usernameField.getText().trim();
+            String password = new String(passwordField.getPassword());
+            
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(loginDialog, 
+                    "Username e Password sono obbligatori!", 
+                    "Errore", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (formActionListener != null) {
+                formActionListener.onLoginSubmit(username, password);
+            }
+            
+            loginDialog.dispose();
+        });
+        
+        cancelButton.addActionListener(e -> loginDialog.dispose());
+        
+        buttonPanel.add(loginButton);
+        buttonPanel.add(cancelButton);
+        
+        // Add components to main panel
+        mainPanel.add(headerLabel, BorderLayout.NORTH);
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        loginDialog.add(mainPanel);
+        loginDialog.setVisible(true);
     }
     
     /**
@@ -195,7 +471,6 @@ public class UserView {
         outputPanel.add(tabbedPane, BorderLayout.CENTER);
         mainPanel.add(outputPanel, BorderLayout.SOUTH);
     }
-    
     
     /**
      * Display users in table format
@@ -306,7 +581,6 @@ public class UserView {
         }
     }
 
-    
     /**
      * Get user input via dialog
      */
@@ -331,8 +605,6 @@ public class UserView {
         return result == JOptionPane.YES_OPTION;
     }
     
-    /**
-     * 
     /**
      * Append text to output area
      */

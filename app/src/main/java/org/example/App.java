@@ -10,7 +10,7 @@ import org.example.model.*;
 
 /**
  * Main Application with Swing GUI
- * Updated to use the new Swing-based user interface
+ * Updated to use the new Swing-based user interface with form windows
  */
 public class App {
 
@@ -40,7 +40,8 @@ public class App {
 
             @Override
             public void onRegisterUser() {
-                handleRegisterUser();
+                // This will now show the registration window
+                // The actual registration logic is handled in the form listener
             }
 
             @Override
@@ -50,7 +51,8 @@ public class App {
 
             @Override
             public void onAuthenticateUser() {
-                handleAuthenticateUser();
+                // This will now show the login window
+                // The actual authentication logic is handled in the form listener
             }
 
             @Override
@@ -59,82 +61,125 @@ public class App {
             }
         });
 
+        // Set up the form action listener to handle form submissions
+        UserView.setFormActionListener(new UserView.FormActionListener() {
+
+            @Override
+            public void onRegisterSubmit(UserView.RegistrationData data) {
+                handleRegisterSubmit(data);
+            }
+
+            @Override
+            public void onLoginSubmit(String username, String password) {
+                handleLoginSubmit(username, password);
+            }
+        });
+
         // Show the GUI
         UserView.show();
     }
 
-    
-
     /**
-     * Handle user registration
+     * Handle registration form submission
      */
-    private void handleRegisterUser() {
+    private void handleRegisterSubmit(UserView.RegistrationData data) {
         try {
+            UserView.displayMessage("Processing registration...");
 
-            String nome = UserView.getUserInput("Enter Nome:");
-            if (nome == null || nome.trim().isEmpty())
+            // Validate input data
+            if (!validateRegistrationData(data)) {
                 return;
+            }
 
-            String cognome = UserView.getUserInput("Enter Cognome:");
-            if (cognome == null || cognome.trim().isEmpty())
-                return;
-
-            String sesso = UserView.getUserInput("Enter Sesso (M/F):");
-            if (sesso == null || sesso.trim().isEmpty())
-                return;
-
-            String telefono = UserView.getUserInput("Enter Numero di Telefono:");
-            if (telefono == null || telefono.trim().isEmpty())
-                return;
-
-            String stato_residenza = UserView.getUserInput("Enter Stato di Residenza:");
-            if (stato_residenza == null || stato_residenza.trim().isEmpty())
-                return;
-
-            String provincia = UserView.getUserInput("Enter Provincia (es. PU):");
-            if (provincia == null || provincia.trim().isEmpty())
-                return;
-
-            String cap = UserView.getUserInput("Enter CAP:");
-            if (cap == null || cap.trim().isEmpty())
-                return;
-
-            String via = UserView.getUserInput("Enter Via:");
-            if (via == null || via.trim().isEmpty())
-                return;
-
-            String civico = UserView.getUserInput("Enter Numero civico:");
-            if (civico == null || civico.trim().isEmpty())
-                return;
-
-            String username = UserView.getUserInput("Enter Username:");
-            if (username == null || username.trim().isEmpty())
-                return;
-
-            String email = UserView.getUserInput("Enter Email:");
-            if (email == null || email.trim().isEmpty())
-                return;
-
-            String password = UserView.getUserInput("Enter Password:");
-            if (password == null || password.trim().isEmpty())
-                return;
-
-            // Call controller method
-            int persona_id = personalDataController.createPersonalData(nome, cognome, sesso, telefono, stato_residenza,
-                    provincia, cap,
-                    via, civico);
+            // Call controller methods
+            int persona_id = personalDataController.createPersonalData(
+                data.nome, data.cognome, data.sesso, data.telefono, 
+                data.stato_residenza, data.provincia, data.cap, 
+                data.via, data.civico
+            );
+            
             int inventory_id = inventoryController.createInventory();
 
-            if (persona_id == -1 || inventory_id == -1)
+            if (persona_id == -1 || inventory_id == -1) {
+                UserView.displayError("Failed to create personal data or inventory.");
                 return;
+            }
 
-            userController.createUser(persona_id, inventory_id, username, email, password);
+            userController.createUser(persona_id, inventory_id, data.username, data.email, data.password);
 
-        } catch (NumberFormatException e) {
-            UserView.displayError("Invalid number format. Please enter valid integers for ID fields.");
         } catch (Exception e) {
             UserView.displayError("Error during user registration: " + e.getMessage());
         }
+    }
+
+    /**
+     * Handle login form submission
+     */
+    private void handleLoginSubmit(String username, String password) {
+        try {
+            UserView.displayMessage("Authenticating user...");
+            userController.authenticateUser(username, password);
+        } catch (Exception e) {
+            UserView.displayError("Error during authentication: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Validate registration data
+     */
+    private boolean validateRegistrationData(UserView.RegistrationData data) {
+        // Validate email format
+        if (!isValidEmail(data.email)) {
+            UserView.displayError("Invalid email format.");
+            return false;
+        }
+
+        // Validate phone number (basic check)
+        if (!isValidPhoneNumber(data.telefono)) {
+            UserView.displayError("Invalid phone number format.");
+            return false;
+        }
+
+        // Validate sesso field
+        if (!data.sesso.toUpperCase().matches("[MF]")) {
+            UserView.displayError("Sesso must be 'M' or 'F'.");
+            return false;
+        }
+
+        // Validate CAP (Italian postal code - 5 digits)
+        if (!data.cap.matches("\\d{5}")) {
+            UserView.displayError("CAP must be 5 digits.");
+            return false;
+        }
+
+        // Validate provincia (2 uppercase letters)
+        if (!data.provincia.matches("[A-Z]{2}")) {
+            UserView.displayError("Provincia must be 2 uppercase letters (e.g., PU).");
+            return false;
+        }
+
+        // Validate password strength
+        if (data.password.length() < 6) {
+            UserView.displayError("Password must be at least 6 characters long.");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate email format
+     */
+    private boolean isValidEmail(String email) {
+        return email.matches("^[A-Za-z0-9+_.-]+@([A-Za-z0-9.-]+\\.[A-Za-z]{2,})$");
+    }
+
+    /**
+     * Validate phone number format
+     */
+    private boolean isValidPhoneNumber(String phone) {
+        // Basic validation for Italian phone numbers
+        return phone.matches("^[+]?[0-9\\s\\-\\(\\)]{8,15}$");
     }
 
     /**
@@ -145,26 +190,6 @@ public class App {
             userController.displayAllUsersTable();
         } catch (Exception e) {
             UserView.displayError("Error displaying users table: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Handle user authentication
-     */
-    private void handleAuthenticateUser() {
-        try {
-            String username = UserView.getUserInput("Enter Username:");
-            if (username == null || username.trim().isEmpty())
-                return;
-
-            String password = UserView.getUserInput("Enter Password:");
-            if (password == null || password.trim().isEmpty())
-                return;
-
-            userController.authenticateUser(username, password);
-
-        } catch (Exception e) {
-            UserView.displayError("Error during authentication: " + e.getMessage());
         }
     }
 
