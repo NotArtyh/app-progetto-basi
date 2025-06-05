@@ -63,6 +63,8 @@ public class App {
         UserView.show();
     }
 
+    
+
     /**
      * Handle user registration
      */
@@ -118,10 +120,15 @@ public class App {
                 return;
 
             // Call controller method
-            personalDataController.createPersonalData(nome, cognome, sesso, telefono, stato_residenza, provincia, cap,
+            int persona_id = personalDataController.createPersonalData(nome, cognome, sesso, telefono, stato_residenza,
+                    provincia, cap,
                     via, civico);
-            inventoryController.createInventory();
-            // userController.createUser(username, email, password);
+            int inventory_id = inventoryController.createInventory();
+
+            if (persona_id == -1 || inventory_id == -1)
+                return;
+
+            userController.createUser(persona_id, inventory_id, username, email, password);
 
         } catch (NumberFormatException e) {
             UserView.displayError("Invalid number format. Please enter valid integers for ID fields.");
