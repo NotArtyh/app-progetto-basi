@@ -16,17 +16,19 @@ public class ItemController {
         this.itemView = itemView;
     }
 
-    public void createItem(int inventoryId, int mediaId, String condition, String note, LocalDate data_acquisizione) {
+    public int createItem(int inventoryId, int mediaId, String condition, String note, LocalDate data_acquisizione) {
         try {
             Item item = new Item(mediaId, inventoryId, condition, note, data_acquisizione);
 
             itemDAO.createItem(item);
             itemView.displayMessage("User created successfully with ID: " + item.getItemId());
-            
+            return item.getItemId();
         } catch (SQLException e) {
             itemView.displayError("Error creating user: " + e.getMessage());
+            return -1;
         } catch (Exception e) {
             itemView.displayError("Unexpected error: " + e.getMessage());
+            return -1;
         }
 
     }
