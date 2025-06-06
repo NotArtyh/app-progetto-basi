@@ -777,6 +777,7 @@ public class UserView {
                 showVetrinaPage();
             }
         });
+
         JPanel inventoryCard = createDashboardCard("👤", "My Inventory", "View and edit your inventory",
                 new Color(23, 162, 184));
 
@@ -788,16 +789,27 @@ public class UserView {
             }
         });
 
+        JPanel itemCard = createDashboardCard("💿", "Add Item", "Add a new item to your inventory",
+                new Color(113, 97, 20));
+
+        itemCard.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                showInventoryPage();
+            }
+        });
+
         JPanel profileCard = createDashboardCard("⚙️", "My profile", "Show your personal data and your trade offers",
                 new Color(255, 193, 7));
 
         // Change background color for each card
         vetrinaCard.setBackground(new Color(220, 255, 220)); // Light green background
+        itemCard.setBackground(new Color(113, 97, 239));
         inventoryCard.setBackground(new Color(220, 240, 255)); // Light blue background
         profileCard.setBackground(new Color(255, 245, 220)); // Light yellow background
 
         // Add hover effect to reset background color
-        for (JPanel card : new JPanel[] { vetrinaCard, inventoryCard, profileCard }) {
+        for (JPanel card : new JPanel[] { vetrinaCard, itemCard, inventoryCard, profileCard }) {
             card.addMouseListener(new java.awt.event.MouseAdapter() {
                 private Color originalColor = card.getBackground();
 
@@ -816,7 +828,7 @@ public class UserView {
         }
 
         // Center icon, title, and description for each card
-        for (JPanel card : new JPanel[] { vetrinaCard, inventoryCard, profileCard }) {
+        for (JPanel card : new JPanel[] { vetrinaCard, itemCard, inventoryCard, profileCard }) {
             JPanel headerPanel = (JPanel) card.getComponent(0);
             headerPanel.setLayout(new GridLayout(2, 1, 0, 5)); // Adjust layout for centering
 
@@ -833,6 +845,7 @@ public class UserView {
             descLabel.setFont(new Font("Arial", Font.PLAIN, 30)); // Center description
         }
         cardsPanel.add(vetrinaCard);
+        cardsPanel.add(itemCard);
         cardsPanel.add(inventoryCard);
         cardsPanel.add(profileCard);
 
