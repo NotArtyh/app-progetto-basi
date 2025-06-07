@@ -1054,14 +1054,12 @@ private void showProfilePage() {
                 "Media ID:",
                 "Condizioni:",
                 "Note:",
-                "Data Acquisizione (yyyy-MM-ddTHH:mm):"
         };
 
         Component[] components = {
                 mediaIdField,
                 condizioniField, 
                 noteScrollPane, 
-                dateField
         };
 
         for (int i = 0; i < labels.length; i++) {
@@ -1101,14 +1099,13 @@ private void showProfilePage() {
                 errors.append("- Media ID è obbligatorio\n");
             if (condizioniField.getText().trim().isEmpty())
                 errors.append("- Condizioni è obbligatorio\n");
-            if (dateField.getText().trim().isEmpty())
-                errors.append("- Data Aquisizione è obbligatoria\n");
+    
 
             try {
                 Integer.parseInt(mediaIdField.getText().trim());
             } catch (NumberFormatException ex) {
                 valid = false;
-                errors.append("- Media ID, Item ID e Inventory ID devono essere numeri interi\n");
+                errors.append("- Media ID, deve essere numeri interi\n");
             }
 
             if (errors.length() > 0) {
@@ -1124,7 +1121,7 @@ private void showProfilePage() {
             int mediaId = Integer.parseInt(mediaIdField.getText().trim());
             String condizioni = condizioniField.getText().trim();
             String note = noteArea.getText().trim();
-            LocalDateTime dataAcquisizione = LocalDateTime.parse(dateField.getText().trim());
+            LocalDateTime dataAcquisizione = LocalDateTime.now(); // Use current time for acquisition date
 
             ItemData itemData = new ItemData(mediaId, condizioni, note, dataAcquisizione);
 

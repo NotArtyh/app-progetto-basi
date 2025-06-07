@@ -17,13 +17,13 @@ public class MediaDAO {
                 PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setInt(1, media.getMediaId());
-            stmt.setBytes(2, media.getFoto());
+            stmt.setString(2, media.getFoto());
             stmt.setString(3, media.getTitolo());
             stmt.setTimestamp(4, java.sql.Timestamp.valueOf(media.getData_aggiunta()));
             stmt.setString(5, media.getNome_formato());
             stmt.executeUpdate();
         
-            
+
             }
         }
     }
