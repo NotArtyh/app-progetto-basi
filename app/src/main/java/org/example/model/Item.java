@@ -1,6 +1,6 @@
 package org.example.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Item {
     private int mediaId;
@@ -8,20 +8,12 @@ public class Item {
     private int inventoryId;
     private String condizioni;
     private String note;
-    private LocalDate data_acquisizione;
+    private LocalDateTime data_acquisizione;
 
     public Item() {
     }
 
-    public Item(int mediaId, int inventoryId, String condizioni, String note, LocalDate data_acquisizione) {
-        this.mediaId = mediaId;
-        this.inventoryId = inventoryId;
-        this.condizioni = condizioni;
-        this.note = note;
-        this.data_acquisizione = data_acquisizione;
-    }
-
-    public Item(int mediaId, int itemId, int inventoryId, String condizioni, String note, LocalDate data_acquisizione) {
+    public Item(int mediaId, int inventoryId, int itemId, String condizioni, String note, LocalDateTime data_acquisizione) {
         this.mediaId = mediaId;
         this.itemId = itemId;
         this.inventoryId = inventoryId;
@@ -70,11 +62,11 @@ public class Item {
         this.note = note;
     }
 
-    public LocalDate getData_acquisizione() {
+    public LocalDateTime getData_acquisizione() {
         return data_acquisizione;
     }
 
-    public void setData_acquisizione(LocalDate data_acquisizione) {
+    public void setData_acquisizione(LocalDateTime data_acquisizione) {
         this.data_acquisizione = data_acquisizione;
     }
 

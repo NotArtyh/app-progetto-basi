@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.example.database.ItemDAO;
 import org.example.model.Item;
@@ -16,15 +16,15 @@ public class ItemController {
         this.itemView = itemView;
     }
 
-    public int createItem(int inventoryId, int mediaId, String condition, String note, LocalDate data_acquisizione) {
+    public int createItem(int mediaId, int inventoryId, int itemId ,String condition, String note, LocalDateTime dataAcquisizione) {
         try {
-            Item item = new Item(mediaId, inventoryId, condition, note, data_acquisizione);
+            Item item = new Item(mediaId, inventoryId, itemId, condition, note, dataAcquisizione);
 
             itemDAO.createItem(item);
             itemView.displayMessage("User created successfully with ID: " + item.getItemId());
             return item.getItemId();
         } catch (SQLException e) {
-            itemView.displayError("Error creating user: " + e.getMessage());
+            itemView.displayError("Error creating the item: " + e.getMessage());
             return -1;
         } catch (Exception e) {
             itemView.displayError("Unexpected error: " + e.getMessage());
