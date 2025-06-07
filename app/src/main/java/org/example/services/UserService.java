@@ -13,7 +13,7 @@ public class UserService {
     private UserDAO userDAO;
     private PersonalDataDAO personalDataDAO;
     private InventoryDAO inventoryDAO;
-    
+
     /*
      * Create a new user
      */
@@ -52,12 +52,37 @@ public class UserService {
             // or if need to get the current session userId this would be a good place
             userDAO.createUser(new User(personaId, inventoryId, 1, username, password, email));
 
-            return new ServiceResult(true, "Registrazione nuovo utente avvenuta con successo.");
+            return new ServiceResult(true, "New user registration Succeeded.");
 
         } catch (SQLException e) {
-            return new ServiceResult(false, "Error updating user: " + e.getMessage());
+            return new ServiceResult(false, "Error creating user: " + e.getMessage());
         } catch (Exception e) {
-            return new ServiceResult(false, password);
+            return new ServiceResult(false, "Unexpected error: " + e.getMessage());
+        }
+    }
+
+    /*
+     * Authenticate an existing User on the platform
+     */
+    public ServiceResult authenticateUser(String username, String password) {
+        try {
+            if (username == null || username.trim().isEmpty()) {
+                return new ServiceResult(false, "Username cannot be empty.");
+            }
+
+            if (password == null || password.trim().isEmpty()) {
+                return new ServiceResult(false, "Password cannot be empty.");
+            }
+
+            // We aren't getting an userId from this single operation right here but we
+            // could get it some other way to track the current session user
+            boolean isAuthenticated = userDAO.authenticateUser(username, password);
+            return new ServiceResult(isAuthenticated, "");
+
+        } catch (SQLException e) {
+            return new ServiceResult(false, "Error during authentication: " + e.getMessage());
+        } catch (Exception e) {
+            return new ServiceResult(false, "Unexpected error: " + e.getMessage());
         }
     }
 
