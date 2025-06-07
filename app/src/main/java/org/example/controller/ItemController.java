@@ -16,9 +16,9 @@ public class ItemController {
         this.itemView = itemView;
     }
 
-    public int createItem(int mediaId, int inventoryId, String condition, String note, LocalDateTime dataAcquisizione) {
+    public int createItem(int mediaId, int inventoryId, String condizioni, String note, LocalDateTime dataAcquisizione) {
         try {
-            Item item = new Item(mediaId, inventoryId, condition, note, dataAcquisizione);
+            Item item = new Item(mediaId, inventoryId, condizioni, note, dataAcquisizione);
 
             itemDAO.createItem(item);
             itemView.displayMessage("Item created successfully with ID: " + item.getItemId());

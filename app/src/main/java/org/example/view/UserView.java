@@ -1037,7 +1037,6 @@ private void showProfilePage() {
         // Create form fields
         JTextField mediaIdField = new JTextField(20);
         JTextField condizioniField = new JTextField(20);
-        JTextField dateField = new JTextField(20);
 
         // Multiline note area
         JTextArea noteArea = new JTextArea(4, 20);
