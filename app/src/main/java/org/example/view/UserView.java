@@ -2,6 +2,7 @@ package org.example.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -10,6 +11,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -23,9 +29,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -61,7 +69,28 @@ public class UserView {
 
         void onLoginSubmit(String username, String password);
 
+        void onItemSubmit(ItemData itemData);
+
         void onLogout();
+    }
+
+    public static class ItemData {
+        public int mediaId;
+        public int itemId;
+        public int inventoryId;
+        public String condizioni;
+        public String note;
+        public LocalDateTime dataAcquisizione;
+
+        public ItemData(int mediaId, int itemId, int inventoryId, String condizioni, String note,
+                LocalDateTime dataAcquisizione) {
+            this.mediaId = mediaId;
+            this.itemId = itemId;
+            this.inventoryId = inventoryId;
+            this.condizioni = condizioni;
+            this.note = note;
+            this.dataAcquisizione = dataAcquisizione;
+        }
     }
 
     // Data class for registration form
@@ -795,7 +824,8 @@ public class UserView {
         itemCard.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                showInventoryPage();
+                System.out.println("Clicked item card");
+                showAddItemWindow();
             }
         });
 
@@ -933,6 +963,155 @@ public class UserView {
                 formActionListener.onLogout();
             }
         }
+    }
+
+    private void showAddItemWindow() {
+        JDialog addItemDialog = new JDialog(mainFrame, "Add New Item", true);
+        addItemDialog.setSize(700, 500);
+        addItemDialog.setLocationRelativeTo(mainFrame);
+
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        // Header
+        JLabel headerLabel = new JLabel("ADD NEW ITEM");
+        headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        headerLabel.setOpaque(true);
+        headerLabel.setBackground(new Color(113, 97, 239));
+        headerLabel.setForeground(Color.WHITE);
+        headerLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        // Form panel
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Create form fields
+        JTextField mediaIdField = new JTextField(20);
+        JTextField itemIdField = new JTextField(20);
+        JTextField inventoryIdField = new JTextField(20);
+        JTextField condizioniField = new JTextField(20);
+        JTextField dateField = new JTextField(20);
+
+        // Multiline note area
+        JTextArea noteArea = new JTextArea(4, 20);
+        noteArea.setLineWrap(true);
+        noteArea.setWrapStyleWord(true);
+        JScrollPane noteScrollPane = new JScrollPane(noteArea);
+        noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        // Add fields to form
+        String[] labels = {
+                "Media ID:",
+                "Inventory ID:",
+                "Item ID:",
+                "Condizioni:",
+                "Note:",
+                "Data Acquisizione (yyyy-MM-ddTHH:mm):"
+        };
+
+        Component[] components = {
+                mediaIdField,
+                inventoryIdField,
+                itemIdField, 
+                condizioniField, 
+                noteScrollPane, 
+                dateField
+        };
+
+        for (int i = 0; i < labels.length; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = i;
+            JLabel label = new JLabel(labels[i]);
+            label.setFont(new Font("Arial", Font.PLAIN, 12));
+            formPanel.add(label, gbc);
+
+            gbc.gridx = 1;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.weightx = 1.0;
+            formPanel.add(components[i], gbc);
+            gbc.weightx = 0;
+            gbc.fill = GridBagConstraints.NONE;
+        }
+
+        // Buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        JButton submitButton = new JButton("Add Item");
+        JButton cancelButton = new JButton("Cancel");
+
+        submitButton.setBackground(new Color(40, 167, 69));
+        submitButton.setForeground(Color.BLACK);
+        submitButton.setFont(new Font("Arial", Font.BOLD, 12));
+
+        cancelButton.setBackground(new Color(220, 53, 69));
+        cancelButton.setForeground(Color.BLACK);
+        cancelButton.setFont(new Font("Arial", Font.BOLD, 12));
+
+        submitButton.addActionListener(e -> {
+            boolean valid = true;
+            StringBuilder errors = new StringBuilder();
+
+            // Validate required text fields
+            if (mediaIdField.getText().trim().isEmpty())
+                errors.append("- Media ID è obbligatorio\n");
+            if (itemIdField.getText().trim().isEmpty())
+                errors.append("- Item ID è obbligatorio\n");
+            if (inventoryIdField.getText().trim().isEmpty())
+                errors.append("- Inventory ID è obbligatorio\n");
+            if (condizioniField.getText().trim().isEmpty())
+                errors.append("- Condizioni è obbligatorio\n");
+            if (dateField.getText().trim().isEmpty())
+                errors.append("- Data Aquisizione è obbligatoria\n");
+
+            try {
+                Integer.parseInt(mediaIdField.getText().trim());
+                Integer.parseInt(itemIdField.getText().trim());
+                Integer.parseInt(inventoryIdField.getText().trim());
+            } catch (NumberFormatException ex) {
+                valid = false;
+                errors.append("- Media ID, Item ID e Inventory ID devono essere numeri interi\n");
+            }
+
+            if (errors.length() > 0) {
+                valid = false;
+                JOptionPane.showMessageDialog(addItemDialog, "Errori nella compilazione:\n" + errors,
+                        "Errore", JOptionPane.ERROR_MESSAGE);
+            }
+
+            if (!valid)
+                return;
+
+            // Parse and submit
+            int mediaId = Integer.parseInt(mediaIdField.getText().trim());
+            int itemId = Integer.parseInt(itemIdField.getText().trim());
+            int inventoryId = Integer.parseInt(inventoryIdField.getText().trim());
+            String condizioni = condizioniField.getText().trim();
+            String note = noteArea.getText().trim();
+            LocalDateTime dataAcquisizione = LocalDateTime.parse(dateField.getText().trim());
+
+            ItemData itemData = new ItemData(mediaId, itemId, inventoryId, condizioni, note, dataAcquisizione);
+
+            if (formActionListener != null) {
+                formActionListener.onItemSubmit(itemData);
+            }
+
+            addItemDialog.dispose();
+        });
+
+        cancelButton.addActionListener(e -> addItemDialog.dispose());
+
+        buttonPanel.add(cancelButton);
+        buttonPanel.add(submitButton);
+
+        // Layout everything
+        mainPanel.add(headerLabel, BorderLayout.NORTH);
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        addItemDialog.add(mainPanel);
+        addItemDialog.setVisible(true);
     }
 
     /**
