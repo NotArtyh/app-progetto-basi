@@ -11,11 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -29,11 +25,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -737,154 +731,214 @@ public class UserView {
      * Create top bar with user info and logout button
      */
     private JPanel createTopBar(String username) {
-        JPanel topBar = new JPanel(new BorderLayout());
-        topBar.setBackground(new Color(51, 122, 183));
-        topBar.setBorder(new EmptyBorder(10, 20, 10, 20));
-        topBar.setPreferredSize(new Dimension(0, 80));
+    JPanel topBar = new JPanel(new BorderLayout());
+    topBar.setBackground(new Color(51, 122, 183));
+    topBar.setBorder(new EmptyBorder(10, 20, 10, 20));
+    topBar.setPreferredSize(new Dimension(0, 80));
 
-        // Left side - Welcome message
-        JLabel welcomeLabel = new JLabel("Welcome in MUSIC TRADES COLLECTION!");
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        welcomeLabel.setForeground(Color.WHITE);
+    // Left side - Welcome message
+    JLabel welcomeLabel = new JLabel("Welcome in MUSIC TRADES COLLECTION!");
+    welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
+    welcomeLabel.setForeground(Color.WHITE);
 
-        // Right side - User info and logout
-        JPanel rightPanel = new JPanel(new GridLayout(1, 2, 10, 0));
-        rightPanel.setOpaque(false);
+    // Right side - User info, navigation buttons, and logout
+    JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+    rightPanel.setOpaque(false);
 
-        // User info
-        JLabel userLabel = new JLabel("User: " + username);
-        userLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        userLabel.setForeground(Color.WHITE);
-        userLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+    // User info
+    JLabel userLabel = new JLabel("User: " + username);
+    userLabel.setFont(new Font("Arial", Font.BOLD, 18));
+    userLabel.setForeground(Color.WHITE);
 
-        // Logout button
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.setFont(new Font("Arial", Font.BOLD, 12));
-        logoutButton.setBackground(new Color(189, 48, 62)); // Red color
-        logoutButton.setForeground(Color.WHITE);
-        logoutButton.setFocusPainted(false);
-        logoutButton.setOpaque(true); // Ensure background color is applied
-        logoutButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        logoutButton.addActionListener(e -> handleLogout());
-        logoutButton.setUI(new javax.swing.plaf.basic.BasicButtonUI()); // Force UI to respect background color
+    // My Inventory button
+    JButton inventoryButton = new JButton("My Inventory");
+    inventoryButton.setFont(new Font("Arial", Font.BOLD, 12));
+    inventoryButton.setBackground(new Color(23, 162, 184)); // Blue color
+    inventoryButton.setForeground(Color.WHITE);
+    inventoryButton.setFocusPainted(false);
+    inventoryButton.setOpaque(true);
+    inventoryButton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+    inventoryButton.addActionListener(e -> showInventoryPage());
+    inventoryButton.setUI(new javax.swing.plaf.basic.BasicButtonUI());
 
-        rightPanel.add(userLabel);
-        rightPanel.add(logoutButton);
+    // My Profile button
+    JButton profileButton = new JButton("My Profile");
+    profileButton.setFont(new Font("Arial", Font.BOLD, 12));
+    profileButton.setBackground(new Color(255, 193, 7)); // Yellow color
+    profileButton.setForeground(Color.BLACK);
+    profileButton.setFocusPainted(false);
+    profileButton.setOpaque(true);
+    profileButton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+    profileButton.addActionListener(e -> showProfilePage());
+    profileButton.setUI(new javax.swing.plaf.basic.BasicButtonUI());
 
-        topBar.add(welcomeLabel, BorderLayout.WEST);
-        topBar.add(rightPanel, BorderLayout.EAST);
+    // Logout button
+    JButton logoutButton = new JButton("Logout");
+    logoutButton.setFont(new Font("Arial", Font.BOLD, 12));
+    logoutButton.setBackground(new Color(189, 48, 62)); // Red color
+    logoutButton.setForeground(Color.WHITE);
+    logoutButton.setFocusPainted(false);
+    logoutButton.setOpaque(true);
+    logoutButton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+    logoutButton.addActionListener(e -> handleLogout());
+    logoutButton.setUI(new javax.swing.plaf.basic.BasicButtonUI());
 
-        return topBar;
-    }
+    // Add components to right panel
+    rightPanel.add(userLabel);
+    rightPanel.add(inventoryButton);
+    rightPanel.add(profileButton);
+    rightPanel.add(logoutButton);
+
+    topBar.add(welcomeLabel, BorderLayout.WEST);
+    topBar.add(rightPanel, BorderLayout.EAST);
+
+    return topBar;
+}
+
+/**
+ * Show profile page
+ */
+private void showProfilePage() {
+    JFrame profileFrame = new JFrame("My Profile");
+    profileFrame.setSize(800, 600);
+    profileFrame.setLocationRelativeTo(null);
+    profileFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+    mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+    JLabel titleLabel = new JLabel("My Profile - " + currentUsername);
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
+    titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+    // Profile content panel
+    JPanel contentPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+    
+    // Personal data section
+    JPanel personalDataPanel = new JPanel(new BorderLayout());
+    personalDataPanel.setBorder(BorderFactory.createTitledBorder("Personal Information"));
+    
+    JTextArea personalDataArea = new JTextArea();
+    personalDataArea.setText("Name: [User's Name]\nEmail: [User's Email]\nPhone: [User's Phone]\nAddress: [User's Address]");
+    personalDataArea.setEditable(false);
+    personalDataArea.setFont(new Font("Arial", Font.PLAIN, 14));
+    personalDataArea.setBackground(new Color(248, 248, 248));
+    
+    personalDataPanel.add(new JScrollPane(personalDataArea), BorderLayout.CENTER);
+    
+    // Trade offers section
+    JPanel tradeOffersPanel = new JPanel(new BorderLayout());
+    tradeOffersPanel.setBorder(BorderFactory.createTitledBorder("My Trade Offers"));
+    
+    JTextArea tradeOffersArea = new JTextArea();
+    tradeOffersArea.setText("Active Trade Offers:\n\n1. Trading: Album A for Album B\n   Status: Pending\n\n2. Trading: CD C for Vinyl D\n   Status: In Progress");
+    tradeOffersArea.setEditable(false);
+    tradeOffersArea.setFont(new Font("Arial", Font.PLAIN, 14));
+    tradeOffersArea.setBackground(new Color(248, 248, 248));
+    
+    tradeOffersPanel.add(new JScrollPane(tradeOffersArea), BorderLayout.CENTER);
+    
+    contentPanel.add(personalDataPanel);
+    contentPanel.add(tradeOffersPanel);
+    
+    mainPanel.add(contentPanel, BorderLayout.CENTER);
+
+    profileFrame.add(mainPanel);
+    profileFrame.setVisible(true);
+}
+
 
     /**
      * Create homepage content
      */
     private JPanel createHomepageContent() {
-        JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
-        contentPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
-        contentPanel.setBackground(new Color(202, 207, 240));
+    JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
+    contentPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
+    contentPanel.setBackground(new Color(202, 207, 240));
 
-        // Dashboard header
-        JLabel dashboardLabel = new JLabel("Dashboard");
-        dashboardLabel.setFont(new Font("Arial", Font.BOLD, 50));
-        dashboardLabel.setForeground(new Color(52, 58, 64));
-        dashboardLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    // Dashboard header
+    JLabel dashboardLabel = new JLabel("Dashboard");
+    dashboardLabel.setFont(new Font("Arial", Font.BOLD, 50));
+    dashboardLabel.setForeground(new Color(52, 58, 64));
+    dashboardLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Cards panel
-        JPanel cardsPanel = new JPanel(new GridLayout(1, 3, 20, 20));
-        cardsPanel.setOpaque(false);
+    // Cards panel - now only 2 cards in a row
+    JPanel cardsPanel = new JPanel(new GridLayout(1, 2, 40, 20));
+    cardsPanel.setOpaque(false);
 
-        // Create dashboard cards
-        JPanel vetrinaCard = createDashboardCard("👀", "Vetrina", "View all other users' items and propose new trades",
-                new Color(40, 167, 69));
+    // Create dashboard cards - only Vetrina and Add Item remain
+    JPanel vetrinaCard = createDashboardCard("👀", "Vetrina", "View all other users' items and propose new trades",
+            new Color(40, 167, 69));
 
-        // Add mouse listener to vetrinaCard to show vetrina page
-        vetrinaCard.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                showVetrinaPage();
-            }
-        });
-
-        JPanel inventoryCard = createDashboardCard("👤", "My Inventory", "View and edit your inventory",
-                new Color(23, 162, 184));
-
-        // Add mouse listener to inventoryCard to show inventory page
-        inventoryCard.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                showInventoryPage();
-            }
-        });
-
-        JPanel itemCard = createDashboardCard("💿", "Add Item", "Add a new item to your inventory",
-                new Color(113, 97, 20));
-
-        itemCard.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                System.out.println("Clicked item card");
-                showAddItemWindow();
-            }
-        });
-
-        JPanel profileCard = createDashboardCard("⚙️", "My profile", "Show your personal data and your trade offers",
-                new Color(255, 193, 7));
-
-        // Change background color for each card
-        vetrinaCard.setBackground(new Color(220, 255, 220)); // Light green background
-        itemCard.setBackground(new Color(113, 97, 239));
-        inventoryCard.setBackground(new Color(220, 240, 255)); // Light blue background
-        profileCard.setBackground(new Color(255, 245, 220)); // Light yellow background
-
-        // Add hover effect to reset background color
-        for (JPanel card : new JPanel[] { vetrinaCard, itemCard, inventoryCard, profileCard }) {
-            card.addMouseListener(new java.awt.event.MouseAdapter() {
-                private Color originalColor = card.getBackground();
-
-                @Override
-                public void mouseEntered(java.awt.event.MouseEvent e) {
-                    card.setBackground(new Color(248, 249, 250)); // Hover color
-                    card.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                }
-
-                @Override
-                public void mouseExited(java.awt.event.MouseEvent e) {
-                    card.setBackground(originalColor); // Reset to original color
-                    card.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                }
-            });
+    // Add mouse listener to vetrinaCard to show vetrina page
+    vetrinaCard.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+            showVetrinaPage();
         }
+    });
 
-        // Center icon, title, and description for each card
-        for (JPanel card : new JPanel[] { vetrinaCard, itemCard, inventoryCard, profileCard }) {
-            JPanel headerPanel = (JPanel) card.getComponent(0);
-            headerPanel.setLayout(new GridLayout(2, 1, 0, 5)); // Adjust layout for centering
+    JPanel itemCard = createDashboardCard("💿", "Add Item", "Add a new item to your inventory",
+            new Color(113, 97, 20));
 
-            JLabel iconLabel = (JLabel) headerPanel.getComponent(0);
-            iconLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center icon
-            iconLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Increase icon size
-
-            JLabel titleLabel = (JLabel) headerPanel.getComponent(1);
-            titleLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center title
-            titleLabel.setFont(new Font("Arial", Font.BOLD, 50)); // Increase title size
-
-            JLabel descLabel = (JLabel) card.getComponent(1);
-            descLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            descLabel.setFont(new Font("Arial", Font.PLAIN, 30)); // Center description
+    itemCard.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+            System.out.println("Clicked item card");
+            showAddItemWindow();
         }
-        cardsPanel.add(vetrinaCard);
-        cardsPanel.add(itemCard);
-        cardsPanel.add(inventoryCard);
-        cardsPanel.add(profileCard);
+    });
 
-        contentPanel.add(dashboardLabel, BorderLayout.NORTH);
-        contentPanel.add(cardsPanel, BorderLayout.CENTER);
+    // Change background color for each card
+    vetrinaCard.setBackground(new Color(220, 255, 220)); // Light green background
+    itemCard.setBackground(new Color(113, 97, 239));
 
-        return contentPanel;
+    // Add hover effect to reset background color
+    for (JPanel card : new JPanel[] { vetrinaCard, itemCard }) {
+        card.addMouseListener(new java.awt.event.MouseAdapter() {
+            private Color originalColor = card.getBackground();
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                card.setBackground(new Color(248, 249, 250)); // Hover color
+                card.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                card.setBackground(originalColor); // Reset to original color
+                card.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
+        });
     }
 
+    // Center icon, title, and description for each card
+    for (JPanel card : new JPanel[] { vetrinaCard, itemCard }) {
+        JPanel headerPanel = (JPanel) card.getComponent(0);
+        headerPanel.setLayout(new GridLayout(2, 1, 0, 5)); // Adjust layout for centering
+
+        JLabel iconLabel = (JLabel) headerPanel.getComponent(0);
+        iconLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center icon
+        iconLabel.setFont(new Font("Arial", Font.PLAIN, 50)); // Increase icon size
+
+        JLabel titleLabel = (JLabel) headerPanel.getComponent(1);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center title
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 50)); // Increase title size
+
+        JLabel descLabel = (JLabel) card.getComponent(1);
+        descLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        descLabel.setFont(new Font("Arial", Font.PLAIN, 30)); // Center description
+    }
+
+    cardsPanel.add(vetrinaCard);
+    cardsPanel.add(itemCard);
+
+    contentPanel.add(dashboardLabel, BorderLayout.NORTH);
+    contentPanel.add(cardsPanel, BorderLayout.CENTER);
+
+    return contentPanel;
+}
     /**
      * Create dashboard card
      */
