@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.example.model.Inventory;
 
@@ -43,3 +41,30 @@ public class InventoryDAO {
         }
     }
 }
+
+    /**
+     * Get existing inventory from the database
+     * 
+     * @return Inventory object if found, null otherwise
+     * @throws SQLException if database operation fails
+     */
+
+     /* 
+    public Inventory getExistingInventory() throws SQLException {
+        String sql = "SELECT Inventory_id FROM INVENTARIO WHERE User_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                Inventory inv = new Inventory();
+                inv.setInventoryId(rs.getInt("Inventory_id"));
+                inv.setPubblico(rs.getBoolean("Pubblico"));
+                inv.setTipo(rs.getBoolean("Tipo"));
+                return inv;
+            }
+        }
+        return null;
+
+    }*/

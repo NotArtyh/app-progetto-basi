@@ -16,12 +16,12 @@ public class ItemController {
         this.itemView = itemView;
     }
 
-    public int createItem(int mediaId, int inventoryId, int itemId ,String condition, String note, LocalDateTime dataAcquisizione) {
+    public int createItem(int mediaId, int inventoryId, String condition, String note, LocalDateTime dataAcquisizione) {
         try {
-            Item item = new Item(mediaId, inventoryId, itemId, condition, note, dataAcquisizione);
+            Item item = new Item(mediaId, inventoryId, condition, note, dataAcquisizione);
 
             itemDAO.createItem(item);
-            itemView.displayMessage("User created successfully with ID: " + item.getItemId());
+            itemView.displayMessage("Item created successfully with ID: " + item.getItemId());
             return item.getItemId();
         } catch (SQLException e) {
             itemView.displayError("Error creating the item: " + e.getMessage());
@@ -33,3 +33,4 @@ public class ItemController {
 
     }
 }
+

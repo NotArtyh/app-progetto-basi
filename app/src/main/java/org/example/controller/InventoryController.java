@@ -38,3 +38,26 @@ public class InventoryController {
         }
     }
 }
+
+/* 
+public int getExistingInventoryId() {
+        try {
+            Inventory inv = invDAO.getExistingInventory();
+            if (inv != null) {
+                return inv.getInventoryId();
+            } else {
+                invView.displayError("No existing inventory found.");
+                return -1;
+            }
+        } catch (SQLException e) {
+            invView.displayError("Error retrieving existing inventory: " + e.getMessage());
+            return -1;
+        } catch (Exception e) {
+            invView.displayError("Unexpected error: " + e.getMessage());
+            return -1;
+        }
+    }
+}
+
+
+*/

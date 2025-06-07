@@ -70,17 +70,12 @@ public class UserView {
 
     public static class ItemData {
         public int mediaId;
-        public int itemId;
-        public int inventoryId;
         public String condizioni;
         public String note;
         public LocalDateTime dataAcquisizione;
 
-        public ItemData(int mediaId, int itemId, int inventoryId, String condizioni, String note,
-                LocalDateTime dataAcquisizione) {
+        public ItemData(int mediaId, String condizioni, String note, LocalDateTime dataAcquisizione) {
             this.mediaId = mediaId;
-            this.itemId = itemId;
-            this.inventoryId = inventoryId;
             this.condizioni = condizioni;
             this.note = note;
             this.dataAcquisizione = dataAcquisizione;
@@ -1044,8 +1039,6 @@ private void showProfilePage() {
 
         // Create form fields
         JTextField mediaIdField = new JTextField(20);
-        JTextField itemIdField = new JTextField(20);
-        JTextField inventoryIdField = new JTextField(20);
         JTextField condizioniField = new JTextField(20);
         JTextField dateField = new JTextField(20);
 
@@ -1059,8 +1052,6 @@ private void showProfilePage() {
         // Add fields to form
         String[] labels = {
                 "Media ID:",
-                "Inventory ID:",
-                "Item ID:",
                 "Condizioni:",
                 "Note:",
                 "Data Acquisizione (yyyy-MM-ddTHH:mm):"
@@ -1068,8 +1059,6 @@ private void showProfilePage() {
 
         Component[] components = {
                 mediaIdField,
-                inventoryIdField,
-                itemIdField, 
                 condizioniField, 
                 noteScrollPane, 
                 dateField
@@ -1110,10 +1099,6 @@ private void showProfilePage() {
             // Validate required text fields
             if (mediaIdField.getText().trim().isEmpty())
                 errors.append("- Media ID è obbligatorio\n");
-            if (itemIdField.getText().trim().isEmpty())
-                errors.append("- Item ID è obbligatorio\n");
-            if (inventoryIdField.getText().trim().isEmpty())
-                errors.append("- Inventory ID è obbligatorio\n");
             if (condizioniField.getText().trim().isEmpty())
                 errors.append("- Condizioni è obbligatorio\n");
             if (dateField.getText().trim().isEmpty())
@@ -1121,8 +1106,6 @@ private void showProfilePage() {
 
             try {
                 Integer.parseInt(mediaIdField.getText().trim());
-                Integer.parseInt(itemIdField.getText().trim());
-                Integer.parseInt(inventoryIdField.getText().trim());
             } catch (NumberFormatException ex) {
                 valid = false;
                 errors.append("- Media ID, Item ID e Inventory ID devono essere numeri interi\n");
@@ -1139,13 +1122,11 @@ private void showProfilePage() {
 
             // Parse and submit
             int mediaId = Integer.parseInt(mediaIdField.getText().trim());
-            int itemId = Integer.parseInt(itemIdField.getText().trim());
-            int inventoryId = Integer.parseInt(inventoryIdField.getText().trim());
             String condizioni = condizioniField.getText().trim();
             String note = noteArea.getText().trim();
             LocalDateTime dataAcquisizione = LocalDateTime.parse(dateField.getText().trim());
 
-            ItemData itemData = new ItemData(mediaId, itemId, inventoryId, condizioni, note, dataAcquisizione);
+            ItemData itemData = new ItemData(mediaId, condizioni, note, dataAcquisizione);
 
             if (formActionListener != null) {
                 formActionListener.onItemSubmit(itemData);

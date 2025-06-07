@@ -22,6 +22,14 @@ public class Item {
         this.data_acquisizione = data_acquisizione;
     }
 
+    public Item(int mediaId, int inventoryId, String condition, String note, LocalDateTime dataAcquisizione) {
+        this.mediaId = mediaId;
+        this.inventoryId = inventoryId;
+        this.condizioni = condizioni;
+        this.note = note;
+        this.data_acquisizione = data_acquisizione;
+    }
+
     public int getMediaId() {
         return mediaId;
     }

@@ -89,37 +89,6 @@ public class App {
         UserView.show();
     }
 
-    /**
-     * Handle registration form submission
-     */
-    private void handleRegisterSubmit(UserView.RegistrationData data) {
-        try {
-            UserView.displayMessage("Processing registration...");
-
-            // Validate input data
-            if (!validateRegistrationData(data)) {
-                return;
-            }
-
-            // Call controller methods
-            int persona_id = personalDataController.createPersonalData(
-                    data.nome, data.cognome, data.sesso, data.telefono,
-                    data.stato_residenza, data.provincia, data.cap,
-                    data.via, data.civico);
-
-            int inventory_id = inventoryController.createInventory();
-
-            if (persona_id == -1 || inventory_id == -1) {
-                UserView.displayError("Failed to create personal data or inventory.");
-                return;
-            }
-
-            userController.createUser(persona_id, inventory_id, data.username, data.email, data.password);
-
-        } catch (Exception e) {
-            UserView.displayError("Error during user registration: " + e.getMessage());
-        }
-    }
 
     /**
      * Handle login form submission
@@ -132,6 +101,10 @@ public class App {
             UserView.displayError("Error during authentication: " + e.getMessage());
         }
     }
+
+
+
+
 
     /**
      * Validate registration data
@@ -221,12 +194,58 @@ public class App {
         try {
             UserView.displayMessage("Processing adding a new item...");
 
-            itemController.createItem(data.mediaId, data.inventoryId, data.itemId, data.condizioni, data.note, data.dataAcquisizione);
+            
+            /*  DOBBIAMO FARE IN MODO CHE INVENTORY ID PRENDA L'ID DELL'INVENTARIO CORRENTE 
+            int inventoryId = ;
+
+            if (inventoryId == -1) {
+                UserView.displayError("Failed to create new item: Inventory not found.");
+                return;
+            }
+*/
+            itemController.createItem(data.mediaId, 1, data.condizioni, data.note, data.dataAcquisizione);
 
         } catch (Exception e) {
             UserView.displayError("Error while adding an item: " + e.getMessage());
         }
     }
+
+
+
+
+
+   /**
+     * Handle registration form submission
+     */
+    private void handleRegisterSubmit(UserView.RegistrationData data) {
+        try {
+            UserView.displayMessage("Processing registration...");
+
+            // Validate input data
+            if (!validateRegistrationData(data)) {
+                return;
+            }
+
+            // Call controller methods
+            int persona_id = personalDataController.createPersonalData(
+                    data.nome, data.cognome, data.sesso, data.telefono,
+                    data.stato_residenza, data.provincia, data.cap,
+                    data.via, data.civico);
+
+            int inventory_id = inventoryController.createInventory();
+
+            if (persona_id == -1 || inventory_id == -1) {
+                UserView.displayError("Failed to create personal data or inventory.");
+                return;
+            }
+
+            userController.createUser(persona_id, inventory_id, data.username, data.email, data.password);
+
+        } catch (Exception e) {
+            UserView.displayError("Error during user registration: " + e.getMessage());
+        }
+    }
+
 
     /**
      * Main method - Entry point of the application
