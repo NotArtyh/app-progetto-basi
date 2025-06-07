@@ -22,7 +22,7 @@ public class Item {
         this.data_acquisizione = data_acquisizione;
     }
 
-    public Item(int mediaId, int inventoryId, String condition, String note, LocalDateTime dataAcquisizione) {
+    public Item(int mediaId, int inventoryId, String condizioni, String note, LocalDateTime dataAcquisizione) {
         this.mediaId = mediaId;
         this.inventoryId = inventoryId;
         this.condizioni = condizioni;

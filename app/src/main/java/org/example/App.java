@@ -35,6 +35,8 @@ public class App {
     private ItemDAO itemDAO;
     private ItemController itemController;
 
+    private int currentInventoryId;
+
     public App() {
         // Initialize components
         userDAO = new UserDAO();
@@ -192,26 +194,6 @@ public class App {
         }
     }
 
-    private void handleItemRegistration(UserView.ItemData data) {
-        try {
-            UserView.displayMessage("Processing adding a new item...");
-
-            
-            LocalDateTime dataAcquisizione = LocalDateTime.now();
-            /*  DOBBIAMO FARE IN MODO CHE INVENTORY ID PRENDA L'ID DELL'INVENTARIO CORRENTE 
-            int inventoryId = ;
-
-            if (inventoryId == -1) {
-                UserView.displayError("Failed to create new item: Inventory not found.");
-                return;
-            }
-*/
-            itemController.createItem(data.mediaId, 1, data.condizioni, data.note, dataAcquisizione);
-
-        } catch (Exception e) {
-            UserView.displayError("Error while adding an item: " + e.getMessage());
-        }
-    }
 
    /**
      * Handle registration form submission
@@ -232,6 +214,7 @@ public class App {
                     data.via, data.civico);
 
             int inventory_id = inventoryController.createInventory();
+            currentInventoryId = inventory_id;
 
             if (persona_id == -1 || inventory_id == -1) {
                 UserView.displayError("Failed to create personal data or inventory.");
@@ -240,8 +223,32 @@ public class App {
 
             userController.createUser(persona_id, inventory_id, data.username, data.email, data.password);
 
+            
+
         } catch (Exception e) {
             UserView.displayError("Error during user registration: " + e.getMessage());
+        }
+    }
+
+
+    private void handleItemRegistration(UserView.ItemData data) {
+        try {
+            UserView.displayMessage("Processing adding a new item...");
+
+            
+            LocalDateTime dataAcquisizione = LocalDateTime.now();
+            /*  DOBBIAMO FARE IN MODO CHE INVENTORY ID PRENDA L'ID DELL'INVENTARIO CORRENTE 
+            int inventoryId = ;
+
+            if (inventoryId == -1) {
+                UserView.displayError("Failed to create new item: Inventory not found.");
+                return;
+            }
+*/
+            itemController.createItem(data.mediaId, currentInventoryId, data.condizioni, data.note, dataAcquisizione);
+
+        } catch (Exception e) {
+            UserView.displayError("Error while adding an item: " + e.getMessage());
         }
     }
 
