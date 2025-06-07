@@ -71,7 +71,7 @@ public class Item {
     }
 
     public LocalDateTime getData_acquisizione() {
-        return data_acquisizione;
+        return LocalDateTime.now();
     }
 
     public void setData_acquisizione(LocalDateTime data_acquisizione) {

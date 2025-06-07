@@ -5,10 +5,15 @@ import java.time.LocalDateTime;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import org.example.database.*;
-import org.example.view.*;
-import org.example.controller.*;
-import org.example.model.*;
+import org.example.controller.InventoryController;
+import org.example.controller.ItemController;
+import org.example.controller.PersonalDataController;
+import org.example.controller.UserController;
+import org.example.database.InventoryDAO;
+import org.example.database.ItemDAO;
+import org.example.database.PersonalDataDAO;
+import org.example.database.UserDAO;
+import org.example.view.UserView;
 
 /**
  * Main Application with Swing GUI
@@ -191,8 +196,8 @@ public class App {
         try {
             UserView.displayMessage("Processing adding a new item...");
 
-            LocalDateTime dataAcquisizione = LocalDateTime.now(); 
             
+            LocalDateTime dataAcquisizione = LocalDateTime.now();
             /*  DOBBIAMO FARE IN MODO CHE INVENTORY ID PRENDA L'ID DELL'INVENTARIO CORRENTE 
             int inventoryId = ;
 
@@ -244,6 +249,7 @@ public class App {
      * Main method - Entry point of the application
      */
     public static void main(String[] args) {
+
         // Set system look and feel for better appearance
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

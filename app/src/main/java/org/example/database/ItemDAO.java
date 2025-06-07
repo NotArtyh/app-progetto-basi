@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 import org.example.model.Item;
 
@@ -20,7 +21,7 @@ public class ItemDAO {
             stmt.setInt(2, item.getInventoryId());
             stmt.setString(3, item.getCondizioni());
             stmt.setString(4, item.getNote());
-            stmt.setTimestamp(5, java.sql.Timestamp.valueOf(item.getData_acquisizione()));
+            stmt.setTimestamp(5, Timestamp.valueOf(item.getData_acquisizione()));
             int rowsAffected = stmt.executeUpdate();
             
             if (rowsAffected > 0) {
@@ -33,5 +34,3 @@ public class ItemDAO {
         }
     }
 }
-
-
