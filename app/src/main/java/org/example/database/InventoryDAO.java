@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.example.model.Inventory;
 
@@ -22,7 +20,7 @@ public class InventoryDAO {
      * @param user User object to create
      * @throws SQLException if database operation fails
      */
-    public void createInventory(Inventory inv) throws SQLException {
+    public int createInventory(Inventory inv) throws SQLException {
         String sql = "INSERT INTO INVENTARIO (Pubblico, Tipo) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -32,14 +30,16 @@ public class InventoryDAO {
             stmt.setBoolean(2, inv.isTipo());
 
             int rowsAffected = stmt.executeUpdate();
-            
+
             if (rowsAffected > 0) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         inv.setInventoryId(rs.getInt(1));
                     }
                 }
-            }
+                return inv.getInventoryId();
+            } else
+                return -1;
         }
     }
 }
