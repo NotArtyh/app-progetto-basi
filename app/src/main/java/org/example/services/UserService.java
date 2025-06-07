@@ -14,6 +14,12 @@ public class UserService {
     private PersonalDataDAO personalDataDAO;
     private InventoryDAO inventoryDAO;
 
+    public UserService(UserDAO userDAO, PersonalDataDAO personalDataDAO, InventoryDAO inventoryDAO) {
+        this.userDAO = userDAO;
+        this.personalDataDAO = personalDataDAO;
+        this.inventoryDAO = inventoryDAO;
+    }
+
     /*
      * Create a new user
      */
