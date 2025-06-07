@@ -26,5 +26,27 @@ public class MediaDAO {
 
             }
         }
-    }
     
+
+        /*      FUNZIONE PER CONTROLLARE SE UN MEDIA ESISTE NEL DATABASE
+
+     public boolean mediaExists(int mediaId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM DATI_UTENTE WHERE Media_id = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, mediaId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+}
+    */
+
+}

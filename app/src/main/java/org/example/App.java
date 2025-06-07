@@ -240,10 +240,6 @@ public class App {
             /*  DOBBIAMO FARE IN MODO CHE INVENTORY ID PRENDA L'ID DELL'INVENTARIO CORRENTE 
             int inventoryId = ;
 
-            if (inventoryId == -1) {
-                UserView.displayError("Failed to create new item: Inventory not found.");
-                return;
-            }
 */
             if (data.mediaId == -1) {
                 UserView.displayError("Failed to create new item: Media not found.");
