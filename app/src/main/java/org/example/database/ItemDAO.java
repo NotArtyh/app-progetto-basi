@@ -27,7 +27,7 @@ public class ItemDAO {
             if (rowsAffected > 0) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
-                        item.setInventoryId(rs.getInt(1));
+                        item.setItemId(rs.getInt(1));
                     }
                 }
             }

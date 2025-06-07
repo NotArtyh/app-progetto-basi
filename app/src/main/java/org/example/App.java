@@ -214,7 +214,7 @@ public class App {
                     data.via, data.civico);
 
             int inventory_id = inventoryController.createInventory();
-            currentInventoryId = inventory_id;
+            
 
             if (persona_id == -1 || inventory_id == -1) {
                 UserView.displayError("Failed to create personal data or inventory.");
@@ -245,7 +245,13 @@ public class App {
                 return;
             }
 */
-            itemController.createItem(data.mediaId, currentInventoryId, data.condizioni, data.note, dataAcquisizione);
+            if (data.mediaId == -1) {
+                UserView.displayError("Failed to create new item: Media not found.");
+                return;
+            }
+
+
+            itemController.createItem(data.mediaId, 1, data.condizioni, data.note, dataAcquisizione);
 
         } catch (Exception e) {
             UserView.displayError("Error while adding an item: " + e.getMessage());
