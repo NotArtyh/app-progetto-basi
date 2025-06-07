@@ -11,7 +11,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.time.LocalDateTime;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -72,13 +71,11 @@ public class UserView {
         public int mediaId;
         public String condizioni;
         public String note;
-        public LocalDateTime dataAcquisizione;
 
-        public ItemData(int mediaId, String condizioni, String note, LocalDateTime dataAcquisizione) {
+        public ItemData(int mediaId, String condizioni, String note) {
             this.mediaId = mediaId;
             this.condizioni = condizioni;
             this.note = note;
-            this.dataAcquisizione = dataAcquisizione;
         }
     }
 
@@ -1121,9 +1118,9 @@ private void showProfilePage() {
             int mediaId = Integer.parseInt(mediaIdField.getText().trim());
             String condizioni = condizioniField.getText().trim();
             String note = noteArea.getText().trim();
-            LocalDateTime dataAcquisizione = LocalDateTime.now(); // Use current time for acquisition date
+            // Use current time for acquisition date
 
-            ItemData itemData = new ItemData(mediaId, condizioni, note, dataAcquisizione);
+            ItemData itemData = new ItemData(mediaId, condizioni, note);
 
             if (formActionListener != null) {
                 formActionListener.onItemSubmit(itemData);

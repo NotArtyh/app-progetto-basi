@@ -1,5 +1,7 @@
 package org.example;
 
+import java.time.LocalDateTime;
+
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -89,7 +91,6 @@ public class App {
         UserView.show();
     }
 
-
     /**
      * Handle login form submission
      */
@@ -101,10 +102,6 @@ public class App {
             UserView.displayError("Error during authentication: " + e.getMessage());
         }
     }
-
-
-
-
 
     /**
      * Validate registration data
@@ -194,6 +191,7 @@ public class App {
         try {
             UserView.displayMessage("Processing adding a new item...");
 
+            LocalDateTime dataAcquisizione = LocalDateTime.now(); 
             
             /*  DOBBIAMO FARE IN MODO CHE INVENTORY ID PRENDA L'ID DELL'INVENTARIO CORRENTE 
             int inventoryId = ;
@@ -203,16 +201,12 @@ public class App {
                 return;
             }
 */
-            itemController.createItem(data.mediaId, 1, data.condizioni, data.note, data.dataAcquisizione);
+            itemController.createItem(data.mediaId, 1, data.condizioni, data.note, dataAcquisizione);
 
         } catch (Exception e) {
             UserView.displayError("Error while adding an item: " + e.getMessage());
         }
     }
-
-
-
-
 
    /**
      * Handle registration form submission
@@ -245,7 +239,6 @@ public class App {
             UserView.displayError("Error during user registration: " + e.getMessage());
         }
     }
-
 
     /**
      * Main method - Entry point of the application

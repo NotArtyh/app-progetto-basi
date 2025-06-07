@@ -11,14 +11,16 @@ import org.example.model.Item;
 public class ItemDAO {
 
     public void createItem(Item item) throws SQLException {
-        String sql = "INSERT INTO ITEM_INVENTARIO (Condizioni, Note, Data_acquisizione) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO ITEM_INVENTARIO (Media_id, Inventory_id, Condizioni, Note, Data_acquisizione) VALUES (?, ?, ?, ?, ?)";
         System.out.println(item.getData_acquisizione());
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, item.getCondizioni());
-            stmt.setString(2, item.getNote());
-            stmt.setTimestamp(3, java.sql.Timestamp.valueOf(item.getData_acquisizione()));
+            stmt.setInt(1, item.getMediaId());
+            stmt.setInt(2, item.getInventoryId());
+            stmt.setString(3, item.getCondizioni());
+            stmt.setString(4, item.getNote());
+            stmt.setTimestamp(5, java.sql.Timestamp.valueOf(item.getData_acquisizione()));
             int rowsAffected = stmt.executeUpdate();
             
             if (rowsAffected > 0) {
