@@ -25,6 +25,9 @@ public class App {
     private InventoryDAO inventoryDAO;
     private InventoryController inventoryController;
 
+    private ItemDAO itemDAO;
+    private ItemController itemController;
+
     public App() {
         // Initialize components
         userDAO = new UserDAO();
@@ -34,6 +37,8 @@ public class App {
         personalDataController = new PersonalDataController(personalDataDAO, UserView);
         inventoryDAO = new InventoryDAO();
         inventoryController = new InventoryController(inventoryDAO, UserView);
+        itemDAO = new ItemDAO();
+        itemController = new ItemController(itemDAO, UserView);
 
         // Set up the action listener to handle button clicks
         UserView.setActionListener(new UserView.UserActionListener() {
@@ -73,6 +78,11 @@ public class App {
             public void onLogout() {
                 handleLogout();
             }
+
+            @Override
+            public void onItemSubmit(UserView.ItemData data) {
+                handleItemRegistration(data);
+            }
         });
 
         // Show the GUI
@@ -93,11 +103,10 @@ public class App {
 
             // Call controller methods
             int persona_id = personalDataController.createPersonalData(
-                data.nome, data.cognome, data.sesso, data.telefono, 
-                data.stato_residenza, data.provincia, data.cap, 
-                data.via, data.civico
-            );
-            
+                    data.nome, data.cognome, data.sesso, data.telefono,
+                    data.stato_residenza, data.provincia, data.cap,
+                    data.via, data.civico);
+
             int inventory_id = inventoryController.createInventory();
 
             if (persona_id == -1 || inventory_id == -1) {
@@ -190,7 +199,6 @@ public class App {
         // Additional logout logic can be added here if needed
     }
 
-  
     /**
      * Handle application exit
      */
@@ -206,6 +214,17 @@ public class App {
                 Thread.currentThread().interrupt();
             }
             UserView.close();
+        }
+    }
+
+    private void handleItemRegistration(UserView.ItemData data) {
+        try {
+            UserView.displayMessage("Processing adding a new item...");
+
+            itemController.createItem(data.mediaId, data.inventoryId, data.itemId, data.condizioni, data.note, data.dataAcquisizione);
+
+        } catch (Exception e) {
+            UserView.displayError("Error while adding an item: " + e.getMessage());
         }
     }
 
