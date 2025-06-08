@@ -11,6 +11,12 @@ public class DAOResult {
     private boolean success;
     private int id;
 
+    // Constructor for failure case, we don't specify any id in the case of failure
+    public DAOResult(boolean success) {
+        this.success = success;
+    }
+
+    // Constructor for success case, we provide the id
     public DAOResult(boolean success, int id) {
         this.success = success;
         this.id = id;
