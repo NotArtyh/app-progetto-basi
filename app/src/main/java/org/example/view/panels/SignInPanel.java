@@ -13,6 +13,7 @@ public class SignInPanel extends JPanel {
     private UserActionListener actionListener;
 
     public SignInPanel() {
+        setLayout(new GridBagLayout());
         createButtonPanel();
     }
 
@@ -61,7 +62,11 @@ public class SignInPanel extends JPanel {
         buttonPanel.add(Box.createVerticalStrut(10));
         buttonPanel.add(bottomRow);
 
-        add(buttonPanel);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(buttonPanel, gbc);
     }
 
     public interface UserActionListener {
