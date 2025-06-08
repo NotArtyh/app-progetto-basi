@@ -14,14 +14,14 @@ public class SignInPanel extends JPanel {
 
     public SignInPanel() {
         setLayout(new GridBagLayout());
-        createButtonPanel();
+        createSignInPanel();
     }
 
     public void setActionListener(UserActionListener actionListener) {
         this.actionListener = actionListener;
     }
 
-    private void createButtonPanel() {
+    private void createSignInPanel() {
         // Main button panel with vertical layout
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -67,6 +67,8 @@ public class SignInPanel extends JPanel {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.CENTER;
         add(buttonPanel, gbc);
+        // Here we should implement the imagePanel to have the view as 
+        // we used to but it isn't really important as of now
     }
 
     public interface UserActionListener {
