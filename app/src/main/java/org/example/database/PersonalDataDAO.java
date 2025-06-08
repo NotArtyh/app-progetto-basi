@@ -20,7 +20,7 @@ public class PersonalDataDAO {
      * @param PersonalData object to create
      * @throws SQLException if database operation fails
      */
-    public int createPersonalData(PersonalData person) throws SQLException {
+    public DAOResult createPersonalData(PersonalData person) throws SQLException {
         String sql = "INSERT INTO DATI_ANAGRAFICI (Nome , Cognome , Sesso , Telefono , Stato_residenza , Provincia , CAP, Via_Viale_Piazza, Numero_civico) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -44,9 +44,9 @@ public class PersonalDataDAO {
                         person.setPersonaId(rs.getInt(1));
                     }
                 }
-                return person.getPersonaId();
+                return new DAOResult(true, person.getPersonaId());
             } else
-                return -1;
+                return new DAOResult(false);
         }
     }
 }

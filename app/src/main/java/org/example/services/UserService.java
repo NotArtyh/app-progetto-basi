@@ -2,6 +2,7 @@ package org.example.services;
 
 import java.sql.SQLException;
 
+import org.example.database.DAOResult;
 import org.example.database.InventoryDAO;
 import org.example.database.PersonalDataDAO;
 import org.example.database.UserDAO;
@@ -43,21 +44,29 @@ public class UserService {
                 return new ServiceResult(false, "Password cannot be empty.");
             }
 
-            int inventoryId = inventoryDAO.createInventory(new Inventory(true, true));
-            if (inventoryId == -1) {
+            // We send the querries via the DAOs and based on the result we either give an
+            // error or go trough
+            DAOResult inventoryResult = inventoryDAO.createInventory(new Inventory(true, true));
+            if (!inventoryResult.isSuccess()) {
                 return new ServiceResult(false, "Failed to create the inventory.");
             }
 
-            int personaId = personalDataDAO.createPersonalData(
+            DAOResult personalDataResult = personalDataDAO.createPersonalData(
                     new PersonalData(name, surname, sesso, telefono, provincia, statoResidenza, cap, via, civico));
-            if (personaId == -1) {
+            if (!personalDataResult.isSuccess()) {
                 return new ServiceResult(false, "Failed to create the personal data.");
             }
 
-            // Could also return the userId if we want to track say the last created user,
-            // or if need to get the current session userId this would be a good place
-            userDAO.createUser(new User(personaId, inventoryId, 1, username, password, email));
+            // Set the id from the two results - if we get here it means the querry went
+            // trough
+            int inventoryId = inventoryResult.getId();
+            int personaId = personalDataResult.getId();
 
+            // We finally create the user
+            // userResult contains the userId - use it for tracking the current user
+            DAOResult userResult = userDAO.createUser(new User(personaId, inventoryId, 1, username, password, email));
+
+            // could put a check here if the creation went trough but we asume it does
             return new ServiceResult(true, "New user registration Succeeded.");
 
         } catch (SQLException e) {
@@ -82,8 +91,8 @@ public class UserService {
 
             // We aren't getting an userId from this single operation right here but we
             // could get it some other way to track the current session user
-            boolean isAuthenticated = userDAO.authenticateUser(username, password);
-            return new ServiceResult(isAuthenticated, "");
+            DAOResult authResult = userDAO.authenticateUser(username, password);
+            return new ServiceResult(authResult.isSuccess(), "");
 
         } catch (SQLException e) {
             return new ServiceResult(false, "Error during authentication: " + e.getMessage());
