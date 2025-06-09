@@ -13,6 +13,11 @@ public class ItemService {
     private ItemDAO itemDAO;
     private MediaDAO mediaDAO;
 
+    public ItemService(ItemDAO itemDAO, MediaDAO mediaDAO) {
+        this.itemDAO = itemDAO;
+        this.mediaDAO = mediaDAO;
+    }
+
     public ServiceResult registerItem(String title, String condition, String note) {
         try {
             // Need to implement all the logic
@@ -22,7 +27,9 @@ public class ItemService {
             }
 
             int mediaId = mediaResult.getId(); // should be the one that matches the corresponding title
-            int inventoryId = SessionManager.getInstance().getCurrenUser().getInventoryId(); // should be the one that matches the current session user
+            int inventoryId = SessionManager.getInstance().getCurrenUser().getInventoryId(); // should be the one that
+                                                                                             // matches the current
+                                                                                             // session user
 
             // Usign the current date and time for the acquistion date
             LocalDateTime dateCurrent = LocalDateTime.now();
