@@ -13,7 +13,16 @@ public class Item {
     public Item() {
     }
 
-    public Item(int mediaId, int inventoryId, int itemId, String condizioni, String note, LocalDateTime dataAcquisizione) {
+    public Item(int mediaId, int inventoryId, String condizioni, String note, LocalDateTime dataAcquisizione) {
+        this.mediaId = mediaId;
+        this.inventoryId = inventoryId;
+        this.condizioni = condizioni;
+        this.note = note;
+        this.dataAcquisizione = dataAcquisizione;
+    }
+
+    public Item(int mediaId, int inventoryId, int itemId, String condizioni, String note,
+            LocalDateTime dataAcquisizione) {
         this.mediaId = mediaId;
         this.itemId = itemId;
         this.inventoryId = inventoryId;
