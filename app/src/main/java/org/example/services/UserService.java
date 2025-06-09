@@ -24,7 +24,7 @@ public class UserService {
     /*
      * Create a new user
      */
-    public ServiceResult createUser(String name, String surname, String sesso, String telefono, String statoResidenza,
+    public ServiceResult registerUser(String name, String surname, String sesso, String telefono, String statoResidenza,
             String provincia, String cap, String via, String civico, String username, String email,
             String password) {
         try {

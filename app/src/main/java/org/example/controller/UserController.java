@@ -21,11 +21,10 @@ public class UserController {
             String stateResidency, String province, String cap, String street, String streetCode, String username,
             String email, String password) {
         try {
-            // Get the data from the view - even as an argument for this function could work
-            // but like this should be better
+            // Get the data from the view - arguments of this method
 
             // Call service for creating a user
-            ServiceResult result = userService.createUser(name, surname, sex, phoneNumber, stateResidency, province,
+            ServiceResult result = userService.registerUser(name, surname, sex, phoneNumber, stateResidency, province,
                     cap, street, streetCode, username, email, password);
 
             // Update the view based on result
