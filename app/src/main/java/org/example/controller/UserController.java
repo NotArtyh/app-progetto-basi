@@ -17,14 +17,16 @@ public class UserController {
         this.viewManager = viewManager;
     }
 
-    public void handleUserCreation() {
+    public void handleUserRegistration(String name, String surname, String sex, String phoneNumber,
+            String stateResidency, String province, String cap, String street, String streetCode, String username,
+            String email, String password) {
         try {
             // Get the data from the view - even as an argument for this function could work
             // but like this should be better
 
             // Call service for creating a user
-            ServiceResult result = userService.createUser(null, null, null, null, null, null, null, null, null, null,
-                    null, null);
+            ServiceResult result = userService.createUser(name, surname, sex, phoneNumber, stateResidency, province,
+                    cap, street, streetCode, username, email, password);
 
             // Update the view based on result
             if (result.isSuccess()) {
