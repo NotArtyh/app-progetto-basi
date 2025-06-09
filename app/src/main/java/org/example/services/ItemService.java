@@ -3,6 +3,7 @@ package org.example.services;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+import org.example.SessionManager;
 import org.example.database.DAOResult;
 import org.example.database.ItemDAO;
 import org.example.database.MediaDAO;
@@ -21,7 +22,7 @@ public class ItemService {
             }
 
             int mediaId = mediaResult.getId(); // should be the one that matches the corresponding title
-            int inventoryId = 1; // should be the one that matches the current session user
+            int inventoryId = SessionManager.getInstance().getCurrenUser().getInventoryId(); // should be the one that matches the current session user
 
             // Usign the current date and time for the acquistion date
             LocalDateTime dateCurrent = LocalDateTime.now();
