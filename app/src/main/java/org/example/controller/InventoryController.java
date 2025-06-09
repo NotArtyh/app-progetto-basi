@@ -2,39 +2,48 @@ package org.example.controller;
 
 import java.sql.SQLException;
 
-import org.example.database.InventoryDAO;
-import org.example.model.Inventory;
-import org.example.view.UserView;
+import org.example.services.ServiceResult;
+import org.example.services.InventoryService;
+import org.example.view.ViewManager;
 
 /**
  * Inventory Controller Class
  * Handles business logic and coordinates between Model and View
  */
 public class InventoryController {
-    private InventoryDAO invDAO;
-    private UserView invView;
+    private InventoryService inventoryService;
+    private ViewManager viewManager;
 
-    public InventoryController(InventoryDAO invDAO, UserView invView) {
-        this.invDAO = invDAO;
-        this.invView = invView;
+    public InventoryController(InventoryService inventoryService, ViewManager viewManager) {
+        this.inventoryService = inventoryService;
+        this.viewManager = viewManager;
     }
 
-    /**
-     * Create a new inventory
+    /*
+     * An example of a Controller method that just wires the view to the corespond
+     * service here this method would be use to handle the display of an invenotry
+     * and the like the service is responsible for calling all the DAOs it need to
+     * operate such querry The Controller is bound to the "entity" that is best
+     * paired with: in this case the inventory is bounded to all those operations
+     * that would use it directly, like the display of the inventory with all its
+     * items inside displaying a list of these inventories and the likes.
+     * 
+     * NO LOGIC HERE - ALL OPERATIONS INSIDE THE SERVICE
+     * we simply wire the view and the service togheter aka we expect
+     * a ServiceResult type reuslt that tells the view what to display
      */
-    public int createInventory() {
+    public void handleInventoryDisplay(int invenotryId) {
         try {
-            Inventory inv = new Inventory(true, true);
-
-            invDAO.createInventory(inv);
-            invView.displayMessage("Inventory created successfully with ID: " + inv.getInventoryId());
-            return inv.getInventoryId();
-        } catch (SQLException e) {
-            invView.displayError("Error creating user: " + e.getMessage());
-            return -1;
+            ServiceResult result = inventoryService.getItemsInInvetory(invenotryId); //here you do the acutal implementation
+            
+            // Update the view based on result
+            if (result.isSuccess()) {
+                // View goes forward - Ok
+            } else {
+                // View displays an error and doesn't go forwards
+            }
         } catch (Exception e) {
-            invView.displayError("Unexpected error: " + e.getMessage());
-            return -1;
+            // Display the fatal error on the view
         }
     }
 }
