@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.example.SessionManager;
 import org.example.model.User;
 
 /**
@@ -46,7 +47,6 @@ public class UserDAO {
                 return new DAOResult(true, user.getUserId());
             } else
                 return new DAOResult(false);
-
         }
     }
 
@@ -69,20 +69,26 @@ public class UserDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new DAOResult(rs.getInt(1) > 0);
+                    return new DAOResult(rs.getInt(1) > 0, rs.getInt("User_id"));
                 }
             }
         }
         return new DAOResult(false);
     }
 
-    // ------------------------- check if below is needed ---------------------
-
     /**
      * Get user by ID
      * 
+     * IMPORTANT - This method is only used in pair with the SessionManager
+     * in the UserService to handle setting a current Session user when either
+     * a user logs in or when registering a new user which automathilly logs you
+     * in that account.
+     * Its a trade off between implementing the needed logic here in the DAO or
+     * in the UserService and it makes more sense to have everything in the service
+     * while the DAO handles just the db querries
+     * 
      * @param userId User ID to search for
-     * @return User object or null if not found
+     * @return User object or null if not found - NOT DAOResult so not good but has to do for now
      * @throws SQLException if database operation fails
      */
     public User getUserById(int userId) throws SQLException {
@@ -108,6 +114,8 @@ public class UserDAO {
         }
         return null;
     }
+
+    // ------------------------- check if below is needed ---------------------
 
     /**
      * Get user by username
