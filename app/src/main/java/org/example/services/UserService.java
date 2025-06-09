@@ -24,8 +24,8 @@ public class UserService {
     /*
      * Create a new user
      */
-    public ServiceResult createUser(String name, String surname, String sesso, String telefono, String provincia,
-            String statoResidenza, String cap, String via, String civico, String username, String email,
+    public ServiceResult createUser(String name, String surname, String sesso, String telefono, String statoResidenza,
+            String provincia, String cap, String via, String civico, String username, String email,
             String password) {
         try {
             if (userDAO.usernameExists(username)) {
