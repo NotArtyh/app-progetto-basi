@@ -5,17 +5,22 @@ import java.time.LocalDateTime;
 
 import org.example.database.DAOResult;
 import org.example.database.ItemDAO;
+import org.example.database.MediaDAO;
 import org.example.model.Item;
 
 public class ItemService {
     private ItemDAO itemDAO;
+    private MediaDAO mediaDAO;
 
     public ServiceResult registerItem(String title, String condition, String note) {
         try {
             // Need to implement all the logic
+            DAOResult mediaResult = mediaDAO.getIdTitle(title);
+            if (!mediaResult.isSuccess()) {
+                return new ServiceResult(false, "Failed to retrieve the mediaId via its title");
+            }
 
-            int mediaId = 1; // should be the one that matches the corresponding mediaId
-
+            int mediaId = mediaResult.getId(); // should be the one that matches the corresponding title
             int inventoryId = 1; // should be the one that matches the current session user
 
             // Usign the current date and time for the acquistion date
