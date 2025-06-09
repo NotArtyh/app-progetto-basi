@@ -24,6 +24,7 @@ public class UserService {
 
     /*
      * Create a new user
+     * set session user to the new created user
      */
     public ServiceResult registerUser(String name, String surname, String sesso, String telefono, String statoResidenza,
             String provincia, String cap, String via, String civico, String username, String email,
@@ -86,6 +87,7 @@ public class UserService {
 
     /*
      * Authenticate an existing User on the platform
+     * set session user to auth user 
      */
     public ServiceResult authenticateUser(String username, String password) {
         try {
@@ -116,7 +118,14 @@ public class UserService {
             return new ServiceResult(false, "Unexpected error: " + e.getMessage());
         }
     }
-
+    
+    /**
+     * Set current session user via a provided userId 
+     * 
+     * @param userId
+     * @return
+     * @throws SQLException
+     */
     private boolean setCurrentUserByUserId(int userId) throws SQLException {
         User currentUser = userDAO.getUserById(userId);
         SessionManager.getInstance().setCurrentUser(currentUser);
