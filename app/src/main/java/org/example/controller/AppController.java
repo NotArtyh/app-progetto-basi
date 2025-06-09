@@ -37,7 +37,7 @@ public class AppController {
         LogInPanel logInPanel = new LogInPanel();
         logInPanel.setActionListener(new LogInPanel.UserActionListener() {
             public void onLoginSubmit(String username, String password) {
-                // Call the Usercontroller for handling the registration
+                // Call the UserController for handling the auth
                 userController.handleUserAuthentication(username, password);
             }
 
@@ -46,9 +46,27 @@ public class AppController {
             }
         });
 
+        // Register panel
+        RegistrationPanel registrationPanel = new RegistrationPanel();
+        registrationPanel.setActionListener(new RegistrationPanel.UserActionListener() {
+            public void onRegisterSubmit(String name, String surname, String sex, String phoneNumber,
+                    String stateResidency,
+                    String province, String cap, String street, String streetCode, String username, String email,
+                    String password) {
+                // Call the UserCOntroller for handling the registration
+                userController.handleUserRegistration(name, surname, sex, phoneNumber, stateResidency, province, cap,
+                        street, streetCode, username, email, password);
+            }
+
+            public void onRegisterCancel() {
+                viewManager.show("signIn"); // Go back to sign in
+            }
+        });
+
         // Register all the pannels
         viewManager.registerPanel("signIn", signInPanel);
         viewManager.registerPanel("login", logInPanel);
+        viewManager.registerPanel("registration", registrationPanel);
 
         // start the app on the signIn pannel
         // here i should had the logic for displaying the two pannels side by side maybe
