@@ -3,7 +3,7 @@ package org.example;
 import org.example.model.User;
 
 /*
- * Singleton class that tracks current session user
+ * Singleton class that traks current session user
  * Use this class when in need of knowing the curren user id
  * for all types of operations
  */
