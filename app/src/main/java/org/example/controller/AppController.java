@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import org.example.view.*;
-import org.example.view.components.UserBar;
+import org.example.view.components.*;
 import org.example.view.panels.*;
 
 public class AppController {
@@ -45,7 +45,7 @@ public class AppController {
             }
 
             public void onLoginCancel() {
-                viewManager.show("signIn"); // Go back to sign in
+                viewManager.show("signin"); // Go back to sign in
             }
         });
 
@@ -56,13 +56,13 @@ public class AppController {
                     String stateResidency,
                     String province, String cap, String street, String streetCode, String username, String email,
                     String password) {
-                // Call the UserCOntroller for handling the registration
+                // Call the UserController for handling the registration
                 userController.handleUserRegistration(name, surname, sex, phoneNumber, stateResidency, province, cap,
                         street, streetCode, username, email, password);
             }
 
             public void onRegisterCancel() {
-                viewManager.show("signIn"); // Go back to sign in
+                viewManager.show("signin"); // Go back to sign in
             }
         });
 
@@ -76,11 +76,11 @@ public class AppController {
             // have to impl listeners
         });
 
-
         OperationsPanel operationsPanel = new OperationsPanel();
         operationsPanel.setActionListener(new OperationsPanel.UserActionListener() {
             public void onAddItem() {
                 // change view to Add item panel
+                viewManager.show("additem");
             }
 
             public void onViewInventory() {
@@ -95,15 +95,26 @@ public class AppController {
         HomePanel homePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel);
         // this pannel has no listeners.
 
+        AddItemPanel addItemPanel = new AddItemPanel();
+        addItemPanel.setActionListener(new AddItemPanel.UserActionListener() {
+            public void onRegisterItemSubmit(String title, String condition, String note) {
+                itemController.handleItemRegistration(title, condition, note);
+            }
+
+            public void onRegisterItemCancel() {
+                viewManager.show("home"); // go back to home view
+            }
+        });
 
         // Register all the pannels
-        viewManager.registerPanel("signIn", signInPanel);
+        viewManager.registerPanel("signn", signInPanel);
         viewManager.registerPanel("login", logInPanel);
         viewManager.registerPanel("registration", registrationPanel);
         viewManager.registerPanel("home", homePanel);
+        viewManager.registerPanel("additem", addItemPanel);
 
         // start the app on the signIn pannel
         // here i should had the logic for displaying the two pannels side by side maybe
-        viewManager.show("signIn");
+        viewManager.show("signin");
     }
 }
