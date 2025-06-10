@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.SessionManager;
 import org.example.view.ViewManager;
 import org.example.view.components.UserBar;
 import org.example.view.panels.AddItemPanel;
@@ -16,11 +17,13 @@ public class AppController {
     private final UserController userController;
     private final ItemController itemController;
     private PersonalInventoryPanel personalInventoryPanel;
+    private final SessionManager sessionManager;
 
-    public AppController(ViewManager viewManager, UserController userController, ItemController itemController) {
+    public AppController(ViewManager viewManager, UserController userController, ItemController itemController, SessionManager sessionManager) {
         this.viewManager = viewManager;
         this.userController = userController;
         this.itemController = itemController;
+        this.sessionManager = sessionManager;
         setupViews();
     }
 
@@ -137,8 +140,7 @@ public class AppController {
      */
     private void initializePersonalInventory() {
         // Ottieni l'ID dell'utente corrente dal UserController
-        //SessionManager sessionManager = new SessionManager();
-        int currentUserId = 1;//sessionManager.getCurrentUserId(); 
+        int currentUserId = sessionManager.getCurrenUserId() ;//sessionManager.getCurrentUserId(); 
         
         if (currentUserId > 0) {
             // Se non esiste ancora o se l'utente è cambiato, crea un nuovo pannello

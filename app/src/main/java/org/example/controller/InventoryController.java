@@ -30,9 +30,9 @@ public class InventoryController {
      * we simply wire the view and the service togheter aka we expect
      * a ServiceResult type reuslt that tells the view what to display
      */
-    public void handleInventoryDisplay(int invenotryId) {
+    public void handleInventoryDisplay(int inventoryId) {
         try {
-            ServiceResult result = inventoryService.getItemsInInvetory(invenotryId);
+            ServiceResult result = inventoryService.getItemsInInvetory(inventoryId);
             
             // Update the view based on result
             if (result.isSuccess()) {

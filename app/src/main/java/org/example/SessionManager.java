@@ -30,6 +30,10 @@ public class SessionManager {
         return currentUser;
     }
 
+     public int getCurrenUserId() {
+        return currentUser.getUserId();
+    }
+
     public void clearSession() {
         this.currentUser = null;
     }
