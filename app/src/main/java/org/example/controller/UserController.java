@@ -53,7 +53,7 @@ public class UserController {
             } else {
                 // View displays an error and doesn't go forward
                 System.out.println(result.getMessage());
-                viewManager.show("");
+                // viewManager.show("");
             }
         } catch (Exception e) {
             // Display the fatal error on the view

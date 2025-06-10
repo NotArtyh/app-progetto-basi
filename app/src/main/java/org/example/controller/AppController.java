@@ -45,7 +45,7 @@ public class AppController {
             }
 
             public void onLoginCancel() {
-                viewManager.show("signin"); // Go back to sign in
+                viewManager.show("signIn"); // Go back to sign in
             }
         });
 
@@ -62,7 +62,7 @@ public class AppController {
             }
 
             public void onRegisterCancel() {
-                viewManager.show("signin"); // Go back to sign in
+                viewManager.show("signIn"); // Go back to sign in
             }
         });
 
@@ -80,7 +80,7 @@ public class AppController {
         operationsPanel.setActionListener(new OperationsPanel.UserActionListener() {
             public void onAddItem() {
                 // change view to Add item panel
-                viewManager.show("additem");
+                viewManager.show("addItem");
             }
 
             public void onViewInventory() {
@@ -107,14 +107,14 @@ public class AppController {
         });
 
         // Register all the pannels
-        viewManager.registerPanel("signn", signInPanel);
+        viewManager.registerPanel("signIn", signInPanel);
         viewManager.registerPanel("login", logInPanel);
         viewManager.registerPanel("registration", registrationPanel);
         viewManager.registerPanel("home", homePanel);
-        viewManager.registerPanel("additem", addItemPanel);
+        viewManager.registerPanel("addItem", addItemPanel);
 
         // start the app on the signIn pannel
         // here i should had the logic for displaying the two pannels side by side maybe
-        viewManager.show("signin");
+        viewManager.show("signIn");
     }
 }
