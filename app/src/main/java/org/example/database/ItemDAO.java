@@ -13,7 +13,7 @@ public class ItemDAO {
 
     public DAOResult createItem(Item item) throws SQLException {
         String sql = "INSERT INTO ITEM_INVENTARIO (Media_id, Inventory_id, Condizioni, Note, Data_acquisizione) VALUES (?, ?, ?, ?, ?)";
-        System.out.println(item.getData_acquisizione());
+
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
