@@ -13,6 +13,8 @@ import org.example.database.ItemDAO;
 import org.example.database.MediaDAO;
 
 public class PersonalInventoryPanel extends JPanel {
+    private UserActionListener actionListener;
+
     private static final int GRID_SIZE = 5;
     private static final int ITEMS_PER_PAGE = GRID_SIZE * GRID_SIZE;
     private int currentPage = 0;
@@ -31,6 +33,10 @@ public class PersonalInventoryPanel extends JPanel {
         this.mediaDAO = new MediaDAO();
         initializePanel();
         loadUserItems();
+    }
+
+    public void setActionListener(UserActionListener actionListener) {
+        this.actionListener = actionListener;
     }
 
     private void initializePanel() {
@@ -88,6 +94,17 @@ public class PersonalInventoryPanel extends JPanel {
         refreshButton.addActionListener(e -> refreshInventory());
         controlPanel.add(refreshButton, BorderLayout.EAST);
 
+        // exit Button
+        JButton exiButton = new JButton("Cancel");
+        exiButton.setFont(new Font("Roboto", Font.BOLD, 12));
+        exiButton.setForeground(Color.BLACK);
+        exiButton.setBackground(new Color(220, 53, 69));
+        exiButton.addActionListener(e -> {
+            if (actionListener != null)
+            actionListener.onExit();
+        });
+        controlPanel.add(exiButton, BorderLayout.WEST);
+        
         add(controlPanel, BorderLayout.SOUTH);
     }
 
@@ -315,5 +332,9 @@ public class PersonalInventoryPanel extends JPanel {
     // Metodo pubblico per aggiornare l'inventario dall'esterno
     public void refreshData() {
         refreshInventory();
+    }
+
+    public interface UserActionListener {
+        void onExit();
     }
 }
