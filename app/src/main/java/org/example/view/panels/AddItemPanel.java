@@ -1,10 +1,12 @@
 package org.example.view.panels;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 
-public class AddItemPanel {
-        private UserActionListener actionListener;
+public class AddItemPanel extends JPanel {
+    private UserActionListener actionListener;
 
     public AddItemPanel() {
         createAddItemPanel();
@@ -15,11 +17,97 @@ public class AddItemPanel {
     }
 
     private void createAddItemPanel() {
-        // Implement the bar that contains the user info like name logout option user
-        // icon etc
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        // Form panel
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Create form fiels
+        JTextField titleField = new JTextField(20);
+        JTextField conditionField = new JTextField(20);
+
+        // Create text area for notes
+        JTextArea noteArea = new JTextArea(4, 20);
+        noteArea.setLineWrap(true);
+        noteArea.setWrapStyleWord(true);
+        JScrollPane noteScrollPane = new JScrollPane(noteArea);
+        noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        String[] labels = { "Title:", "Condition:", "Note:" };
+
+        Component[] components = { titleField, conditionField, noteScrollPane };
+
+        for (int i = 0; i < labels.length; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = i;
+            JLabel label = new JLabel(labels[i]);
+            label.setFont(new Font("Roboto", Font.PLAIN, 12));
+            formPanel.add(label, gbc);
+
+            gbc.gridx = 1;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.weightx = 1.0;
+            formPanel.add(components[i], gbc);
+            gbc.weightx = 0;
+            gbc.fill = GridBagConstraints.NONE;
+        }
+
+        // Button panel
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        JButton submitButton = new JButton("Register");
+        JButton cancelButton = new JButton("Cancel");
+
+        submitButton.setBackground(new Color(40, 167, 69));
+        submitButton.setForeground(Color.BLACK);
+        submitButton.setFont(new Font("Roboto", Font.BOLD, 12));
+
+        cancelButton.setBackground(new Color(220, 53, 69));
+        cancelButton.setForeground(Color.BLACK);
+        cancelButton.setFont(new Font("Roboto", Font.BOLD, 12));
+
+        submitButton.addActionListener(e -> {
+            boolean valid = true;
+            StringBuilder errors = new StringBuilder();
+
+            // here should go validation logic but too lazy to do it now
+
+            if (!valid) {
+                // Display Error Message
+                return;
+            }
+
+            // Create item data and submit
+            String title = titleField.getText().trim();
+            String condition = conditionField.getText().trim();
+            String note = noteArea.getText().trim();
+
+            if (actionListener != null) {
+                actionListener.onRegisterItemSubmit(title, condition, note);
+            }
+        });
+
+        cancelButton.addActionListener(e -> {
+            if (actionListener != null)
+                actionListener.onRegisterItemCancel();
+        });
+
+        buttonPanel.add(cancelButton);
+        buttonPanel.add(submitButton);
+
+        // Layout everything
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        add(mainPanel);
     }
 
     public interface UserActionListener {
-        // Implement the needed action listeners
+        void onRegisterItemSubmit(String title, String condition, String note);
+
+        void onRegisterItemCancel();
     }
 }
