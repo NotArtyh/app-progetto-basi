@@ -1,7 +1,8 @@
 package org.example.view.panels;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagLayout;
+
+import javax.swing.JPanel;
 
 public class UsersInventoryPanel extends JPanel {
     private UserActionListener actionListener;
@@ -26,3 +27,7 @@ public class UsersInventoryPanel extends JPanel {
         // Implement the needed action listeners
     }
 }
+
+
+
+

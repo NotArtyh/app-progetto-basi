@@ -140,7 +140,7 @@ public class AppController {
      */
     private void initializePersonalInventory() {
         // Ottieni l'ID dell'utente corrente dal UserController
-        int currentUserId = sessionManager.getCurrenUserId() ;//sessionManager.getCurrentUserId(); 
+        int currentUserId = sessionManager.getCurrenUserId() ;
         
         if (currentUserId > 0) {
             // Se non esiste ancora o se l'utente è cambiato, crea un nuovo pannello
