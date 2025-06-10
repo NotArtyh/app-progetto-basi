@@ -1,8 +1,14 @@
 package org.example.controller;
 
-import org.example.view.*;
-import org.example.view.components.*;
-import org.example.view.panels.*;
+import org.example.view.ViewManager;
+import org.example.view.components.UserBar;
+import org.example.view.panels.AddItemPanel;
+import org.example.view.panels.HomePanel;
+import org.example.view.panels.LogInPanel;
+import org.example.view.panels.OperationsPanel;
+import org.example.view.panels.RegistrationPanel;
+import org.example.view.panels.SignInPanel;
+import org.example.view.panels.UsersInventoryPanel;
 
 public class AppController {
     private final ViewManager viewManager;
@@ -107,7 +113,7 @@ public class AppController {
         });
 
         // Register all the pannels
-        viewManager.registerPanel("signn", signInPanel);
+        viewManager.registerPanel("signin", signInPanel);
         viewManager.registerPanel("login", logInPanel);
         viewManager.registerPanel("registration", registrationPanel);
         viewManager.registerPanel("home", homePanel);

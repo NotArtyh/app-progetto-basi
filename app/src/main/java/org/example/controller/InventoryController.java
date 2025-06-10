@@ -1,9 +1,7 @@
 package org.example.controller;
 
-import java.sql.SQLException;
-
-import org.example.services.ServiceResult;
 import org.example.services.InventoryService;
+import org.example.services.ServiceResult;
 import org.example.view.ViewManager;
 
 /**
@@ -34,18 +32,20 @@ public class InventoryController {
      */
     public void handleInventoryDisplay(int invenotryId) {
         try {
-            ServiceResult result = inventoryService.getItemsInInvetory(invenotryId); //here you do the acutal implementation
+            ServiceResult result = inventoryService.getItemsInInvetory(invenotryId);
             
             // Update the view based on result
             if (result.isSuccess()) {
-                // View goes forward - Ok
-                System.out.println(result.getMessage());
+            // View goes forward - Ok
+            System.out.println(result.getMessage());
             } else {
-                // View displays an error and doesn't go forwards
-                System.out.println(result.getMessage());
+            // View displays an error and doesn't go forwards
+            System.out.println(result.getMessage());
             }
         } catch (Exception e) {
             // Display the fatal error on the view
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
