@@ -1,15 +1,18 @@
 package org.example.controller;
 
 import org.example.view.*;
+import org.example.view.components.UserBar;
 import org.example.view.panels.*;
 
 public class AppController {
     private final ViewManager viewManager;
     private final UserController userController;
+    private final ItemController itemController;
 
-    public AppController(ViewManager viewManager, UserController userController) {
+    public AppController(ViewManager viewManager, UserController userController, ItemController itemController) {
         this.viewManager = viewManager;
         this.userController = userController;
+        this.itemController = itemController;
         setupViews();
     }
 
@@ -63,10 +66,41 @@ public class AppController {
             }
         });
 
+        UserBar userBar = new UserBar();
+        userBar.setActionListener(new UserBar.UserActionListener() {
+            // have to impl listeners
+        });
+
+        UsersInventoryPanel usersInventoryPanel = new UsersInventoryPanel();
+        usersInventoryPanel.setActionListener(new UsersInventoryPanel.UserActionListener() {
+            // have to impl listeners
+        });
+
+
+        OperationsPanel operationsPanel = new OperationsPanel();
+        operationsPanel.setActionListener(new OperationsPanel.UserActionListener() {
+            public void onAddItem() {
+                // change view to Add item panel
+            }
+
+            public void onViewInventory() {
+                // change view to inventory view panel
+            }
+
+            public void onTradeItem() {
+                // change view to trade panel
+            }
+        });
+
+        HomePanel homePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel);
+        // this pannel has no listeners.
+
+
         // Register all the pannels
         viewManager.registerPanel("signIn", signInPanel);
         viewManager.registerPanel("login", logInPanel);
         viewManager.registerPanel("registration", registrationPanel);
+        viewManager.registerPanel("home", homePanel);
 
         // start the app on the signIn pannel
         // here i should had the logic for displaying the two pannels side by side maybe
