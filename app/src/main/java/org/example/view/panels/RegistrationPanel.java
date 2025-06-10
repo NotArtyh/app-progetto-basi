@@ -69,11 +69,11 @@ public class RegistrationPanel extends JPanel {
 
         submitButton.setBackground(new Color(40, 167, 69));
         submitButton.setForeground(Color.BLACK);
-        submitButton.setFont(new Font("Arial", Font.BOLD, 12));
+        submitButton.setFont(new Font("Roboto", Font.BOLD, 12));
 
         cancelButton.setBackground(new Color(220, 53, 69));
         cancelButton.setForeground(Color.BLACK);
-        cancelButton.setFont(new Font("Arial", Font.BOLD, 12));
+        cancelButton.setFont(new Font("Roboto", Font.BOLD, 12));
 
         submitButton.addActionListener(e -> {
             // Validate fields
