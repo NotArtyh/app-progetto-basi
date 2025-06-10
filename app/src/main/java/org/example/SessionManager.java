@@ -26,7 +26,7 @@ public class SessionManager {
         this.currentUser = user;
     }
 
-    public User getCurrenUser() {
+  public User getCurrenUser() {
         return currentUser;
     }
 

@@ -1,4 +1,5 @@
 package org.example.database;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,5 +52,30 @@ public class MediaDAO {
         }
         
         return titles;
+    }
+    
+    /**
+     * Get media title by its ID
+     *
+     * @param mediaId ID of the media
+     * @return Title of the media or "Titolo non trovato" if not found
+     * @throws SQLException if database operation fails
+     */
+    public String getTitleById(int mediaId) throws SQLException {
+        String sql = "SELECT Titolo FROM MEDIA WHERE Media_id = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, mediaId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("Titolo");
+                }
+            }
+        }
+        
+        return "Titolo non trovato"; // Fallback se non viene trovato
     }
 }

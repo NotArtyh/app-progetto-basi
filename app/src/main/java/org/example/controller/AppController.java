@@ -6,6 +6,7 @@ import org.example.view.panels.AddItemPanel;
 import org.example.view.panels.HomePanel;
 import org.example.view.panels.LogInPanel;
 import org.example.view.panels.OperationsPanel;
+import org.example.view.panels.PersonalInventoryPanel;
 import org.example.view.panels.RegistrationPanel;
 import org.example.view.panels.SignInPanel;
 import org.example.view.panels.UsersInventoryPanel;
@@ -14,6 +15,7 @@ public class AppController {
     private final ViewManager viewManager;
     private final UserController userController;
     private final ItemController itemController;
+    private PersonalInventoryPanel personalInventoryPanel;
 
     public AppController(ViewManager viewManager, UserController userController, ItemController itemController) {
         this.viewManager = viewManager;
@@ -90,7 +92,9 @@ public class AppController {
             }
 
             public void onViewInventory() {
-                // change view to inventory view panel
+                // Inizializza o aggiorna il PersonalInventoryPanel prima di mostrarlo
+                initializePersonalInventory();
+                viewManager.show("inventory");
             }
 
             public void onTradeItem() {
@@ -112,16 +116,57 @@ public class AppController {
             }
         });
 
+        // Il PersonalInventoryPanel verrà inizializzato quando necessario
+        // perché richiede l'ID dell'utente corrente che non è disponibile all'avvio
+
         // Register all the pannels
         viewManager.registerPanel("signin", signInPanel);
         viewManager.registerPanel("login", logInPanel);
         viewManager.registerPanel("registration", registrationPanel);
         viewManager.registerPanel("home", homePanel);
         viewManager.registerPanel("additem", addItemPanel);
-        //we need to add a error panel viewManager.registerPanel("error", errorPanel);
+        // Il pannello inventory verrà registrato dinamicamente
 
         // start the app on the signIn pannel
-        // here i should had the logic for displaying the two pannels side by side maybe
         viewManager.show("signin");
+    }
+
+    /**
+     * Inizializza il PersonalInventoryPanel con l'ID dell'utente corrente
+     * Questo metodo deve essere chiamato dopo che l'utente ha fatto login
+     */
+    private void initializePersonalInventory() {
+        // Ottieni l'ID dell'utente corrente dal UserController
+        //SessionManager sessionManager = new SessionManager();
+        int currentUserId = 1;//sessionManager.getCurrentUserId(); 
+        
+        if (currentUserId > 0) {
+            // Se non esiste ancora o se l'utente è cambiato, crea un nuovo pannello
+            if (personalInventoryPanel == null) {
+                personalInventoryPanel = new PersonalInventoryPanel(currentUserId);
+                viewManager.registerPanel("inventory", personalInventoryPanel);
+            } else {
+                // Se il pannello esiste già, aggiorna i dati
+                personalInventoryPanel.refreshData();
+            }
+        } else {
+            // Se non c'è un utente loggato, torna al login
+            viewManager.show("signin");
+        }
+    }
+
+    /**
+     * Metodo pubblico per inizializzare l'inventario quando l'utente fa login
+     * Deve essere chiamato dal UserController dopo un login riuscito
+     */
+    public void onUserLoggedIn() {
+        initializePersonalInventory();
+    }
+
+    /**
+     * Metodo per pulire i dati quando l'utente fa logout
+     */
+    public void onUserLoggedOut() {
+        
     }
 }
