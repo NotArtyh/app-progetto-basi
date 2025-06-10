@@ -2,11 +2,14 @@ package org.example.view.panels;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.List;
+import org.example.database.MediaDAO;
 
 public class AddItemPanel extends JPanel {
     private UserActionListener actionListener;
+    private JComboBox<String> titleComboBox;
 
     public AddItemPanel() {
         createAddItemPanel();
@@ -26,8 +29,8 @@ public class AddItemPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Create form fiels
-        JTextField titleField = new JTextField(20);
+        // Create form fields
+        titleComboBox = createTitleComboBox();
         JTextField conditionField = new JTextField(20);
 
         // Create text area for notes
@@ -38,8 +41,7 @@ public class AddItemPanel extends JPanel {
         noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         String[] labels = { "Title:", "Condition:", "Note:" };
-
-        Component[] components = { titleField, conditionField, noteScrollPane };
+        Component[] components = { titleComboBox, conditionField, noteScrollPane };
 
         for (int i = 0; i < labels.length; i++) {
             gbc.gridx = 0;
@@ -74,14 +76,13 @@ public class AddItemPanel extends JPanel {
             StringBuilder errors = new StringBuilder();
 
             // here should go validation logic but too lazy to do it now
-
             if (!valid) {
                 // Display Error Message
                 return;
             }
 
             // Create item data and submit
-            String title = titleField.getText().trim();
+            String title = (String) titleComboBox.getSelectedItem();
             String condition = conditionField.getText().trim();
             String note = noteArea.getText().trim();
 
@@ -101,8 +102,45 @@ public class AddItemPanel extends JPanel {
         // Layout everything
         mainPanel.add(formPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-
         add(mainPanel);
+    }
+
+    private JComboBox<String> createTitleComboBox() {
+        JComboBox<String> comboBox = new JComboBox<>();
+
+        // Carica i titoli dal database
+        loadTitlesFromDatabase(comboBox);
+
+        // Imposta il numero massimo di righe visibili senza scorrimento
+        comboBox.setMaximumRowCount(10);
+
+        return comboBox;
+    }
+
+    private void loadTitlesFromDatabase(JComboBox<String> comboBox) {
+        MediaDAO mediaDAO = new MediaDAO();
+
+        try {
+            List<String> titles = mediaDAO.getAllTitles();
+
+            // Aggiungi un'opzione vuota per default
+            comboBox.addItem("-- Seleziona un titolo --");
+
+            // Aggiungi tutti i titoli al combobox
+            for (String title : titles) {
+                comboBox.addItem(title);
+            }
+
+        } catch (SQLException e) {
+            // Gestisci l'errore mostrando un messaggio
+            JOptionPane.showMessageDialog(this,
+                    "Errore nel caricamento dei titoli: " + e.getMessage(),
+                    "Errore Database",
+                    JOptionPane.ERROR_MESSAGE);
+
+            // Aggiungi almeno un'opzione di default
+            comboBox.addItem("-- Errore nel caricamento --");
+        }
     }
 
     public interface UserActionListener {

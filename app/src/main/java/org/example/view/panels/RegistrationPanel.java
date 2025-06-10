@@ -1,9 +1,21 @@
 package org.example.view.panels;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class RegistrationPanel extends JPanel {
     private UserActionListener actionListener;
@@ -88,7 +100,9 @@ public class RegistrationPanel extends JPanel {
             }
 
             if (!valid) {
-                // Display error message
+                JOptionPane.showMessageDialog(this,
+                        "Compila tutti i campi obbligatori:\n" + errors.toString(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
