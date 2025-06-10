@@ -30,6 +30,7 @@ public class UserController {
             // Update the view based on result
             if (result.isSuccess()) {
                 // View goes forward - Ok
+                viewManager.show("home");
             } else {
                 // View displays an error and doesn't go forwards
             }
@@ -44,8 +45,8 @@ public class UserController {
             ServiceResult result = userService.authenticateUser(username, password);
 
             if (result.isSuccess()) {
-                // View goes forward - ok show dashboard with inventory view etc
-                viewManager.show("");
+                // View goes forward - ok show dashboard with inventory view etc;
+                viewManager.show("home");
             } else {
                 // View displays an error and doesn't go forward
                 viewManager.show("");
