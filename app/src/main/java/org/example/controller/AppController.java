@@ -16,7 +16,7 @@ public class AppController {
     private final ViewManager viewManager;
     private final UserController userController;
     private final ItemController itemController;
-    private PersonalInventoryPanel personalInventoryPanel;
+    private PersonalInventoryPanel personalInventoryPanel; //va rimosso
     private final SessionManager sessionManager;
 
     public AppController(ViewManager viewManager, UserController userController, ItemController itemController, SessionManager sessionManager) {
@@ -139,7 +139,7 @@ public class AppController {
      * Questo metodo deve essere chiamato dopo che l'utente ha fatto login
      */
     private void initializePersonalInventory() {
-        // Ottieni l'ID dell'utente corrente dal UserController
+        // Ottieni l'ID dell'utente corrente 
         int currentUserId = sessionManager.getCurrenUserId() ;
         
         if (currentUserId > 0) {
