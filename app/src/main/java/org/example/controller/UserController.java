@@ -30,9 +30,11 @@ public class UserController {
             // Update the view based on result
             if (result.isSuccess()) {
                 // View goes forward - Ok
+                System.out.println(result.getMessage());
                 viewManager.show("home");
             } else {
                 // View displays an error and doesn't go forwards
+                System.out.println(result.getMessage());
             }
         } catch (Exception e) {
             // Display the fatal error on the view
@@ -46,9 +48,11 @@ public class UserController {
 
             if (result.isSuccess()) {
                 // View goes forward - ok show dashboard with inventory view etc;
+                System.out.println(result.getMessage());
                 viewManager.show("home");
             } else {
                 // View displays an error and doesn't go forward
+                System.out.println(result.getMessage());
                 viewManager.show("");
             }
         } catch (Exception e) {

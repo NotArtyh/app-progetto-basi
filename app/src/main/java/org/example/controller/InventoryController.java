@@ -39,8 +39,10 @@ public class InventoryController {
             // Update the view based on result
             if (result.isSuccess()) {
                 // View goes forward - Ok
+                System.out.println(result.getMessage());
             } else {
                 // View displays an error and doesn't go forwards
+                System.out.println(result.getMessage());
             }
         } catch (Exception e) {
             // Display the fatal error on the view
