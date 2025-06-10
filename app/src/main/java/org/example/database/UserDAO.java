@@ -59,7 +59,7 @@ public class UserDAO {
      * @throws SQLException if database operation fails
      */
     public DAOResult authenticateUser(String username, String password) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM DATI_UTENTE WHERE Username = ? AND PasswordUtente = ?";
+        String sql = "SELECT User_id FROM DATI_UTENTE WHERE Username = ? AND PasswordUtente = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -69,7 +69,7 @@ public class UserDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new DAOResult(rs.getInt(1) > 0, rs.getInt("User_id"));
+                    return new DAOResult(true, rs.getInt("User_id"));
                 }
             }
         }
@@ -88,7 +88,8 @@ public class UserDAO {
      * while the DAO handles just the db querries
      * 
      * @param userId User ID to search for
-     * @return User object or null if not found - NOT DAOResult so not good but has to do for now
+     * @return User object or null if not found - NOT DAOResult so not good but has
+     *         to do for now
      * @throws SQLException if database operation fails
      */
     public User getUserById(int userId) throws SQLException {
