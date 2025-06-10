@@ -3,7 +3,7 @@ package org.example.view.components;
 import javax.swing.*;
 import java.awt.*;
 
-public class UserBar {
+public class UserBar extends JPanel{
     private UserActionListener actionListener;
 
     public UserBar() {
