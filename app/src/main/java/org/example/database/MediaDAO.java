@@ -24,7 +24,7 @@ public class MediaDAO {
 
             stmt.setString(1, title);
 
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     int mediaId = rs.getInt("Media_id"); // Retrieve the media_id from the result set
                     return new DAOResult(true, mediaId);
