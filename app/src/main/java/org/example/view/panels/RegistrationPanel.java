@@ -10,6 +10,7 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
@@ -99,7 +100,9 @@ public class RegistrationPanel extends JPanel {
             }
 
             if (!valid) {
-                // Display error message
+                JOptionPane.showMessageDialog(this,
+                        "Compila tutti i campi obbligatori:\n" + errors.toString(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

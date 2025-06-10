@@ -1,7 +1,20 @@
 package org.example.view.panels;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 public class LogInPanel extends JPanel {
     private UserActionListener actionListener;
@@ -77,7 +90,9 @@ public class LogInPanel extends JPanel {
 
             // validate fields input
             if (username.isEmpty() || password.isEmpty()) {
-                // Display error message
+                JOptionPane.showMessageDialog(this,
+                        "Username and Password are required!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

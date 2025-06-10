@@ -118,6 +118,7 @@ public class AppController {
         viewManager.registerPanel("registration", registrationPanel);
         viewManager.registerPanel("home", homePanel);
         viewManager.registerPanel("additem", addItemPanel);
+        //we need to add a error panel viewManager.registerPanel("error", errorPanel);
 
         // start the app on the signIn pannel
         // here i should had the logic for displaying the two pannels side by side maybe
