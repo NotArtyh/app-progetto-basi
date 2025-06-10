@@ -21,8 +21,11 @@ public class ItemController {
 
             if (result.isSuccess()) {
                 // View goes forward - Ok
+                System.out.println(result.getMessage());
+                viewManager.show("home"); // We return to the homepage
             } else {
                 // View displays an error and doesn't go forwards
+                System.out.println(result.getMessage());
             }
         } catch (Exception e) {
             // Display the fatal error on the view
