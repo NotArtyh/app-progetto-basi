@@ -43,13 +43,4 @@ public class InventoryService {
             return new ServiceResult(false, "Unexpected error: " + e.getMessage());
         }
     }
-
-    public ServiceResult initializeInventory() {
-        try {
-
-            return new ServiceResult(false, null); // temp
-        } catch (Exception e) {
-            return new ServiceResult(false, "Unexpected error: " + e.getMessage());
-        }
-    }
 }
