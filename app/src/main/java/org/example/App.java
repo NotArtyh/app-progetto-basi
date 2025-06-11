@@ -15,24 +15,27 @@ public class App {
             MainFrame mainFrame = new MainFrame();
             ViewManager viewManager = new ViewManager(mainFrame);
 
-            // Create Services
+            // Create DAO
             UserDAO userDAO = new UserDAO();
             PersonalDataDAO personalDataDAO = new PersonalDataDAO();
             InventoryDAO inventoryDAO = new InventoryDAO();
-            UserService userService = new UserService(userDAO, personalDataDAO, inventoryDAO);
-
             ItemDAO itemDAO = new ItemDAO();
             MediaDAO mediaDAO = new MediaDAO();
+            
+            // Create Services
+            UserService userService = new UserService(userDAO, personalDataDAO, inventoryDAO);
             ItemService itemService = new ItemService(itemDAO, mediaDAO);
+            InventoryService inventoryService = new InventoryService(inventoryDAO, itemDAO);
 
             // create the controllers
             UserController userController = new UserController(userService, viewManager);
-
             ItemController itemController = new ItemController(itemService, viewManager);
+            InventoryController inventoryController = new InventoryController(inventoryService, viewManager);
 
             // Create the final App controller that manages everything
             // could have a return for validation but ok for now
-            AppController appController = new AppController(viewManager, userController, itemController);
+            AppController appController = new AppController(viewManager, userController, itemController,
+                    inventoryController);
 
             mainFrame.setVisible(true);
         });
