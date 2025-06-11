@@ -1,15 +1,11 @@
 package org.example.view;
 
-import org.example.view.components.StatusBar;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    private StatusBar statusBar;
-    // private HeaderPanel headerPanel;
 
     public MainFrame() {
         initializeFrame();
@@ -32,10 +28,6 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         add(cardPanel, BorderLayout.CENTER);
-
-        // Status bar at bottom - Will be deprecated soon
-        statusBar = new StatusBar();
-        add(statusBar, BorderLayout.SOUTH);
     }
 
     /*
@@ -50,19 +42,5 @@ public class MainFrame extends JFrame {
      */
     public void showPanel(String name) {
         cardLayout.show(cardPanel, name);
-    }
-
-    /*
-     * Show a status message - Will be deprecated soon
-     */
-    public void showStatusMessage(String message) {
-        statusBar.setMessage(message);
-    }
-
-    /*
-     * Show an error message
-     */
-    public void showErrorMessage(String message) {
-        statusBar.setErrorMessage(message);
     }
 }
