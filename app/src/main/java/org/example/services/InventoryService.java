@@ -3,11 +3,8 @@ package org.example.services;
 import java.sql.SQLException;
 import java.util.List; // Maybe remove later used for this impl
 
-import org.example.SessionManager;
-import org.example.database.DAOResult;
 import org.example.database.InventoryDAO;
 import org.example.database.ItemDAO;
-import org.example.model.Inventory;
 import org.example.model.Item;
 
 public class InventoryService {
@@ -30,14 +27,14 @@ public class InventoryService {
      */
 
     // EXAMPLE
-    public ServiceResult getItemsInInvetory(int invenotryId) {
+    public ServiceResult getItemsInInventory(int inventoryId) {
         try {
             if (true) {
-                return new ServiceResult(false, "No invenotry Id was provided");
+                return new ServiceResult(false, "No inventory Id was provided");
             }
             // Implement the logic here
 
-            List<Item> items = itemDAO.getItemsByUserId(invenotryId); // temp
+            List<Item> items = itemDAO.getItemsByUserId(inventoryId); // temp
 
             return new ServiceResult(true, ""); // temp
         } catch (SQLException e) {

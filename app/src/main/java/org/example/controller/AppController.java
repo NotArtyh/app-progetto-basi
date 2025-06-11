@@ -18,16 +18,19 @@ public class AppController {
     private final UserController userController;
     private final ItemController itemController;
     private final InventoryController inventoryController;
+    private final UsersInventoryController usersInventoryController;
 
     // Dynamically handled pannels that change depending on the current session user
     private PersonalInventoryPanel personalInventoryPanel;
 
     public AppController(ViewManager viewManager, UserController userController, ItemController itemController,
-            InventoryController inventoryController) {
+            InventoryController inventoryController, UsersInventoryController usersInventoryController) {
         this.viewManager = viewManager;
         this.userController = userController;
         this.itemController = itemController;
         this.inventoryController = inventoryController;
+        this.usersInventoryController = usersInventoryController;
+
         setupViews();
     }
 
