@@ -3,7 +3,7 @@ package org.example.view.components;
 import javax.swing.*;
 import java.awt.*;
 
-public class UserBar extends JPanel{
+public class UserBar extends JPanel {
     private UserActionListener actionListener;
 
     public UserBar() {
@@ -20,6 +20,6 @@ public class UserBar extends JPanel{
     }
 
     public interface UserActionListener {
-        // Implement the needed action listeners
+        void onLogOut();
     }
 }

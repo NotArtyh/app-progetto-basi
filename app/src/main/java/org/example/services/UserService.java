@@ -87,7 +87,7 @@ public class UserService {
 
     /*
      * Authenticate an existing User on the platform
-     * set session user to auth user 
+     * set session user to auth user
      */
     public ServiceResult authenticateUser(String username, String password) {
         try {
@@ -118,9 +118,27 @@ public class UserService {
             return new ServiceResult(false, "Unexpected error: " + e.getMessage());
         }
     }
-    
+
+    public ServiceResult logOutUser() {
+        try {
+            // The only user we can log out is the current user so we simply have to call
+            // clearSession on the SessionManager and check that the user is not logged in
+            SessionManager.getInstance().clearSession();
+
+            if (SessionManager.getInstance().isUserLoggedIn()) {
+                // the user is still logged in so we send an erro
+                return new ServiceResult(false, "Failed to clear current session user.");
+            }
+
+            return new ServiceResult(true, "User Log out succeeded");
+
+        } catch (Exception e) {
+            return new ServiceResult(false, "Unexpected error: " + e.getMessage());
+        }
+    }
+
     /**
-     * Set current session user via a provided userId 
+     * Set current session user via a provided userId
      * 
      * @param userId
      * @return

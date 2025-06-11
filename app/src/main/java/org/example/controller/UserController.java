@@ -53,7 +53,22 @@ public class UserController {
             } else {
                 // View displays an error and doesn't go forward
                 System.out.println(result.getMessage());
-                // viewManager.show("");
+            }
+        } catch (Exception e) {
+            // Display the fatal error on the view
+        }
+    }
+
+    public void handleUserLogOut() {
+        try {
+            ServiceResult result = userService.logOutUser();
+
+            if (result.isSuccess()) {
+                System.out.println(result.getMessage());
+                viewManager.show("signIn");
+            } else {
+                // View displays an error and doesn't go forward
+                System.out.println(result.getMessage());
             }
         } catch (Exception e) {
             // Display the fatal error on the view
