@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.example.model.Item;
+import org.example.view.components.StyledButton;
 import org.example.database.ItemDAO;
 import org.example.database.MediaDAO;
 
@@ -89,22 +90,22 @@ public class PersonalInventoryPanel extends JPanel {
         controlPanel.add(navigationPanel, BorderLayout.CENTER);
 
         // Pulsante refresh
-        JButton refreshButton = new JButton("🔄 Aggiorna");
+        JButton refreshButton = new StyledButton("🔄", "Update");
         refreshButton.setFont(new Font("Roboto", Font.BOLD, 12));
         refreshButton.addActionListener(e -> refreshInventory());
         controlPanel.add(refreshButton, BorderLayout.EAST);
 
         // exit Button
-        JButton exiButton = new JButton("Cancel");
+        JButton exiButton = new JButton("Exit");
         exiButton.setFont(new Font("Roboto", Font.BOLD, 12));
         exiButton.setForeground(Color.BLACK);
         exiButton.setBackground(new Color(220, 53, 69));
         exiButton.addActionListener(e -> {
             if (actionListener != null)
-            actionListener.onExit();
+                actionListener.onExit();
         });
         controlPanel.add(exiButton, BorderLayout.WEST);
-        
+
         add(controlPanel, BorderLayout.SOUTH);
     }
 
