@@ -131,7 +131,7 @@ public class UserService {
             }
 
             return new ServiceResult(true, "User Log out succeeded");
-
+            
         } catch (Exception e) {
             return new ServiceResult(false, "Unexpected error: " + e.getMessage());
         }

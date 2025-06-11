@@ -30,16 +30,22 @@ public class InventoryService {
      */
 
     // EXAMPLE
-    public ServiceResult getItemsInInvetory(int invenotryId) {
+    public ServiceResult getCurrentUserItems() {
         try {
-            if (true) {
+            if (!SessionManager.getInstance().isUserLoggedIn()) {
                 return new ServiceResult(false, "No invenotry Id was provided");
             }
-            // Implement the logic here
+            int currentUserId = SessionManager.getInstance().getCurrenUser().getUserId();
 
-            List<Item> items = itemDAO.getItemsByUserId(invenotryId); // temp
+            List<Item> items = itemDAO.getItemsByUserId(currentUserId);
+            if (items.isEmpty()) {
+                return new ServiceResult(false, "failed to retrieve viewData");
+            }
 
-            return new ServiceResult(true, ""); // temp
+            ServiceResult result = new ServiceResult(true, "view data retrieved.");
+            result.setItems(items);
+            return result;
+
         } catch (SQLException e) {
             return new ServiceResult(false, "Error: " + e.getMessage());
         } catch (Exception e) {

@@ -1,5 +1,10 @@
 package org.example.services;
 
+import java.util.List;
+
+import org.example.model.Item;
+import org.example.model.User;
+
 /**
  * Wrapper class used to handle the outcome for the
  * service operation, it has a boolean for the success
@@ -11,15 +16,14 @@ package org.example.services;
 public class ServiceResult {
     private boolean success;
     private String message;
-    private Object viewData;
 
     public ServiceResult(boolean success, String message) {
         this.success = success;
         this.message = message;
     }
 
-    public ServiceResult(Object viewData) {
-        this.viewData = viewData;
+    public ServiceResult(List<Item> items) {
+        this.items = items;
     }
 
     public boolean isSuccess() {
@@ -30,19 +34,32 @@ public class ServiceResult {
         this.success = success;
     }
 
-    public Object getViewData() {
-        return viewData;
-    }
-
-    public void setViewData(Object viewData) {
-        this.viewData = viewData;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    // ------------- handling list returns for view ---------
+
+    private List<Item> items;
+    private List<User> users;
+
+    public Object getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }
