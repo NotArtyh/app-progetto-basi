@@ -43,4 +43,26 @@ public class MainFrame extends JFrame {
     public void showPanel(String name) {
         cardLayout.show(cardPanel, name);
     }
+
+    // Remove a panel by name
+    public void removePanel(String name) {
+        Component[] components = cardPanel.getComponents();
+        for (Component comp : components) {
+            if (comp.getName() != null && comp.getName().equals(name)) {
+                cardPanel.remove(comp);
+                break;
+            }
+        }
+        cardPanel.revalidate();
+        cardPanel.repaint();
+    }
+
+    // Replace a panel with the same name
+    public void replacePanel(String name, JPanel newPanel) {
+        removePanel(name);
+        newPanel.setName(name);
+        addPanel(name, newPanel);
+        cardPanel.revalidate();
+        cardPanel.repaint();
+    }
 }

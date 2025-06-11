@@ -31,4 +31,10 @@ public class ViewManager {
     public JPanel getPanel(String name) {
         return panels.get(name);
     }
+
+    public void updatePanel(String name, JPanel updatedPanel) {
+        updatedPanel.setName(name); // Important for correct identification
+        mainFrame.replacePanel(name, updatedPanel);
+        panels.put(name, updatedPanel); // Keep internal map in sync
+    }
 }
