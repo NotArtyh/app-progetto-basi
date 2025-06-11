@@ -29,6 +29,13 @@ public class ServiceResult {
         this.viewListData = viewListData;
     }
 
+
+    public ServiceResult(boolean success, String message, Object viewData) {
+        this.success = success;
+        this.message = message;
+        this.viewData = viewData;
+    }
+
     public boolean isSuccess() {
         return success;
     }

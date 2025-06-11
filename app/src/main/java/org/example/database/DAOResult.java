@@ -22,6 +22,8 @@ public class DAOResult {
         this.id = id;
     }
 
+    
+
     public boolean isSuccess() {
         return success;
     }

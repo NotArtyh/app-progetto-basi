@@ -91,9 +91,9 @@ public class AppController {
 
         // home panel - Global view of all user inventories on the platform
         UsersInventoryPanel usersInventoryPanel = new UsersInventoryPanel();
-        usersInventoryPanel.setActionListener(new UsersInventoryPanel.UserActionListener() {
+        //usersInventoryPanel.setActionListener(new UsersInventoryPanel.UserActionListener() {
             // have to impl listeners
-        });
+       // });
 
         // home panel - Side view with user operations
         OperationsPanel operationsPanel = new OperationsPanel();

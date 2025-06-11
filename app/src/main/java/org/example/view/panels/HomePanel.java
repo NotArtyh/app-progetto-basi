@@ -1,7 +1,11 @@
 package org.example.view.panels;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 
 /*
  * This should be the main pannel of the app where we see everything,
@@ -47,3 +51,6 @@ public class HomePanel extends JPanel {
         add(operationsPanel, gbc);
     }
 }
+
+
+

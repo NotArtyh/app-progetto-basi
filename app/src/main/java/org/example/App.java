@@ -18,7 +18,6 @@ import org.example.services.UserService;
 import org.example.services.UsersInventoryService;
 import org.example.view.MainFrame;
 import org.example.view.ViewManager;
-import org.example.view.panels.UsersInventoryPanel;
 
 
 public class App {
@@ -52,7 +51,7 @@ public class App {
             // Create the final App controller that manages everything
             // could have a return for validation but ok for now
             AppController appController = new AppController(viewManager, userController, itemController,
-                    inventoryController);
+                    inventoryController, usersInventoryController);
 
             mainFrame.setVisible(true);
         });

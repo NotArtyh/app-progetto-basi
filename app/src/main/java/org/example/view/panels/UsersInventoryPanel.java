@@ -8,8 +8,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -20,15 +20,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.example.services.UsersInventoryService;
-import org.example.services.ServiceResult;
+import org.example.database.ItemDAO;
 import org.example.database.MediaDAO;
-import org.example.model.User;
+import org.example.database.UserDAO;
 import org.example.model.Item;
-import org.example.view.components.StyledButton;
+import org.example.model.User;
 
 public class UsersInventoryPanel extends JPanel {
     
@@ -50,6 +48,8 @@ public class UsersInventoryPanel extends JPanel {
     private JButton nextButton;
     private JButton refreshButton;
     private MediaDAO mediaDAO;
+    private ItemDAO itemDAO ;
+    private UserDAO userDAO;
 
     public UsersInventoryPanel() {
         this.mediaDAO = new MediaDAO();
@@ -181,19 +181,19 @@ public class UsersInventoryPanel extends JPanel {
     }
 
     private void loadAllUsers() {
-        ServiceResult result = usersInventoryService.getAllUsers();
-        
-        if (result.isSuccess()) {
-            @SuppressWarnings("unchecked")
-            List<User> users = (List<User>) result.getData();
-            this.allUsers = users != null ? users : new ArrayList<>();
+
+        try {
+            this.allUsers = userDAO.getAllUsers();
             updateUsersPanel();
-        } else {
-            showError("Errore nel caricamento degli utenti: " + result.getMessage());
+        } catch (SQLException e) {
+            showError("Errore nel caricamento degli utenti: " + e.getMessage());
             this.allUsers = new ArrayList<>();
             updateUsersPanel();
         }
+
+
     }
+
 
     private void updateUsersPanel() {
         usersPanel.removeAll();
@@ -266,19 +266,17 @@ public class UsersInventoryPanel extends JPanel {
     }
 
     private void loadUserItems(int userId) {
-        ServiceResult result = usersInventoryService.getUserItems(userId);
-        
-        if (result.isSuccess()) {
-            @SuppressWarnings("unchecked")
-            List<Item> items = (List<Item>) result.getData();
-            this.selectedUserItems = items != null ? items : new ArrayList<>();
-        } else {
-            showError("Errore nel caricamento dell'inventario: " + result.getMessage());
+        try {
+            this.selectedUserItems = itemDAO.getItemsByUserId(userId);
+            updateItemsGrid();
+        } catch (SQLException e) {
+           showError("Errore nel caricamento dell'inventario");
             this.selectedUserItems = new ArrayList<>();
+            updateItemsGrid();
         }
-        
-        updateItemsGrid();
+       
     }
+
 
     private void updateItemsGrid() {
         itemsGridPanel.removeAll();
@@ -517,5 +515,4 @@ public class UsersInventoryPanel extends JPanel {
 
         void onTradeRequest();
     }
-    
 }

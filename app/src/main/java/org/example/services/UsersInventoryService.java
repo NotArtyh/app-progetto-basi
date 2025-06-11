@@ -4,12 +4,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.example.SessionManager;
-import org.example.database.UserDAO;
-import org.example.database.ItemDAO;
 import org.example.database.InventoryDAO;
-import org.example.database.DAOResult;
-import org.example.model.User;
+import org.example.database.ItemDAO;
+import org.example.database.UserDAO;
 import org.example.model.Item;
+import org.example.model.User;
 
 
 
@@ -127,11 +126,11 @@ public class UsersInventoryService {
         try {
             List<Item> userItems = itemDAO.getItemsByUserId(userId);
             boolean hasItems = userItems != null && !userItems.isEmpty();
-
-            if (hasItems){
             
-            return new ServiceResult(true, "Verifica completata");
+            if (hasItems) {
+                return new ServiceResult(true, "Verifica completata");
             }
+            return new ServiceResult(false, "L'utente non ha item");
             
         } catch (SQLException e) {
             return new ServiceResult(false, "Errore nella verifica degli item: " + e.getMessage());

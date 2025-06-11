@@ -22,10 +22,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.example.view.components.StyledButton;
 import org.example.database.ItemDAO;
 import org.example.database.MediaDAO;
 import org.example.model.Item;
+import org.example.view.components.StyledButton;
 
 public class PersonalInventoryPanel extends JPanel {
     private UserActionListener actionListener;
@@ -290,7 +290,6 @@ public class PersonalInventoryPanel extends JPanel {
     }
 
     private String getMediaTitle(int mediaId) throws SQLException {
-        // Assumo che ci sia un metodo per ottenere il titolo dal MediaDAO
         return mediaDAO.getTitleById(mediaId);
     }
 
