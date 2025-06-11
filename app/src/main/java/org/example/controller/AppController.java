@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.SessionManager;
+import org.example.SessionManager;
 import org.example.view.ViewManager;
 import org.example.view.components.UserBar;
 import org.example.view.panels.AddItemPanel;

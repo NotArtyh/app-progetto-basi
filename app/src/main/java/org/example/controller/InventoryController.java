@@ -30,7 +30,7 @@ public class InventoryController {
      * we simply wire the view and the service togheter aka we expect
      * a ServiceResult type reuslt that tells the view what to display
      */
-    public void handleInventoryDisplay(int invenotryId) {
+    public void handleInventoryDisplay(int inventoryId) {
         try {
             // get the result from the service - aka get the needed list of items you want
             // to be diplayed by the view

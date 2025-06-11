@@ -1,17 +1,31 @@
 package org.example.view.panels;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import org.example.model.Item;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
 import org.example.view.components.StyledButton;
 import org.example.database.ItemDAO;
 import org.example.database.MediaDAO;
+import org.example.model.Item;
 
 public class PersonalInventoryPanel extends JPanel {
     private UserActionListener actionListener;
@@ -109,6 +123,7 @@ public class PersonalInventoryPanel extends JPanel {
         add(controlPanel, BorderLayout.SOUTH);
     }
 
+    // questa funzione dovrebbe essere spostata
     private void loadUserItems() {
         try {
             userItems = itemDAO.getItemsByUserId(currentUserId);
