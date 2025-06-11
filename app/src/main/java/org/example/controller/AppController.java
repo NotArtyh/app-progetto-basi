@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import org.example.SessionManager;
-import org.example.SessionManager;
 import org.example.view.ViewManager;
 import org.example.view.components.UserBar;
 import org.example.view.panels.AddItemPanel;
@@ -101,6 +100,7 @@ public class AppController {
 
             public void onViewInventory() {
                 // The pannel is created on demand
+                inventoryController.handlePersonalInventoryUpdate();
                 viewManager.show("inventory");
 
                 // inventoryController.handleInventoryDisplay(SessionManager.getInstance().getCurrenUser().getUserId());
@@ -128,11 +128,6 @@ public class AppController {
 
         // Personal Inventory - view what you got
         PersonalInventoryPanel personalInventoryPanel = new PersonalInventoryPanel();
-        personalInventoryPanel.setActionListener(new PersonalInventoryPanel.UserActionListener() {
-            public void onExit() {
-                viewManager.show("home"); // go back to home view
-            }
-        });
 
         // Register all the pannels - naming is the same as for java variables
         viewManager.registerPanel("signIn", signInPanel);
