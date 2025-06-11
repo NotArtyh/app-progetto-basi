@@ -23,9 +23,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import org.example.view.components.StyledButton;
-import org.example.database.ItemDAO;
-import org.example.database.MediaDAO;
 import org.example.model.Item;
+import org.example.services.ServiceResult;
 
 public class PersonalInventoryPanel extends JPanel {
     private UserActionListener actionListener;
@@ -38,16 +37,17 @@ public class PersonalInventoryPanel extends JPanel {
     private JLabel pageLabel;
     private JButton prevButton;
     private JButton nextButton;
-    private ItemDAO itemDAO;
-    private MediaDAO mediaDAO;
-    private int currentUserId; // ID dell'utente corrente
 
-    public PersonalInventoryPanel(int userId) {
-        this.currentUserId = userId;
-        this.itemDAO = new ItemDAO();
-        this.mediaDAO = new MediaDAO();
+    // basic constructor that sets just the basic buttons
+    public PersonalInventoryPanel() {
         initializePanel();
-        loadUserItems();
+    }
+
+    // consturct the pannels once the
+    public PersonalInventoryPanel(ServiceResult viewData) {
+        initializePanel();
+        this.userItems = (List<Item>) viewData.getItems();
+        updateGrid();
     }
 
     public void setActionListener(UserActionListener actionListener) {
@@ -123,18 +123,6 @@ public class PersonalInventoryPanel extends JPanel {
         add(controlPanel, BorderLayout.SOUTH);
     }
 
-    // questa funzione dovrebbe essere spostata
-    private void loadUserItems() {
-        try {
-            userItems = itemDAO.getItemsByUserId(currentUserId);
-            updateGrid();
-        } catch (SQLException e) {
-            showError("Errore nel caricamento dell'inventario: " + e.getMessage());
-            userItems = List.of(); // Lista vuota in caso di errore
-            updateGrid();
-        }
-    }
-
     private void updateGrid() {
         gridPanel.removeAll();
 
@@ -176,7 +164,7 @@ public class PersonalInventoryPanel extends JPanel {
 
         try {
             // Ottieni il titolo del media
-            String mediaTitle = getMediaTitle(item.getMediaId());
+            String mediaTitle = "pisello";
 
             // Pannello superiore con titolo
             JPanel headerPanel = new JPanel(new BorderLayout());
@@ -289,10 +277,10 @@ public class PersonalInventoryPanel extends JPanel {
                 BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
 
-    private String getMediaTitle(int mediaId) throws SQLException {
-        // Assumo che ci sia un metodo per ottenere il titolo dal MediaDAO
-        return mediaDAO.getTitleById(mediaId);
-    }
+    // private String getMediaTitle(int mediaId) throws SQLException {
+    //     // Assumo che ci sia un metodo per ottenere il titolo dal MediaDAO
+    //     return mediaDAO.getTitleById(mediaId);
+    // }
 
     private String truncateText(String text, int maxLength) {
         if (text == null)
@@ -338,7 +326,7 @@ public class PersonalInventoryPanel extends JPanel {
 
     private void refreshInventory() {
         currentPage = 0;
-        loadUserItems();
+        updateGrid();
     }
 
     private void showError(String message) {
