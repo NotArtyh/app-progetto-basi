@@ -3,6 +3,7 @@ package org.example;
 import javax.swing.SwingUtilities;
 
 import org.example.controller.AppController;
+import org.example.controller.InventoryController;
 import org.example.controller.ItemController;
 import org.example.controller.UserController;
 import org.example.database.InventoryDAO;
@@ -10,6 +11,7 @@ import org.example.database.ItemDAO;
 import org.example.database.MediaDAO;
 import org.example.database.PersonalDataDAO;
 import org.example.database.UserDAO;
+import org.example.services.InventoryService;
 import org.example.services.ItemService;
 import org.example.services.UserService;
 import org.example.view.MainFrame;
