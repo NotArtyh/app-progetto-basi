@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.SessionManager;
 import org.example.view.ViewManager;
 import org.example.view.components.UserBar;
 import org.example.view.panels.AddItemPanel;
@@ -15,17 +16,21 @@ public class AppController {
     private final ViewManager viewManager;
     private final UserController userController;
     private final ItemController itemController;
+    private final InventoryController inventoryController;
+
+    // Dynamically handled pannels that change depending on the current session user
     private PersonalInventoryPanel personalInventoryPanel;
 
-    public AppController(ViewManager viewManager, UserController userController, ItemController itemController) {
+    public AppController(ViewManager viewManager, UserController userController, ItemController itemController,
+            InventoryController inventoryController) {
         this.viewManager = viewManager;
         this.userController = userController;
         this.itemController = itemController;
+        this.inventoryController = inventoryController;
         setupViews();
     }
 
-    // prepares the action listeners for the signInPannel
-    // add new listeners as needed for each pannel
+    // prepares the action listeners
     private void setupViews() {
 
         // SignIn panel
@@ -74,16 +79,19 @@ public class AppController {
             }
         });
 
+        // Home panel - Top user bar with infos and logout
         UserBar userBar = new UserBar();
         userBar.setActionListener(new UserBar.UserActionListener() {
             // have to impl listeners
         });
 
+        // home panel - Global view of all user inventories on the platform
         UsersInventoryPanel usersInventoryPanel = new UsersInventoryPanel();
         usersInventoryPanel.setActionListener(new UsersInventoryPanel.UserActionListener() {
             // have to impl listeners
         });
 
+        // home panel - Side view with user operations
         OperationsPanel operationsPanel = new OperationsPanel();
         operationsPanel.setActionListener(new OperationsPanel.UserActionListener() {
             public void onAddItem() {
@@ -92,9 +100,11 @@ public class AppController {
             }
 
             public void onViewInventory() {
-                // Inizializza o aggiorna il PersonalInventoryPanel prima di mostrarlo
+                // The pannel is created on demand
                 initializePersonalInventory();
                 viewManager.show("inventory");
+
+                // inventoryController.handleInventoryDisplay(SessionManager.getInstance().getCurrenUser().getUserId());
             }
 
             public void onTradeItem() {
@@ -105,6 +115,7 @@ public class AppController {
         HomePanel homePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel);
         // this pannel has no listeners.
 
+        // AddItem panel - add new item to inventory
         AddItemPanel addItemPanel = new AddItemPanel();
         addItemPanel.setActionListener(new AddItemPanel.UserActionListener() {
             public void onRegisterItemSubmit(String title, String condition, String note) {
@@ -116,57 +127,53 @@ public class AppController {
             }
         });
 
-        // Il PersonalInventoryPanel verrà inizializzato quando necessario
-        // perché richiede l'ID dell'utente corrente che non è disponibile all'avvio
-
-        // Register all the pannels
+        // Register all the pannels - naming is the same as for java variables
         viewManager.registerPanel("signIn", signInPanel);
         viewManager.registerPanel("logIn", logInPanel);
         viewManager.registerPanel("registration", registrationPanel);
         viewManager.registerPanel("home", homePanel);
         viewManager.registerPanel("addItem", addItemPanel);
-        // Il pannello inventory verrà registrato dinamicamente
+        // The inventory pannel is registered dinamically based on the current User
 
-        // start the app on the signIn pannel
+        // start the app on the signIn pannel - can be used for debugging
         viewManager.show("signIn");
     }
 
-    /**
-     * Inizializza il PersonalInventoryPanel con l'ID dell'utente corrente
-     * Questo metodo deve essere chiamato dopo che l'utente ha fatto login
+    /*
+     * We generate the pannel on demand based on the userId in order to get its
+     * own inventory, for this we simply check with the session manager
+     * if a user is logged in and validate if the pannel for that
+     * inventory exists, we then simply regenerate one or generate
+     * a new one based on the result
+     * 
+     * We can setup event listeners in the SetupView method above
+     * as if we take for granted that this pannel already exists, in fact
+     * the below code is triggered only the first time
+     * 
      */
     private void initializePersonalInventory() {
-        // Ottieni l'ID dell'utente corrente dal UserController
-        //SessionManager sessionManager = new SessionManager();
-        int currentUserId = 1;//sessionManager.getCurrentUserId(); 
-        
-        if (currentUserId > 0) {
-            // Se non esiste ancora o se l'utente è cambiato, crea un nuovo pannello
+        // Get current user Id via session manager
+        int currentUserId = SessionManager.getInstance().getCurrenUser().getUserId();
+
+        if (SessionManager.getInstance().isUserLoggedIn()) {
             if (personalInventoryPanel == null) {
                 personalInventoryPanel = new PersonalInventoryPanel(currentUserId);
+
+                /*
+                 * PersonalInventoryPanel listeners
+                 */
+                personalInventoryPanel.setActionListener(new PersonalInventoryPanel.UserActionListener() {
+                    public void onExit() {
+                        viewManager.show("home"); // go back to home view
+                    }
+                });
+
                 viewManager.registerPanel("inventory", personalInventoryPanel);
             } else {
                 // Se il pannello esiste già, aggiorna i dati
                 personalInventoryPanel.refreshData();
             }
-        } else {
-            // Se non c'è un utente loggato, torna al login
+        } else
             viewManager.show("signIn");
-        }
-    }
-
-    /**
-     * Metodo pubblico per inizializzare l'inventario quando l'utente fa login
-     * Deve essere chiamato dal UserController dopo un login riuscito
-     */
-    public void onUserLoggedIn() {
-        initializePersonalInventory();
-    }
-
-    /**
-     * Metodo per pulire i dati quando l'utente fa logout
-     */
-    public void onUserLoggedOut() {
-        
     }
 }
