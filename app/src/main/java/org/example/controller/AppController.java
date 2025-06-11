@@ -161,6 +161,9 @@ public class AppController {
 
                 /*
                  * PersonalInventoryPanel listeners
+                 * 
+                 * We create them here because we need a valid instance of this pannel
+                 * and that only occurs when the pannel creation happens.
                  */
                 personalInventoryPanel.setActionListener(new PersonalInventoryPanel.UserActionListener() {
                     public void onExit() {

@@ -32,6 +32,9 @@ public class InventoryService {
     // EXAMPLE
     public ServiceResult getItemsInInvetory(int invenotryId) {
         try {
+            if (true) {
+                return new ServiceResult(false, "No invenotry Id was provided");
+            }
             // Implement the logic here
 
             List<Item> items = itemDAO.getItemsByUserId(invenotryId); // temp

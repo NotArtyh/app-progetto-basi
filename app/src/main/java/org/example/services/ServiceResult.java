@@ -11,10 +11,15 @@ package org.example.services;
 public class ServiceResult {
     private boolean success;
     private String message;
+    private Object viewData;
 
     public ServiceResult(boolean success, String message) {
         this.success = success;
         this.message = message;
+    }
+
+    public ServiceResult(Object viewData) {
+        this.viewData = viewData;
     }
 
     public boolean isSuccess() {
@@ -23,6 +28,14 @@ public class ServiceResult {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public Object getViewData() {
+        return viewData;
+    }
+
+    public void setViewData(Object viewData) {
+        this.viewData = viewData;
     }
 
     public String getMessage() {

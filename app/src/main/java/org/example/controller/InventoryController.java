@@ -32,7 +32,13 @@ public class InventoryController {
      */
     public void handleInventoryDisplay(int invenotryId) {
         try {
+            // get the result from the service - aka get the needed list of items you want
+            // to be diplayed by the view
+
             ServiceResult result = inventoryService.getItemsInInvetory(invenotryId);
+
+            // pass the list of items to the view so that they can be displayed via the viewManager
+
 
             // Update the view based on result
             if (result.isSuccess()) {
