@@ -3,6 +3,7 @@ package org.example.controller;
 import org.example.services.InventoryService;
 import org.example.services.ServiceResult;
 import org.example.view.ViewManager;
+import org.example.view.panels.PersonalInventoryPanel;
 
 /**
  * Inventory Controller Class
@@ -17,39 +18,35 @@ public class InventoryController {
         this.viewManager = viewManager;
     }
 
-    /*
-     * An example of a Controller method that just wires the view to the corespond
-     * service here this method would be use to handle the display of an invenotry
-     * and the like the service is responsible for calling all the DAOs it need to
-     * operate such querry The Controller is bound to the "entity" that is best
-     * paired with: in this case the inventory is bounded to all those operations
-     * that would use it directly, like the display of the inventory with all its
-     * items inside displaying a list of these inventories and the likes.
-     * 
-     * NO LOGIC HERE - ALL OPERATIONS INSIDE THE SERVICE
-     * we simply wire the view and the service togheter aka we expect
-     * a ServiceResult type reuslt that tells the view what to display
+    /**
+     * Method that handles the update of a personal inventory pannel
+     * It calls the invenotryService method for handling the retrieval of items
+     * in the current session user and then passes the positive result to the
+     * the new pannel which will repalce the old one.
      */
-    public void handleInventoryDisplay(int inventoryId) {
+    public void handlePersonalInventoryUpdate() {
         try {
-            // get the result from the service - aka get the needed list of items you want
-            // to be diplayed by the view
+            ServiceResult result = inventoryService.getCurrentUserItems();
 
-            ServiceResult result = inventoryService.getItemsInInvetory(inventoryId);
-
-            // pass the list of items to the view so that they can be displayed via the viewManager
-
-
-            // Update the view based on result
-            if (result.isSuccess()) {
-                // View goes forward - Ok
+            // Validate if the service returned any items
+            if (!result.isSuccess()) {
                 System.out.println(result.getMessage());
-            } else {
-                // View displays an error and doesn't go forwards
-                System.out.println(result.getMessage());
+                return;
             }
+
+            // Pass the list of items to the view so that it can update via a special
+            // constructor that handles the updates.
+            // Reset the action listerners for the new pannel
+            PersonalInventoryPanel updatedPersonalInventoryPanel = new PersonalInventoryPanel(result);
+            updatedPersonalInventoryPanel.setActionListener(new PersonalInventoryPanel.UserActionListener() {
+                public void onExit() {
+                    viewManager.show("home"); // go back to home view
+                }
+            });
+
+            viewManager.updatePanel("inventory", updatedPersonalInventoryPanel);
+
         } catch (Exception e) {
-            // Display the fatal error on the view
             System.out.println("Fatal error: " + e.getMessage());
             e.printStackTrace();
         }
