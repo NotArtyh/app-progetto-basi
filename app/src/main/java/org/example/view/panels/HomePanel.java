@@ -14,13 +14,12 @@ public class HomePanel extends JPanel {
 
     public HomePanel(JPanel userBar, JPanel usersInventoryPanel, JPanel operationsPanel) {
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         createHomePanel(userBar, usersInventoryPanel, operationsPanel);
     }
 
     private void createHomePanel(JPanel userBar, JPanel usersInventoryPanel, JPanel operationsPanel) {
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.BOTH;
 
         // Top user bar (full width)
@@ -29,6 +28,7 @@ public class HomePanel extends JPanel {
         gbc.gridwidth = 2;
         gbc.weightx = 1.0;
         gbc.weighty = 0.1;
+        gbc.insets = new Insets(0, 0, 0, 0);
         add(userBar, gbc);
 
         // UsersInventoryPanel panel (2/3 width)
@@ -37,6 +37,7 @@ public class HomePanel extends JPanel {
         gbc.gridwidth = 1;
         gbc.weightx = 0.66;
         gbc.weighty = 0.9;
+        gbc.insets = new Insets(10, 10, 10, 10);
         add(usersInventoryPanel, gbc);
 
         // Operations panel (1/3 width)
@@ -44,6 +45,7 @@ public class HomePanel extends JPanel {
         gbc.gridy = 1;
         gbc.weightx = 0.34;
         gbc.weighty = 0.9;
+        gbc.insets = new Insets(10, 10, 10, 10);
         add(operationsPanel, gbc);
     }
 }
