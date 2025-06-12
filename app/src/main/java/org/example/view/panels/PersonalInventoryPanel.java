@@ -8,7 +8,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -33,20 +35,24 @@ public class PersonalInventoryPanel extends JPanel {
     private static final int ITEMS_PER_PAGE = GRID_SIZE * GRID_SIZE;
     private int currentPage = 0;
     private List<Item> userItems;
+    private List<String> userItemsTitles;
     private JPanel gridPanel;
     private JLabel pageLabel;
     private JButton prevButton;
     private JButton nextButton;
 
-    // basic constructor that sets just the basic buttons
+    // Constructor used to just initialize the pannel for a later update to happen
+    // so that no resource are wasted trying to draw something that will be
+    // inevitably redrawn
     public PersonalInventoryPanel() {
-        initializePanel();
     }
 
     // consturct the pannels once the
     public PersonalInventoryPanel(ServiceResult viewData) {
         initializePanel();
-        this.userItems = (List<Item>) viewData.getItems();
+        Map<Item, String> titletItemsMap = (Map<Item, String>) viewData.getViewDataPayload();
+        this.userItems = new ArrayList<>(titletItemsMap.keySet());
+        this.userItemsTitles = new ArrayList<>(titletItemsMap.values());
         updateGrid();
     }
 
@@ -141,7 +147,7 @@ public class PersonalInventoryPanel extends JPanel {
 
             // Aggiungi gli item della pagina corrente
             for (int i = startIndex; i < endIndex; i++) {
-                JPanel itemPanel = createItemPanel(userItems.get(i));
+                JPanel itemPanel = createItemPanel(userItems.get(i), i);
                 gridPanel.add(itemPanel);
             }
 
@@ -156,7 +162,7 @@ public class PersonalInventoryPanel extends JPanel {
         gridPanel.repaint();
     }
 
-    private JPanel createItemPanel(Item item) {
+    private JPanel createItemPanel(Item item, int titleIndex) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(createItemBorder());
         panel.setBackground(Color.WHITE);
@@ -164,8 +170,7 @@ public class PersonalInventoryPanel extends JPanel {
 
         try {
             // Ottieni il titolo del media
-            String mediaTitle = "pisello";
-
+            String mediaTitle = userItemsTitles.get(titleIndex);
             // Pannello superiore con titolo
             JPanel headerPanel = new JPanel(new BorderLayout());
             headerPanel.setBackground(new Color(240, 248, 255));
@@ -277,9 +282,9 @@ public class PersonalInventoryPanel extends JPanel {
                 BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
 
-    // private String getMediaTitle(int mediaId) throws SQLException {
-    //     // Assumo che ci sia un metodo per ottenere il titolo dal MediaDAO
-    //     return mediaDAO.getTitleById(mediaId);
+    // private String getMediaTitle(Item item) {
+    // // Assumo che ci sia un metodo per ottenere il titolo dal MediaDAO
+    // return mediaDAO.getTitleById(mediaId);
     // }
 
     private String truncateText(String text, int maxLength) {

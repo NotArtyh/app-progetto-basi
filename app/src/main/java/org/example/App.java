@@ -31,11 +31,11 @@ public class App {
             InventoryDAO inventoryDAO = new InventoryDAO();
             ItemDAO itemDAO = new ItemDAO();
             MediaDAO mediaDAO = new MediaDAO();
-            
+
             // Create Services
             UserService userService = new UserService(userDAO, personalDataDAO, inventoryDAO);
             ItemService itemService = new ItemService(itemDAO, mediaDAO);
-            InventoryService inventoryService = new InventoryService(inventoryDAO, itemDAO);
+            InventoryService inventoryService = new InventoryService(inventoryDAO, itemDAO, mediaDAO);
 
             // create the controllers
             UserController userController = new UserController(userService, viewManager);
