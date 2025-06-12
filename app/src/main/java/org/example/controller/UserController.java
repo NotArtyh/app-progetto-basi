@@ -1,8 +1,13 @@
 package org.example.controller;
 
+import javax.swing.JPanel;
+
 import org.example.services.ServiceResult;
 import org.example.services.UserService;
+import org.example.view.HomePanelManager;
 import org.example.view.ViewManager;
+import org.example.view.components.UserBar;
+import org.example.view.panels.HomePanel;
 
 /**
  * User Controller Class
@@ -11,10 +16,12 @@ import org.example.view.ViewManager;
 public class UserController {
     private UserService userService;
     private ViewManager viewManager;
+    private HomePanelManager homePanelManager;
 
-    public UserController(UserService userService, ViewManager viewManager) {
+    public UserController(UserService userService, ViewManager viewManager, HomePanelManager homePanelManager) {
         this.userService = userService;
         this.viewManager = viewManager;
+        this.homePanelManager = homePanelManager;
     }
 
     public void handleUserRegistration(String name, String surname, String sex, String phoneNumber,
@@ -49,6 +56,7 @@ public class UserController {
             if (result.isSuccess()) {
                 // View goes forward - ok show dashboard with inventory view etc;
                 System.out.println(result.getMessage());
+                handleUserInfoUpdate();
                 viewManager.show("home");
             } else {
                 // View displays an error and doesn't go forward
@@ -73,5 +81,27 @@ public class UserController {
         } catch (Exception e) {
             // Display the fatal error on the view
         }
+    }
+
+    public void handleUserInfoUpdate() {
+        ServiceResult result = userService.getCurrentUserData();
+
+        if (!result.isSuccess()) {
+            System.out.println(result.getMessage());
+            return;
+        }
+
+        UserBar updatedUserBar = new UserBar(result);
+        updatedUserBar.setActionListener(new UserBar.UserActionListener() {
+            public void onLogOut() {
+                handleUserLogOut();
+                viewManager.show("SignIn");
+            }
+        });
+
+        System.out.println(result);
+
+        homePanelManager.setUserBar(updatedUserBar);
+        homePanelManager.updateHomePanel();
     }
 }
