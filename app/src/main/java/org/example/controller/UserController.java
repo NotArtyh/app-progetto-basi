@@ -99,8 +99,6 @@ public class UserController {
             }
         });
 
-        System.out.println(result);
-
         homePanelManager.setUserBar(updatedUserBar);
         homePanelManager.updateHomePanel();
     }
