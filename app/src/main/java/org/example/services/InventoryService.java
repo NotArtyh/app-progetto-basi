@@ -38,13 +38,13 @@ public class InventoryService {
     public ServiceResult getCurrentUserItems() {
         try {
             if (!SessionManager.getInstance().isUserLoggedIn()) {
-                return new ServiceResult(false, "No invenotry Id was provided");
+                return new ServiceResult(false, "User not logged in.");
             }
             int currentUserId = SessionManager.getInstance().getCurrenUser().getUserId();
 
             List<Item> items = itemDAO.getItemsByUserId(currentUserId);
             if (items.isEmpty()) {
-                return new ServiceResult(false, "failed to retrieve viewData");
+                return new ServiceResult(false, "Failed to retrieve viewData.");
             }
 
             // pair the corresponding title to each meadia
@@ -56,7 +56,7 @@ public class InventoryService {
 
             // System.out.println(titletItemsMap);
 
-            ServiceResult result = new ServiceResult(true, "view data retrieved.");
+            ServiceResult result = new ServiceResult(true, "View data retrieved.");
             result.setViewDataPayload(titletItemsMap);
             return result;
 
