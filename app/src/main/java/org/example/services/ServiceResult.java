@@ -1,10 +1,5 @@
 package org.example.services;
 
-import java.util.List;
-
-import org.example.model.Item;
-import org.example.model.User;
-
 /**
  * Wrapper class used to handle the outcome for the
  * service operation, it has a boolean for the success
@@ -20,10 +15,6 @@ public class ServiceResult {
     public ServiceResult(boolean success, String message) {
         this.success = success;
         this.message = message;
-    }
-
-    public ServiceResult(List<Item> items) {
-        this.items = items;
     }
 
     public boolean isSuccess() {
@@ -44,22 +35,18 @@ public class ServiceResult {
 
     // ------------- handling list returns for view ---------
 
-    private List<Item> items;
-    private List<User> users;
+    /*
+     * the payload can only be set and no constructor is available on purpose to
+     * avoid the possibility of creating it by mistake, for a given result we set
+     * the payload and retrieve it later in the view
+     */
+    private Object viewDataPayload;
 
-    public Object getItems() {
-        return items;
+    public Object getViewDataPayload() {
+        return viewDataPayload;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setViewDataPayload(Object viewDataPayload) {
+        this.viewDataPayload = viewDataPayload;
     }
 }
