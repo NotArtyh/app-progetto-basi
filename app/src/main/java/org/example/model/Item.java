@@ -31,14 +31,6 @@ public class Item {
         this.dataAcquisizione = dataAcquisizione;
     }
 
-    public Item(int mediaId, int inventoryId, String condizioni, String note, LocalDateTime dataAcquisizione) {
-        this.mediaId = mediaId;
-        this.inventoryId = inventoryId;
-        this.condizioni = condizioni;
-        this.note = note;
-        this.dataAcquisizione = dataAcquisizione;
-    }
-
     public int getMediaId() {
         return mediaId;
     }
