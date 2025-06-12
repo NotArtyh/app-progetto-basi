@@ -8,18 +8,9 @@ public class Item {
     private int inventoryId;
     private String condizioni;
     private String note;
-    private LocalDateTime data_acquisizione;
+    private LocalDateTime dataAcquisizione;
 
     public Item() {
-    }
-
-    public Item(int mediaId, int inventoryId, int itemId, String condizioni, String note, LocalDateTime data_acquisizione) {
-        this.mediaId = mediaId;
-        this.itemId = itemId;
-        this.inventoryId = inventoryId;
-        this.condizioni = condizioni;
-        this.note = note;
-        this.data_acquisizione = data_acquisizione;
     }
 
     public Item(int mediaId, int inventoryId, String condizioni, String note, LocalDateTime dataAcquisizione) {
@@ -27,7 +18,25 @@ public class Item {
         this.inventoryId = inventoryId;
         this.condizioni = condizioni;
         this.note = note;
-        this.data_acquisizione = data_acquisizione;
+        this.dataAcquisizione = dataAcquisizione;
+    }
+
+    public Item(int mediaId, int inventoryId, int itemId, String condizioni, String note,
+            LocalDateTime dataAcquisizione) {
+        this.mediaId = mediaId;
+        this.itemId = itemId;
+        this.inventoryId = inventoryId;
+        this.condizioni = condizioni;
+        this.note = note;
+        this.dataAcquisizione = dataAcquisizione;
+    }
+
+    public Item(int mediaId, int inventoryId, String condizioni, String note, LocalDateTime dataAcquisizione) {
+        this.mediaId = mediaId;
+        this.inventoryId = inventoryId;
+        this.condizioni = condizioni;
+        this.note = note;
+        this.dataAcquisizione = dataAcquisizione;
     }
 
     public int getMediaId() {
@@ -71,17 +80,17 @@ public class Item {
     }
 
     public LocalDateTime getData_acquisizione() {
-        return LocalDateTime.now();
+        return dataAcquisizione;
     }
 
-    public void setData_acquisizione(LocalDateTime data_acquisizione) {
-        this.data_acquisizione = data_acquisizione;
+    public void setData_acquisizione(LocalDateTime dataAcquisizione) {
+        this.dataAcquisizione = dataAcquisizione;
     }
 
     @Override
     public String toString() {
         return "Item [mediaId=" + mediaId + ", itemId=" + itemId + ", inventoryId=" + inventoryId + ", condizioni="
-                + condizioni + ", note=" + note + ", data_acquisizione=" + data_acquisizione + "]";
+                + condizioni + ", note=" + note + ", data_acquisizione=" + dataAcquisizione + "]";
     }
 
     @Override
@@ -109,10 +118,10 @@ public class Item {
                 return false;
         } else if (!note.equals(other.note))
             return false;
-        if (data_acquisizione == null) {
-            if (other.data_acquisizione != null)
+        if (dataAcquisizione == null) {
+            if (other.dataAcquisizione != null)
                 return false;
-        } else if (!data_acquisizione.equals(other.data_acquisizione))
+        } else if (!dataAcquisizione.equals(other.dataAcquisizione))
             return false;
         return true;
     }

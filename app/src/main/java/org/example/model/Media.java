@@ -1,13 +1,14 @@
 package org.example.model;
+
 import java.time.LocalDateTime;
 
 public class Media {
     private int mediaId;
-    private String foto; 
+    private String foto;
     private String titolo;
     private LocalDateTime data_aggiunta;
     private String nome_formato;
-    
+
     public Media() {
     }
 
@@ -65,5 +66,3 @@ public class Media {
                 + ", data_aggiunta=" + data_aggiunta + ", foto=" + foto + "]";
     }
 }
-
-

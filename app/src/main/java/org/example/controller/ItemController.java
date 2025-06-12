@@ -1,36 +1,35 @@
 package org.example.controller;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
-import org.example.database.ItemDAO;
-import org.example.model.Item;
-import org.example.view.UserView;
+import org.example.services.ServiceResult;
+import org.example.services.ItemService;
+import org.example.view.ViewManager;
 
 public class ItemController {
-    private ItemDAO itemDAO;
-    private UserView itemView;
+    private ItemService itemService;
+    private ViewManager viewManager;
 
-    public ItemController(ItemDAO itemDAO, UserView itemView) {
-        this.itemDAO = itemDAO;
-        this.itemView = itemView;
+    public ItemController(ItemService itemService, ViewManager viewManager) {
+        this.itemService = itemService;
+        this.viewManager = viewManager;
     }
 
-    public int createItem(int mediaId, int inventoryId, String condizioni, String note, LocalDateTime dataAcquisizione) {
+    public void handleItemRegistration(String title, String condition, String note) {
         try {
-            Item item = new Item(mediaId, inventoryId, condizioni, note, dataAcquisizione);
+            ServiceResult result = itemService.registerItem(title, condition, note);
 
-            itemDAO.createItem(item);
-            itemView.displayMessage("Item created successfully with ID: " + item.getItemId());
-            return item.getItemId();
-        } catch (SQLException e) {
-            itemView.displayError("Error creating the item: " + e.getMessage());
-            return -1;
+            if (result.isSuccess()) {
+                // View goes forward - Ok
+                System.out.println(result.getMessage());
+                viewManager.show("home"); // We return to the homepage
+            } else {
+                // View displays an error and doesn't go forwards
+                System.out.println(result.getMessage());
+            }
         } catch (Exception e) {
-            itemView.displayError("Unexpected error: " + e.getMessage());
-            return -1;
+            // Display the fatal error on the view
         }
-
     }
 }
 

@@ -4,56 +4,59 @@ package org.example.model;
  * User Entity Class
  * Represents a user from the DATI_UTENTE table
  */
-public class PersonalData{
+public class PersonalData {
     private int personaId;
     private String nome;
     private String cognome;
     private String sesso;
     private String telefono;
     private String provincia;
-    private String stato_residenza;
+    private String statoResidenza;
     private String cap;
     private String via;
     private String civico;
-    
+
     // Default Constructor
-    public PersonalData() {}
-    
+    public PersonalData() {
+    }
+
     // Full Constructor (for existing data)
-    public PersonalData(int personaId, String nome,  String cognome, String sesso, String telefono, String provincia, String stato_residenza, String cap, String via, String civico) {
+    public PersonalData(int personaId, String nome, String cognome, String sesso, String telefono, String provincia,
+            String statoResidenza, String cap, String via, String civico) {
         this.personaId = personaId;
         this.nome = nome;
         this.cognome = cognome;
         this.sesso = sesso;
         this.telefono = telefono;
         this.provincia = provincia;
-        this.stato_residenza = stato_residenza;
+        this.statoResidenza = statoResidenza;
         this.cap = cap;
         this.via = via;
         this.civico = civico;
     }
-    
+
     // Constructor without personaId (for creating new data)
-    public PersonalData(String nome,  String cognome, String sesso, String telefono, String provincia, String stato_residenza, String cap, String via, String civico) {
+    public PersonalData(String nome, String cognome, String sesso, String telefono, String provincia,
+            String statoResidenza, String cap, String via, String civico) {
         this.nome = nome;
         this.cognome = cognome;
         this.sesso = sesso;
         this.telefono = telefono;
         this.provincia = provincia;
-        this.stato_residenza = stato_residenza;
+        this.statoResidenza = statoResidenza;
         this.cap = cap;
         this.via = via;
         this.civico = civico;
     }
-    
+
     // Getters and Setters
-    public int getPersonaId() { 
-        return personaId; 
+    public int getPersonaId() {
+        return personaId;
     }
-    public void setPersonaId(int personaId) { 
-        this.personaId = personaId; 
+
+    public void setPersonaId(int personaId) {
+        this.personaId = personaId;
     }
-    
 
     public String getNome() {
         return nome;
@@ -95,14 +98,12 @@ public class PersonalData{
         return provincia;
     }
 
-
     public String getStato_residenza() {
-        return stato_residenza;
+        return statoResidenza;
     }
 
-
-    public void setStato_residenza(String stato_residenza) {
-        this.stato_residenza = stato_residenza;
+    public void setStato_residenza(String statoResidenza) {
+        this.statoResidenza = statoResidenza;
     }
 
     public String getCap() {
@@ -129,15 +130,15 @@ public class PersonalData{
         this.civico = civico;
     }
 
-  
-
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
         PersonalData that = (PersonalData) obj;
         return personaId == that.personaId;
     }
-    
+
     @Override
     public int hashCode() {
         return Integer.hashCode(personaId);

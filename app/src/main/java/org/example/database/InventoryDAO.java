@@ -20,7 +20,7 @@ public class InventoryDAO {
      * @param user User object to create
      * @throws SQLException if database operation fails
      */
-    public void createInventory(Inventory inv) throws SQLException {
+    public DAOResult createInventory(Inventory inv) throws SQLException {
         String sql = "INSERT INTO INVENTARIO (Pubblico, Tipo) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -30,14 +30,16 @@ public class InventoryDAO {
             stmt.setBoolean(2, inv.isTipo());
 
             int rowsAffected = stmt.executeUpdate();
-            
+
             if (rowsAffected > 0) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         inv.setInventoryId(rs.getInt(1));
                     }
                 }
-            }
+                return new DAOResult(true, inv.getInventoryId());
+            } else
+                return new DAOResult(false);
         }
     }
 }
