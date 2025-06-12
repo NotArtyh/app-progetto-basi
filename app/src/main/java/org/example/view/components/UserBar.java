@@ -3,13 +3,21 @@ package org.example.view.components;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import org.example.model.User;
+import org.example.services.ServiceResult;
+
 import java.awt.*;
 
 public class UserBar extends JPanel {
     private UserActionListener actionListener;
-    private String username = "xXPippoXx";
+    private String username;
 
     public UserBar() {
+    }
+
+    public UserBar(ServiceResult viewData) {
+        User user = (User) viewData.getViewDataPayload();
+        this.username = user.getUsername();
         createUserBar();
     }
 
