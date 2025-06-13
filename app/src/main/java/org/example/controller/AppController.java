@@ -1,33 +1,32 @@
 package org.example.controller;
 
-import org.example.SessionManager;
+import org.example.view.HomePanelManager;
 import org.example.view.ViewManager;
-import org.example.view.components.UserBar;
 import org.example.view.panels.AddItemPanel;
-import org.example.view.panels.HomePanel;
 import org.example.view.panels.LogInPanel;
 import org.example.view.panels.OperationsPanel;
 import org.example.view.panels.PersonalInventoryPanel;
 import org.example.view.panels.RegistrationPanel;
 import org.example.view.panels.SignInPanel;
-import org.example.view.panels.UsersInventoryPanel;
 
 public class AppController {
     private final ViewManager viewManager;
+    private final HomePanelManager homePanelManager;
     private final UserController userController;
     private final ItemController itemController;
     private final InventoryController inventoryController;
 
     public AppController(ViewManager viewManager, UserController userController, ItemController itemController,
-            InventoryController inventoryController) {
+            InventoryController inventoryController, HomePanelManager homePanelManager) {
         this.viewManager = viewManager;
+        this.homePanelManager = homePanelManager;
         this.userController = userController;
         this.itemController = itemController;
         this.inventoryController = inventoryController;
         setupViews();
     }
 
-    // prepares the action listeners
+    // prepares the action listeners for the static panels that arent user dependant
     private void setupViews() {
 
         // SignIn panel
@@ -76,20 +75,6 @@ public class AppController {
             }
         });
 
-        // Home panel - Top user bar with infos and logout
-        UserBar userBar = new UserBar();
-        userBar.setActionListener(new UserBar.UserActionListener() {
-            public void onLogOut() {
-                userController.handleUserLogOut();
-            }
-        });
-
-        // home panel - Global view of all user inventories on the platform
-        UsersInventoryPanel usersInventoryPanel = new UsersInventoryPanel();
-        usersInventoryPanel.setActionListener(new UsersInventoryPanel.UserActionListener() {
-            // have to impl listeners
-        });
-
         // home panel - Side view with user operations
         OperationsPanel operationsPanel = new OperationsPanel();
         operationsPanel.setActionListener(new OperationsPanel.UserActionListener() {
@@ -111,7 +96,11 @@ public class AppController {
             }
         });
 
-        HomePanel homePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel);
+        // set just the static pannel, the update of the other is hanled in the
+        // controllers that interest it, nominally the UserController in the HandleLogin
+        // method
+        homePanelManager.setOperationsPanel(operationsPanel);
+
         // this pannel has no listeners.
 
         // AddItem panel - add new item to inventory
@@ -133,7 +122,6 @@ public class AppController {
         viewManager.registerPanel("signIn", signInPanel);
         viewManager.registerPanel("logIn", logInPanel);
         viewManager.registerPanel("registration", registrationPanel);
-        viewManager.registerPanel("home", homePanel);
         viewManager.registerPanel("addItem", addItemPanel);
         viewManager.registerPanel("inventory", personalInventoryPanel);
 
@@ -178,5 +166,8 @@ public class AppController {
      * every time we want to recompose the pannel, like the home pannel which is
      * simply the composition of subpannels but in this case we have the logic
      * for updating.
+     * 
+     * FINAL - I've added a HomePannelManager, each controller implements its update
+     * function to handle when a given pannel should refresh but if its
      */
 }
