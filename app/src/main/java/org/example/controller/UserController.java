@@ -35,7 +35,7 @@ public class UserController {
             if (result.isSuccess()) {
                 // View goes forward - Ok
                 System.out.println(result.getMessage());
-                handleUserInfoUpdate();
+                handleUserAuthentication(username, password);
                 viewManager.show("home");
             } else {
                 // View displays an error and doesn't go forwards
