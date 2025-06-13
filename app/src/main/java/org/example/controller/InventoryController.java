@@ -5,6 +5,7 @@ import org.example.services.ServiceResult;
 import org.example.view.DynamicPanelManager;
 import org.example.view.ViewManager;
 import org.example.view.panels.PersonalInventoryPanel;
+import org.example.view.panels.TradePanel;
 
 /**
  * Inventory Controller Class
@@ -49,6 +50,28 @@ public class InventoryController {
 
             dynamicPanelManager.setPersonalInventoryPanel(updatedPersonalInventoryPanel);
             dynamicPanelManager.updatePersonalInventoryPanel();
+
+        } catch (Exception e) {
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // call this method inside the handler for the view of the users inventories
+    // when the trade button is sent for that user
+    public void handleTradeRequestUpdate(ServiceResult receiverUserData) {
+        try {
+            ServiceResult currentUserResult = inventoryService.getCurrentUserItems();
+            if (!currentUserResult.isSuccess()) {
+                System.out.println(currentUserResult.getMessage());
+            }
+
+            // the service result passed to this handle should already have the info about
+            // the user we want to trade with, we simply have to pass it to the view whihc
+            // will handle the two types of result
+
+            TradePanel updatedTradePanel = new TradePanel(currentUserResult, receiverUserData);
+            
 
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());
