@@ -13,5 +13,3 @@ Before running the application ensure to have installed the java jdk.
 In order to run the application two options are provided:
 - using the `.jar` - *[TODO] yet to be implement*
 - using the gradle wrapper `./gradlew run`
-
-WEIRD GITHUB ISSUE
