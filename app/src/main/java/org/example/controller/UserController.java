@@ -5,7 +5,6 @@ import org.example.services.UserService;
 import org.example.view.DynamicPanelManager;
 import org.example.view.ViewManager;
 import org.example.view.components.UserBar;
-
 /**
  * User Controller Class
  * coordinates between Model and View
@@ -14,11 +13,15 @@ public class UserController {
     private UserService userService;
     private ViewManager viewManager;
     private DynamicPanelManager dynamicPanelManager;
+    private InventoryController inventoryController;
 
-    public UserController(UserService userService, ViewManager viewManager, DynamicPanelManager dynamicPanelManager) {
+
+    public UserController(UserService userService, ViewManager viewManager, DynamicPanelManager dynamicPanelManager, 
+            InventoryController inventoryController) {
         this.userService = userService;
         this.viewManager = viewManager;
         this.dynamicPanelManager = dynamicPanelManager;
+        this.inventoryController = inventoryController;
     }
 
     public void handleUserRegistration(String name, String surname, String sex, String phoneNumber,
@@ -102,6 +105,7 @@ public class UserController {
             });
 
             dynamicPanelManager.setUserBar(updatedUserBar);
+            inventoryController.handlePersonalInventoryUpdate();
             dynamicPanelManager.updateHomePanel();
 
         } catch (Exception e) {

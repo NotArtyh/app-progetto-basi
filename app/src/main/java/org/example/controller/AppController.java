@@ -5,7 +5,6 @@ import org.example.view.ViewManager;
 import org.example.view.panels.AddItemPanel;
 import org.example.view.panels.LogInPanel;
 import org.example.view.panels.OperationsPanel;
-import org.example.view.panels.PersonalInventoryPanel;
 import org.example.view.panels.RegistrationPanel;
 import org.example.view.panels.SignInPanel;
 
@@ -90,6 +89,7 @@ public class AppController {
 
                 // inventoryController.handleInventoryDisplay(SessionManager.getInstance().getCurrenUser().getUserId());
             }
+
 
             public void onTradeItem() {
                 // change view to trade panel
