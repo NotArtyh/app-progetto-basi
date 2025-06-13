@@ -115,15 +115,11 @@ public class AppController {
             }
         });
 
-        // Personal Inventory - view what you got
-        PersonalInventoryPanel personalInventoryPanel = new PersonalInventoryPanel();
-
         // Register all the pannels - naming is the same as for java variables
         viewManager.registerPanel("signIn", signInPanel);
         viewManager.registerPanel("logIn", logInPanel);
         viewManager.registerPanel("registration", registrationPanel);
         viewManager.registerPanel("addItem", addItemPanel);
-        viewManager.registerPanel("inventory", personalInventoryPanel);
 
         // start the app on the signIn pannel - can be used for debugging
         viewManager.show("signIn");

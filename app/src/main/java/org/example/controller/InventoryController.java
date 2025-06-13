@@ -35,7 +35,6 @@ public class InventoryController {
             // Validate if the service returned any items
             if (!result.isSuccess()) {
                 System.out.println(result.getMessage());
-                return;
             }
 
             // Pass the list of items to the view so that it can update via a special

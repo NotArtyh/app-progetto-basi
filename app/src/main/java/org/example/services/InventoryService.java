@@ -44,7 +44,7 @@ public class InventoryService {
 
             List<Item> items = itemDAO.getItemsByUserId(currentUserId);
             if (items.isEmpty()) {
-                return new ServiceResult(false, "Failed to retrieve viewData.");
+                return new ServiceResult(false, "User has no items in the inventory.");
             }
 
             // pair the corresponding title to each meadia
