@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.services.InventoryService;
 import org.example.services.ServiceResult;
+import org.example.view.DynamicPanelManager;
 import org.example.view.ViewManager;
 import org.example.view.panels.PersonalInventoryPanel;
 
@@ -12,10 +13,13 @@ import org.example.view.panels.PersonalInventoryPanel;
 public class InventoryController {
     private InventoryService inventoryService;
     private ViewManager viewManager;
+    private DynamicPanelManager dynamicPanelManager;
 
-    public InventoryController(InventoryService inventoryService, ViewManager viewManager) {
+    public InventoryController(InventoryService inventoryService, ViewManager viewManager,
+            DynamicPanelManager dynamicPanelManager) {
         this.inventoryService = inventoryService;
         this.viewManager = viewManager;
+        this.dynamicPanelManager = dynamicPanelManager;
     }
 
     /**
@@ -44,7 +48,8 @@ public class InventoryController {
                 }
             });
 
-            viewManager.updatePanel("inventory", updatedPersonalInventoryPanel);
+            dynamicPanelManager.setPersonalInventoryPanel(updatedPersonalInventoryPanel);
+            dynamicPanelManager.updatePersonalInventoryPanel();
 
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());

@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.view.HomePanelManager;
+import org.example.view.DynamicPanelManager;
 import org.example.view.ViewManager;
 import org.example.view.panels.AddItemPanel;
 import org.example.view.panels.LogInPanel;
@@ -11,15 +11,15 @@ import org.example.view.panels.SignInPanel;
 
 public class AppController {
     private final ViewManager viewManager;
-    private final HomePanelManager homePanelManager;
+    private final DynamicPanelManager dynamicPanelManager;
     private final UserController userController;
     private final ItemController itemController;
     private final InventoryController inventoryController;
 
     public AppController(ViewManager viewManager, UserController userController, ItemController itemController,
-            InventoryController inventoryController, HomePanelManager homePanelManager) {
+            InventoryController inventoryController, DynamicPanelManager dynamicPanelManager) {
         this.viewManager = viewManager;
-        this.homePanelManager = homePanelManager;
+        this.dynamicPanelManager = dynamicPanelManager;
         this.userController = userController;
         this.itemController = itemController;
         this.inventoryController = inventoryController;
@@ -99,7 +99,7 @@ public class AppController {
         // set just the static pannel, the update of the other is hanled in the
         // controllers that interest it, nominally the UserController in the HandleLogin
         // method
-        homePanelManager.setOperationsPanel(operationsPanel);
+        dynamicPanelManager.setOperationsPanel(operationsPanel);
 
         // this pannel has no listeners.
 

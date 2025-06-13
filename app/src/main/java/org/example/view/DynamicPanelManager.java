@@ -3,23 +3,31 @@ package org.example.view;
 import org.example.view.components.UserBar;
 import org.example.view.panels.HomePanel;
 import org.example.view.panels.OperationsPanel;
+import org.example.view.panels.PersonalInventoryPanel;
 import org.example.view.panels.UsersInventoryPanel;
 
-public class HomePanelManager {
-
+public class DynamicPanelManager {
     private ViewManager viewManager;
+
     private UserBar userBar;
     private UsersInventoryPanel usersInventoryPanel;
     private OperationsPanel operationsPanel;
     private HomePanel homePanel;
 
-    public HomePanelManager(ViewManager viewManager) {
+    private PersonalInventoryPanel personalInventoryPanel;
+
+    public DynamicPanelManager(ViewManager viewManager) {
         this.viewManager = viewManager;
+
         this.userBar = new UserBar();
         this.usersInventoryPanel = new UsersInventoryPanel();
         this.operationsPanel = new OperationsPanel();
         this.homePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel);
+
+        this.personalInventoryPanel = new PersonalInventoryPanel();
     }
+
+    // ------ Home panel
 
     public void setUserBar(UserBar userBar) {
         this.userBar = userBar;
@@ -40,5 +48,15 @@ public class HomePanelManager {
 
     public void registerHomePanel() {
         viewManager.registerPanel("home", homePanel);
+    }
+
+    // ------ Personal inventory panel
+
+    public void setPersonalInventoryPanel(PersonalInventoryPanel personalInventoryPanel) {
+        this.personalInventoryPanel = personalInventoryPanel;
+    }
+
+    public void updatePersonalInventoryPanel() {
+        viewManager.updatePanel("inventory", personalInventoryPanel);
     }
 }

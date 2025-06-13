@@ -14,7 +14,7 @@ import org.example.database.UserDAO;
 import org.example.services.InventoryService;
 import org.example.services.ItemService;
 import org.example.services.UserService;
-import org.example.view.HomePanelManager;
+import org.example.view.DynamicPanelManager;
 import org.example.view.MainFrame;
 import org.example.view.ViewManager;
 
@@ -25,7 +25,7 @@ public class App {
             // Create the frame and the manager
             MainFrame mainFrame = new MainFrame();
             ViewManager viewManager = new ViewManager(mainFrame);
-            HomePanelManager homePanelManager = new HomePanelManager(viewManager);
+            DynamicPanelManager dynamicPanelManager = new DynamicPanelManager(viewManager);
 
             // Create DAO
             UserDAO userDAO = new UserDAO();
@@ -40,15 +40,16 @@ public class App {
             InventoryService inventoryService = new InventoryService(inventoryDAO, itemDAO, mediaDAO);
 
             // create the controllers
-            
-            UserController userController = new UserController(userService, viewManager, homePanelManager);
+
+            UserController userController = new UserController(userService, viewManager, dynamicPanelManager);
             ItemController itemController = new ItemController(itemService, viewManager);
-            InventoryController inventoryController = new InventoryController(inventoryService, viewManager);
+            InventoryController inventoryController = new InventoryController(inventoryService, viewManager,
+                    dynamicPanelManager);
 
             // Create the final App controller that manages everything
             // could have a return for validation but ok for now
             AppController appController = new AppController(viewManager, userController, itemController,
-                    inventoryController, homePanelManager);
+                    inventoryController, dynamicPanelManager);
 
             mainFrame.setVisible(true);
         });
