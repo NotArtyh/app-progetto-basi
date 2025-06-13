@@ -1,13 +1,10 @@
 package org.example.controller;
 
-import javax.swing.JPanel;
-
 import org.example.services.ServiceResult;
 import org.example.services.UserService;
-import org.example.view.HomePanelManager;
+import org.example.view.DynamicPanelManager;
 import org.example.view.ViewManager;
 import org.example.view.components.UserBar;
-import org.example.view.panels.HomePanel;
 
 /**
  * User Controller Class
@@ -16,12 +13,12 @@ import org.example.view.panels.HomePanel;
 public class UserController {
     private UserService userService;
     private ViewManager viewManager;
-    private HomePanelManager homePanelManager;
+    private DynamicPanelManager dynamicPanelManager;
 
-    public UserController(UserService userService, ViewManager viewManager, HomePanelManager homePanelManager) {
+    public UserController(UserService userService, ViewManager viewManager, DynamicPanelManager dynamicPanelManager) {
         this.userService = userService;
         this.viewManager = viewManager;
-        this.homePanelManager = homePanelManager;
+        this.dynamicPanelManager = dynamicPanelManager;
     }
 
     public void handleUserRegistration(String name, String surname, String sex, String phoneNumber,
@@ -44,7 +41,8 @@ public class UserController {
                 System.out.println(result.getMessage());
             }
         } catch (Exception e) {
-            // Display the fatal error on the view
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -63,7 +61,8 @@ public class UserController {
                 System.out.println(result.getMessage());
             }
         } catch (Exception e) {
-            // Display the fatal error on the view
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -79,27 +78,34 @@ public class UserController {
                 System.out.println(result.getMessage());
             }
         } catch (Exception e) {
-            // Display the fatal error on the view
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     public void handleUserInfoUpdate() {
-        ServiceResult result = userService.getCurrentUserData();
+        try {
+            ServiceResult result = userService.getCurrentUserData();
 
-        if (!result.isSuccess()) {
-            System.out.println(result.getMessage());
-            return;
-        }
-
-        UserBar updatedUserBar = new UserBar(result);
-        updatedUserBar.setActionListener(new UserBar.UserActionListener() {
-            public void onLogOut() {
-                handleUserLogOut();
-                viewManager.show("SignIn");
+            if (!result.isSuccess()) {
+                System.out.println(result.getMessage());
+                return;
             }
-        });
 
-        homePanelManager.setUserBar(updatedUserBar);
-        homePanelManager.updateHomePanel();
+            UserBar updatedUserBar = new UserBar(result);
+            updatedUserBar.setActionListener(new UserBar.UserActionListener() {
+                public void onLogOut() {
+                    handleUserLogOut();
+                    viewManager.show("SignIn");
+                }
+            });
+
+            dynamicPanelManager.setUserBar(updatedUserBar);
+            dynamicPanelManager.updateHomePanel();
+
+        } catch (Exception e) {
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
