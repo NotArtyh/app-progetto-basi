@@ -3,6 +3,7 @@ package org.example.model;
 import java.time.LocalDateTime;
 
 public class Trade {
+    private int ScambioId;
     private int RiceventeInventoryId;
     private int RichiedenteInventoryId;
     private LocalDateTime DataScambio;
@@ -16,6 +17,14 @@ public class Trade {
         RichiedenteInventoryId = RichiedenteInventoryId;
         DataScambio = dataScambio;
         Stato = stato;
+    }
+
+    public int getScambioId() {
+        return ScambioId;
+    }
+
+    public void setScambioId(int scambioId) {
+        ScambioId = scambioId;
     }
 
     public int getRiceventeInventoryId() {
