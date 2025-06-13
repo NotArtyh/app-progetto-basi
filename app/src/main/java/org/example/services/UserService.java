@@ -131,7 +131,27 @@ public class UserService {
             }
 
             return new ServiceResult(true, "User Log out succeeded");
-            
+
+        } catch (Exception e) {
+            return new ServiceResult(false, "Unexpected error: " + e.getMessage());
+        }
+    }
+
+    public ServiceResult getCurrentUserData() {
+        try {
+            if (!SessionManager.getInstance().isUserLoggedIn()) {
+                return new ServiceResult(false, "User not logged in.");
+            }
+            User currentUser = SessionManager.getInstance().getCurrenUser();
+
+            // Add all the data you want to display on the user bar like number of trades
+            // done, last trade, etc.
+            // Create a payload that bundles the data you want to display.
+
+            ServiceResult result = new ServiceResult(true, "User Log out succeeded");
+            result.setViewDataPayload(currentUser);
+            return result;
+
         } catch (Exception e) {
             return new ServiceResult(false, "Unexpected error: " + e.getMessage());
         }

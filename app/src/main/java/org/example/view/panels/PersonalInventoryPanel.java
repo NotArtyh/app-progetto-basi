@@ -50,9 +50,11 @@ public class PersonalInventoryPanel extends JPanel {
     // consturct the pannels once the
     public PersonalInventoryPanel(ServiceResult viewData) {
         initializePanel();
-        Map<Item, String> titletItemsMap = (Map<Item, String>) viewData.getViewDataPayload();
-        this.userItems = new ArrayList<>(titletItemsMap.keySet());
-        this.userItemsTitles = new ArrayList<>(titletItemsMap.values());
+        if (viewData.getViewDataPayload() != null) {
+            Map<Item, String> titletItemsMap = (Map<Item, String>) viewData.getViewDataPayload();
+            this.userItems = new ArrayList<>(titletItemsMap.keySet());
+            this.userItemsTitles = new ArrayList<>(titletItemsMap.values());
+        }
         updateGrid();
     }
 

@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.services.InventoryService;
 import org.example.services.ServiceResult;
+import org.example.view.DynamicPanelManager;
 import org.example.view.ViewManager;
 import org.example.view.panels.PersonalInventoryPanel;
 
@@ -12,10 +13,13 @@ import org.example.view.panels.PersonalInventoryPanel;
 public class InventoryController {
     private InventoryService inventoryService;
     private ViewManager viewManager;
+    private DynamicPanelManager dynamicPanelManager;
 
-    public InventoryController(InventoryService inventoryService, ViewManager viewManager) {
+    public InventoryController(InventoryService inventoryService, ViewManager viewManager,
+            DynamicPanelManager dynamicPanelManager) {
         this.inventoryService = inventoryService;
         this.viewManager = viewManager;
+        this.dynamicPanelManager = dynamicPanelManager;
     }
 
     /**
@@ -31,7 +35,6 @@ public class InventoryController {
             // Validate if the service returned any items
             if (!result.isSuccess()) {
                 System.out.println(result.getMessage());
-                return;
             }
 
             // Pass the list of items to the view so that it can update via a special
@@ -44,7 +47,8 @@ public class InventoryController {
                 }
             });
 
-            viewManager.updatePanel("inventory", updatedPersonalInventoryPanel);
+            dynamicPanelManager.setPersonalInventoryPanel(updatedPersonalInventoryPanel);
+            dynamicPanelManager.updatePersonalInventoryPanel();
 
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());
@@ -52,26 +56,3 @@ public class InventoryController {
         }
     }
 }
-
-/* 
-public int getExistingInventoryId() {
-        try {
-            Inventory inv = invDAO.getExistingInventory();
-            if (inv != null) {
-                return inv.getInventoryId();
-            } else {
-                invView.displayError("No existing inventory found.");
-                return -1;
-            }
-        } catch (SQLException e) {
-            invView.displayError("Error retrieving existing inventory: " + e.getMessage());
-            return -1;
-        } catch (Exception e) {
-            invView.displayError("Unexpected error: " + e.getMessage());
-            return -1;
-        }
-    }
-}
-
-
-*/

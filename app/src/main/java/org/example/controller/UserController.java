@@ -2,7 +2,9 @@ package org.example.controller;
 
 import org.example.services.ServiceResult;
 import org.example.services.UserService;
+import org.example.view.DynamicPanelManager;
 import org.example.view.ViewManager;
+import org.example.view.components.UserBar;
 
 /**
  * User Controller Class
@@ -11,10 +13,12 @@ import org.example.view.ViewManager;
 public class UserController {
     private UserService userService;
     private ViewManager viewManager;
+    private DynamicPanelManager dynamicPanelManager;
 
-    public UserController(UserService userService, ViewManager viewManager) {
+    public UserController(UserService userService, ViewManager viewManager, DynamicPanelManager dynamicPanelManager) {
         this.userService = userService;
         this.viewManager = viewManager;
+        this.dynamicPanelManager = dynamicPanelManager;
     }
 
     public void handleUserRegistration(String name, String surname, String sex, String phoneNumber,
@@ -31,13 +35,15 @@ public class UserController {
             if (result.isSuccess()) {
                 // View goes forward - Ok
                 System.out.println(result.getMessage());
+                handleUserAuthentication(username, password);
                 viewManager.show("home");
             } else {
                 // View displays an error and doesn't go forwards
                 System.out.println(result.getMessage());
             }
         } catch (Exception e) {
-            // Display the fatal error on the view
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -49,13 +55,15 @@ public class UserController {
             if (result.isSuccess()) {
                 // View goes forward - ok show dashboard with inventory view etc;
                 System.out.println(result.getMessage());
+                handleUserInfoUpdate();
                 viewManager.show("home");
             } else {
                 // View displays an error and doesn't go forward
                 System.out.println(result.getMessage());
             }
         } catch (Exception e) {
-            // Display the fatal error on the view
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -71,7 +79,34 @@ public class UserController {
                 System.out.println(result.getMessage());
             }
         } catch (Exception e) {
-            // Display the fatal error on the view
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void handleUserInfoUpdate() {
+        try {
+            ServiceResult result = userService.getCurrentUserData();
+
+            if (!result.isSuccess()) {
+                System.out.println(result.getMessage());
+                return;
+            }
+
+            UserBar updatedUserBar = new UserBar(result);
+            updatedUserBar.setActionListener(new UserBar.UserActionListener() {
+                public void onLogOut() {
+                    handleUserLogOut();
+                    viewManager.show("SignIn");
+                }
+            });
+
+            dynamicPanelManager.setUserBar(updatedUserBar);
+            dynamicPanelManager.updateHomePanel();
+
+        } catch (Exception e) {
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
