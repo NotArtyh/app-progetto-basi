@@ -3,35 +3,35 @@ package org.example.model;
 import java.time.LocalDateTime;
 
 public class Trade {
-    private int Ricevente_inventory_id;
-    private int Richiedente_inventory_id;
+    private int RiceventeInventoryId;
+    private int RichiedenteInventoryId;
     private LocalDateTime DataScambio;
     private String Stato;
 
     public Trade() {
     }
 
-    public Trade(int ricevente_inventory_id, int richiedente_inventory_id, LocalDateTime dataScambio, String stato) {
-        Ricevente_inventory_id = ricevente_inventory_id;
-        Richiedente_inventory_id = richiedente_inventory_id;
+    public Trade(int RiceventeInventoryId, int RichiedenteInventoryId, LocalDateTime dataScambio, String stato) {
+        RiceventeInventoryId = RiceventeInventoryId;
+        RichiedenteInventoryId = RichiedenteInventoryId;
         DataScambio = dataScambio;
         Stato = stato;
     }
 
-    public int getRicevente_inventory_id() {
-        return Ricevente_inventory_id;
+    public int getRiceventeInventoryId() {
+        return RiceventeInventoryId;
     }
 
-    public void setRicevente_inventory_id(int ricevente_inventory_id) {
-        Ricevente_inventory_id = ricevente_inventory_id;
+    public void setRiceventeInventoryId(int RiceventeInventoryId) {
+        RiceventeInventoryId = RiceventeInventoryId;
     }
 
-    public int getRichiedente_inventory_id() {
-        return Richiedente_inventory_id;
+    public int getRichiedenteInventoryId() {
+        return RichiedenteInventoryId;
     }
 
-    public void setRichiedente_inventory_id(int richiedente_inventory_id) {
-        Richiedente_inventory_id = richiedente_inventory_id;
+    public void setRichiedenteInventoryId(int RichiedenteInventoryId) {
+        RichiedenteInventoryId = RichiedenteInventoryId;
     }
 
     public LocalDateTime getDataScambio() {
