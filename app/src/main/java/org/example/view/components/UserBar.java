@@ -29,13 +29,23 @@ public class UserBar extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(210, 213, 221));
 
-        JLabel userLabel = new JLabel("User: " + username);
+        // right panel elements
+        JPanel rightPanel = new JPanel(new GridBagLayout());
+        rightPanel.setOpaque(false);
+
+        JLabel userLabel = new JLabel(username);
         userLabel.setFont(new Font("Roboto", Font.BOLD, 18));
         userLabel.setForeground(Color.BLACK);
+        rightPanel.add(userLabel);
 
-        // Center panel for logout button
-        JPanel centerPanel = new JPanel(new GridBagLayout());
-        centerPanel.setOpaque(false); // Let parent background show through
+        rightPanel.add(Box.createRigidArea(new Dimension(16, 0)));
+
+        JPanel profilePicture = new SquareImagePanel("pfp1.png");
+        rightPanel.add(profilePicture);
+
+        // left panel elements
+        JPanel leftPanel = new JPanel(new GridBagLayout());
+        leftPanel.setOpaque(false); // Let parent background show through
 
         JButton logoutButton = new StyledButton("🚪", "Logout");
         logoutButton.addActionListener(e -> {
@@ -44,14 +54,14 @@ public class UserBar extends JPanel {
             }
         });
 
-        centerPanel.add(logoutButton);
+        leftPanel.add(logoutButton);
 
         // Add some padding to the user label
-        userLabel.setBorder(new EmptyBorder(0, 0, 0, 32));
-        centerPanel.setBorder(new EmptyBorder(0, 32, 0, 0));
+        rightPanel.setBorder(new EmptyBorder(0, 0, 0, 32));
+        leftPanel.setBorder(new EmptyBorder(0, 32, 0, 0));
 
-        add(centerPanel, BorderLayout.WEST);
-        add(userLabel, BorderLayout.EAST);
+        add(leftPanel, BorderLayout.WEST);
+        add(rightPanel, BorderLayout.EAST);
     }
 
     public interface UserActionListener {
