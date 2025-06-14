@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.model.User;
 import org.example.services.InventoryService;
 import org.example.services.ServiceResult;
 import org.example.services.UsersInventoryService;
@@ -55,6 +56,35 @@ public class InventoryController {
             dynamicPanelManager.setPersonalInventoryPanel(updatedPersonalInventoryPanel);
             dynamicPanelManager.updatePersonalInventoryPanel();
 
+            handleUsersInventoryUpdate();
+        } catch (Exception e) {
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void handleUsersInventoryUpdate() {
+        try {
+            ServiceResult result = inventoryService.getCurrentUserItems();
+
+            // Validate if the service returned any items
+            if (!result.isSuccess()) {
+                System.out.println(result.getMessage());
+            }
+
+            // Pass the list of items to the view so that it can update via a special
+            // constructor that handles the updates.
+            // Reset the action listerners for the new pannel
+            UsersInventoryPanel updatedUsersInventoryPanel = new UsersInventoryPanel();
+            updatedUsersInventoryPanel.setTradeRequestListener(new UsersInventoryPanel.TradeRequestListener() {
+                public void onTradeRequest(User targetUser) {
+                    viewManager.show("trade");
+                }
+            });
+
+            dynamicPanelManager.setUsersInventoryPanel(updatedUsersInventoryPanel);
+            dynamicPanelManager.updateHomePanel();
+
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());
             e.printStackTrace();
@@ -71,7 +101,7 @@ public class InventoryController {
             }
 
             // the service result passed to this handle should already have the info about
-            // the user we want to trade with, we simply have to pass it to the view whihc
+            // the user we want to trade with, we simply have to pass it to the view which
             // will handle the two types of result
 
             TradePanel updatedTradePanel = new TradePanel(currentUserResult, receiverUserData);
