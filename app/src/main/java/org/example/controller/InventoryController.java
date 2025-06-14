@@ -72,14 +72,17 @@ public class InventoryController {
             // Pass the list of items to the view so that it can update via a special
             // constructor that handles the updates.
             // Reset the action listerners for the new pannel
+
+            /* 
             UsersInventoryPanel updatedUsersInventoryPanel = new UsersInventoryPanel(result);
             updatedUsersInventoryPanel.setActionListener(new UsersInventoryPanel.UserActionListener() {
                 public void onTrade() {
                     viewManager.show("trade"); // go to trade panel
                 }
             });
+            */
 
-            dynamicPanelManager.setUsersInventoryPanel(updatedUsersInventoryPanel);
+            //dynamicPanelManager.setUsersInventoryPanel(updatedUsersInventoryPanel);
             dynamicPanelManager.updateHomePanel();
 
         } catch (Exception e) {
