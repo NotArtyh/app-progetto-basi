@@ -6,6 +6,7 @@ import org.example.controller.AppController;
 import org.example.controller.InventoryController;
 import org.example.controller.ItemController;
 import org.example.controller.UserController;
+import org.example.controller.UsersInventoryController;
 import org.example.database.InventoryDAO;
 import org.example.database.ItemDAO;
 import org.example.database.MediaDAO;
@@ -14,6 +15,7 @@ import org.example.database.UserDAO;
 import org.example.services.InventoryService;
 import org.example.services.ItemService;
 import org.example.services.UserService;
+import org.example.services.UsersInventoryService;
 import org.example.view.DynamicPanelManager;
 import org.example.view.MainFrame;
 import org.example.view.ViewManager;
@@ -38,18 +40,21 @@ public class App {
             UserService userService = new UserService(userDAO, personalDataDAO, inventoryDAO);
             ItemService itemService = new ItemService(itemDAO, mediaDAO);
             InventoryService inventoryService = new InventoryService(inventoryDAO, itemDAO, mediaDAO);
+            UsersInventoryService usersInventoryService = new UsersInventoryService(itemDAO, mediaDAO, userDAO);
 
             // create the controllers
-
-            UserController userController = new UserController(userService, viewManager, dynamicPanelManager);
-            ItemController itemController = new ItemController(itemService, viewManager);
             InventoryController inventoryController = new InventoryController(inventoryService, viewManager,
-                    dynamicPanelManager);
+                    dynamicPanelManager, usersInventoryService);
+            UserController userController = new UserController(userService, viewManager, dynamicPanelManager,
+                    inventoryController);
+            ItemController itemController = new ItemController(itemService, viewManager);
+            UsersInventoryController usersInventoryController = new UsersInventoryController(usersInventoryService,
+                    viewManager, dynamicPanelManager);
 
             // Create the final App controller that manages everything
             // could have a return for validation but ok for now
             AppController appController = new AppController(viewManager, userController, itemController,
-                    inventoryController, dynamicPanelManager);
+                    inventoryController, dynamicPanelManager, usersInventoryController);
 
             mainFrame.setVisible(true);
         });

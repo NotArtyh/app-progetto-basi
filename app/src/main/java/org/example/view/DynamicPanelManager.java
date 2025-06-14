@@ -10,11 +10,12 @@ public class DynamicPanelManager {
     private ViewManager viewManager;
 
     private UserBar userBar;
-    private UsersInventoryPanel usersInventoryPanel;
+
     private OperationsPanel operationsPanel;
     private HomePanel homePanel;
 
     private PersonalInventoryPanel personalInventoryPanel;
+    private UsersInventoryPanel usersInventoryPanel;
 
     public DynamicPanelManager(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -58,5 +59,15 @@ public class DynamicPanelManager {
 
     public void updatePersonalInventoryPanel() {
         viewManager.updatePanel("inventory", personalInventoryPanel);
+    }
+
+    // ------ Users inventory panel
+
+    public void setusersInventoryPanel(UsersInventoryPanel usersInventoryPanel) {
+        this.usersInventoryPanel = usersInventoryPanel;
+    }
+
+    public void updateUsersInventoryPanel() {
+        viewManager.updatePanel("usersinv", usersInventoryPanel);
     }
 }

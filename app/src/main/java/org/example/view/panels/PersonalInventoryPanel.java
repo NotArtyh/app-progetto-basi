@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +23,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.example.view.components.StyledButton;
 import org.example.model.Item;
 import org.example.services.ServiceResult;
+import org.example.view.components.StyledButton;
 
 public class PersonalInventoryPanel extends JPanel {
     private UserActionListener actionListener;

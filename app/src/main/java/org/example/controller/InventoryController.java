@@ -2,9 +2,11 @@ package org.example.controller;
 
 import org.example.services.InventoryService;
 import org.example.services.ServiceResult;
+import org.example.services.UsersInventoryService;
 import org.example.view.DynamicPanelManager;
 import org.example.view.ViewManager;
 import org.example.view.panels.PersonalInventoryPanel;
+import org.example.view.panels.UsersInventoryPanel;
 import org.example.view.panels.TradePanel;
 
 /**
@@ -15,12 +17,14 @@ public class InventoryController {
     private InventoryService inventoryService;
     private ViewManager viewManager;
     private DynamicPanelManager dynamicPanelManager;
+    private UsersInventoryService usersInventoryService;
 
     public InventoryController(InventoryService inventoryService, ViewManager viewManager,
-            DynamicPanelManager dynamicPanelManager) {
+            DynamicPanelManager dynamicPanelManager, UsersInventoryService usersInventoryService) {
         this.inventoryService = inventoryService;
         this.viewManager = viewManager;
         this.dynamicPanelManager = dynamicPanelManager;
+        this.usersInventoryService = usersInventoryService;
     }
 
     /**
@@ -71,7 +75,6 @@ public class InventoryController {
             // will handle the two types of result
 
             TradePanel updatedTradePanel = new TradePanel(currentUserResult, receiverUserData);
-            
 
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());

@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.example.SessionManager;
 import org.example.model.User;
 
 /**
@@ -292,4 +291,30 @@ public class UserDAO {
         }
         return false;
     }
+
+    public List<User> getAllUsersExceptCurrent(int currentUserId) throws SQLException {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM DATI_UTENTE WHERE User_id != ? ORDER BY Username";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, currentUserId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    users.add(new User(
+                            rs.getInt("User_id"),
+                            rs.getInt("Persona_id"),
+                            rs.getInt("Inventory_id"),
+                            rs.getInt("Livello"),
+                            rs.getString("Username"),
+                            rs.getString("PasswordUtente"),
+                            rs.getString("Email")));
+                }
+            }
+        }
+        return users;
+    }
+
 }
