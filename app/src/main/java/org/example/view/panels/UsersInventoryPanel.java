@@ -36,7 +36,6 @@ public class UsersInventoryPanel extends JPanel {
     private List<User> allUsers;
     
     private JPanel mainScrollPanel;
-    private JButton refreshButton;
     private MediaDAO mediaDAO;
     private ItemDAO itemDAO;
     private UserDAO userDAO;
@@ -73,13 +72,10 @@ public class UsersInventoryPanel extends JPanel {
         titleLabel.setBorder(new EmptyBorder(0, 0, 15, 0));
         titleLabel.setForeground(new Color(33, 37, 41));
         
-        // Pulsante refresh
-        refreshButton = new JButton("🔄 Aggiorna");
-        refreshButton.setFont(new Font("Roboto", Font.BOLD, 12));
-        refreshButton.addActionListener(e -> refreshData());
+        
+       
         
         headerPanel.add(titleLabel, BorderLayout.CENTER);
-        headerPanel.add(refreshButton, BorderLayout.EAST);
         
         add(headerPanel, BorderLayout.NORTH);
 
@@ -398,8 +394,7 @@ public class UsersInventoryPanel extends JPanel {
     }
 
 public interface UserActionListener {
-        void refreshData();
-        void onViewInventory();
+        
         void onTradeRequest();
     }
 }
