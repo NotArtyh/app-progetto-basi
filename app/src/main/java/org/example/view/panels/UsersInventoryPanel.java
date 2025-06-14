@@ -3,7 +3,6 @@ package org.example.view.panels;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.sql.SQLException;
@@ -32,34 +31,28 @@ public class UsersInventoryPanel extends JPanel {
     
     private TradeRequestListener tradeRequestListener;
     
-    private static final int GRID_SIZE = 4;
-    private static final int ITEMS_PER_PAGE = GRID_SIZE * GRID_SIZE;
-    private int currentPage = 0;
+    private static final int GRID_COLUMNS = 4;
     
     private List<User> allUsers;
-    private User selectedUser;
-    private List<Item> selectedUserItems;
     
-    private JPanel usersPanel;
-    private JPanel itemsGridPanel;
-    private JLabel selectedUserLabel;
-    private JLabel pageLabel;
-    private JButton prevButton;
-    private JButton nextButton;
+    private JPanel mainScrollPanel;
     private JButton refreshButton;
     private MediaDAO mediaDAO;
-    private ItemDAO itemDAO ;
+    private ItemDAO itemDAO;
     private UserDAO userDAO;
 
     public UsersInventoryPanel() {
         this.mediaDAO = new MediaDAO();
-        this.allUsers = new ArrayList<>();
-        this.selectedUserItems = new ArrayList<>();
-        this.userDAO = new UserDAO();
         this.itemDAO = new ItemDAO();
+        this.allUsers = new ArrayList<>();
+        this.userDAO = new UserDAO();
         
         initializePanel();
-        loadAllUsers();
+        
+        // Chiamiamo il caricamento in modo sicuro
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            loadAllUsersWithInventories();
+        });
     }
 
     public void setTradeRequestListener(TradeRequestListener listener) {
@@ -72,251 +65,194 @@ public class UsersInventoryPanel extends JPanel {
         setBackground(new Color(248, 249, 250));
 
         // Titolo principale
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(248, 249, 250));
+        
         JLabel titleLabel = new JLabel("Vetrina", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Roboto", Font.BOLD, 20));
         titleLabel.setBorder(new EmptyBorder(0, 0, 15, 0));
         titleLabel.setForeground(new Color(33, 37, 41));
-        add(titleLabel, BorderLayout.NORTH);
-
-        // Pannello principale diviso in due sezioni
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBackground(new Color(248, 249, 250));
-
-        // Sezione utenti (in alto)
-        createUsersSection(mainPanel);
-
-        // Sezione inventario utente selezionato (in basso)
-        createInventorySection(mainPanel);
-
-        add(mainPanel, BorderLayout.CENTER);
-    }
-
-    private void createUsersSection(JPanel parent) {
-        JPanel usersSection = new JPanel(new BorderLayout(5, 5));
-        usersSection.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createLineBorder(new Color(206, 212, 218)), 
-            "Seleziona Utente"
-        ));
-        usersSection.setBackground(Color.WHITE);
-        usersSection.setPreferredSize(new Dimension(0, 120));
-
-        usersPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-        usersPanel.setBackground(Color.WHITE);
-
-        JScrollPane usersScrollPane = new JScrollPane(usersPanel);
-        usersScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        usersScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        usersScrollPane.setPreferredSize(new Dimension(0, 90));
-
-        usersSection.add(usersScrollPane, BorderLayout.CENTER);
-        parent.add(usersSection, BorderLayout.NORTH);
-    }
-
-    private void createInventorySection(JPanel parent) {
-        JPanel inventorySection = new JPanel(new BorderLayout(5, 5));
-        inventorySection.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createLineBorder(new Color(206, 212, 218)), 
-            "Inventario Utente"
-        ));
-        inventorySection.setBackground(Color.WHITE);
-
-        // Label per utente selezionato
-        selectedUserLabel = new JLabel("Nessun utente selezionato", SwingConstants.CENTER);
-        selectedUserLabel.setFont(new Font("Roboto", Font.BOLD, 14));
-        selectedUserLabel.setBorder(new EmptyBorder(5, 0, 10, 0));
-        selectedUserLabel.setForeground(new Color(108, 117, 125));
-        inventorySection.add(selectedUserLabel, BorderLayout.NORTH);
-
-        // Griglia per gli item
-        itemsGridPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE, 8, 8));
-        itemsGridPanel.setBackground(Color.WHITE);
-        itemsGridPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-
-        JScrollPane itemsScrollPane = new JScrollPane(itemsGridPanel);
-        itemsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        itemsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        inventorySection.add(itemsScrollPane, BorderLayout.CENTER);
-
-        // Controlli di navigazione
-        createNavigationControls(inventorySection);
-
-        parent.add(inventorySection, BorderLayout.CENTER);
-    }
-
-    private void createNavigationControls(JPanel parent) {
-        JPanel controlPanel = new JPanel(new BorderLayout());
-        controlPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
-        controlPanel.setBackground(Color.WHITE);
-
-        // Navigazione pagine
-        JPanel navigationPanel = new JPanel(new FlowLayout());
-        navigationPanel.setBackground(Color.WHITE);
-
-        prevButton = new JButton("◀ Precedente");
-        prevButton.setFont(new Font("Roboto", Font.BOLD, 11));
-        prevButton.setEnabled(false);
-        prevButton.addActionListener(e -> previousPage());
-
-        nextButton = new JButton("Successivo ▶");
-        nextButton.setFont(new Font("Roboto", Font.BOLD, 11));
-        nextButton.setEnabled(false);
-        nextButton.addActionListener(e -> nextPage());
-
-        pageLabel = new JLabel("Pagina 1 di 1", SwingConstants.CENTER);
-        pageLabel.setFont(new Font("Roboto", Font.PLAIN, 11));
-
-        navigationPanel.add(prevButton);
-        navigationPanel.add(Box.createHorizontalStrut(15));
-        navigationPanel.add(pageLabel);
-        navigationPanel.add(Box.createHorizontalStrut(15));
-        navigationPanel.add(nextButton);
-
-        controlPanel.add(navigationPanel, BorderLayout.CENTER);
-
+        
         // Pulsante refresh
         refreshButton = new JButton("🔄 Aggiorna");
-        refreshButton.setFont(new Font("Roboto", Font.BOLD, 11));
+        refreshButton.setFont(new Font("Roboto", Font.BOLD, 12));
         refreshButton.addActionListener(e -> refreshData());
-        controlPanel.add(refreshButton, BorderLayout.EAST);
+        
+        headerPanel.add(titleLabel, BorderLayout.CENTER);
+        headerPanel.add(refreshButton, BorderLayout.EAST);
+        
+        add(headerPanel, BorderLayout.NORTH);
 
-        parent.add(controlPanel, BorderLayout.SOUTH);
+        // Pannello principale scorrevole
+        mainScrollPanel = new JPanel();
+        mainScrollPanel.setLayout(new BoxLayout(mainScrollPanel, BoxLayout.Y_AXIS));
+        mainScrollPanel.setBackground(new Color(248, 249, 250));
+
+        JScrollPane scrollPane = new JScrollPane(mainScrollPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        
+        add(scrollPane, BorderLayout.CENTER);
     }
 
-    private void loadAllUsers() {
-
+    private void loadAllUsersWithInventories() {
         try {
-            this.allUsers = userDAO.getAllUsers();
-            updateUsersPanel();
+            this.allUsers = userDAO.getAllUsersExceptCurrent(1);
+            System.out.println("Caricati " + allUsers.size() + " utenti");
+            updateMainPanel();
         } catch (SQLException e) {
+            System.err.println("Errore SQL: " + e.getMessage());
+            e.printStackTrace();
             showError("Errore nel caricamento degli utenti: " + e.getMessage());
             this.allUsers = new ArrayList<>();
-            updateUsersPanel();
+            updateMainPanel();
+        } catch (Exception e) {
+            System.err.println("Errore generico: " + e.getMessage());
+            e.printStackTrace();
+            showError("Errore imprevisto: " + e.getMessage());
+            this.allUsers = new ArrayList<>();  
+            updateMainPanel();
         }
-
-
     }
 
-
-    private void updateUsersPanel() {
-        usersPanel.removeAll();
+    private void updateMainPanel() {
+        mainScrollPanel.removeAll();
 
         if (allUsers.isEmpty()) {
-            JLabel noUsersLabel = new JLabel("Nessun altro utente trovato");
+            JPanel noUsersPanel = new JPanel(new BorderLayout());
+            noUsersPanel.setBackground(Color.WHITE);
+            noUsersPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(206, 212, 218)),
+                new EmptyBorder(20, 20, 20, 20)
+            ));
+            
+            JLabel noUsersLabel = new JLabel("Nessun altro utente trovato", SwingConstants.CENTER);
             noUsersLabel.setForeground(Color.GRAY);
-            noUsersLabel.setFont(new Font("Roboto", Font.ITALIC, 12));
-            usersPanel.add(noUsersLabel);
+            noUsersLabel.setFont(new Font("Roboto", Font.ITALIC, 14));
+            noUsersPanel.add(noUsersLabel, BorderLayout.CENTER);
+            
+            mainScrollPanel.add(noUsersPanel);
         } else {
             for (User user : allUsers) {
-                JPanel userPanel = createUserPanel(user);
-                usersPanel.add(userPanel);
+                JPanel userSection = createUserSectionPanel(user);
+                mainScrollPanel.add(userSection);
+                mainScrollPanel.add(Box.createVerticalStrut(15));
             }
         }
 
-        usersPanel.revalidate();
-        usersPanel.repaint();
+        mainScrollPanel.revalidate();
+        mainScrollPanel.repaint();
     }
 
-    private JPanel createUserPanel(User user) {
-        JPanel panel = new JPanel(new BorderLayout(5, 5));
-        panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createRaisedBevelBorder(),
-            new EmptyBorder(8, 10, 8, 10)
+    private JPanel createUserSectionPanel(User user) {
+        JPanel sectionPanel = new JPanel(new BorderLayout(10, 10));
+        sectionPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(206, 212, 218)),
+            new EmptyBorder(15, 15, 15, 15)
         ));
-        panel.setBackground(new Color(240, 248, 255));
-        panel.setPreferredSize(new Dimension(200, 60));
+        sectionPanel.setBackground(Color.WHITE);
 
-        // Nome utente
-        JLabel nameLabel = new JLabel(user.getUsername());
-        nameLabel.setFont(new Font("Roboto", Font.BOLD, 12));
-        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        panel.add(nameLabel, BorderLayout.CENTER);
+        // Header con nome utente e pulsante scambio
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(Color.WHITE);
 
-        // Pannello pulsanti
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 3, 0));
-        buttonPanel.setBackground(new Color(240, 248, 255));
+        JLabel userLabel = new JLabel(user.getUsername());
+        userLabel.setFont(new Font("Roboto", Font.BOLD, 16));
+        userLabel.setForeground(new Color(33, 37, 41));
 
-        // Pulsante visualizza inventario
-        JButton viewInventoryBtn = new JButton("Visualizza");
-        viewInventoryBtn.setFont(new Font("Roboto", Font.PLAIN, 10));
-        viewInventoryBtn.setPreferredSize(new Dimension(70, 25));
-        viewInventoryBtn.addActionListener(e -> selectUser(user));
-
-        // Pulsante richiesta scambio
-        JButton tradeRequestBtn = new JButton("Scambio");
-        tradeRequestBtn.setFont(new Font("Roboto", Font.BOLD, 10));
+        JButton tradeRequestBtn = new JButton("Richiedi Scambio");
+        tradeRequestBtn.setFont(new Font("Roboto", Font.BOLD, 12));
         tradeRequestBtn.setBackground(new Color(40, 167, 69));
         tradeRequestBtn.setForeground(Color.WHITE);
-        tradeRequestBtn.setPreferredSize(new Dimension(70, 25));
+        tradeRequestBtn.setPreferredSize(new Dimension(150, 35));
         tradeRequestBtn.addActionListener(e -> requestTrade(user));
 
-        buttonPanel.add(viewInventoryBtn);
-        buttonPanel.add(tradeRequestBtn);
+        headerPanel.add(userLabel, BorderLayout.WEST);
+        headerPanel.add(tradeRequestBtn, BorderLayout.EAST);
 
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+        sectionPanel.add(headerPanel, BorderLayout.NORTH);
 
-        return panel;
+        // Pannello inventario
+        JPanel inventoryPanel = createInventoryPanel(user);
+        sectionPanel.add(inventoryPanel, BorderLayout.CENTER);
+
+        return sectionPanel;
     }
 
-    private void selectUser(User user) {
-        this.selectedUser = user;
-        this.currentPage = 0;
-        
-        selectedUserLabel.setText("Inventario di: " + user.getUsername());
-        selectedUserLabel.setForeground(new Color(33, 37, 41));
-        
-        loadUserItems(user.getUserId());
-    }
+    private JPanel createInventoryPanel(User user) {
+        JPanel inventoryContainer = new JPanel(new BorderLayout());
+        inventoryContainer.setBackground(Color.WHITE);
 
-    private void loadUserItems(int userId) {
         try {
-            this.selectedUserItems = itemDAO.getItemsByUserId(userId);
-            updateItemsGrid();
-        } catch (SQLException e) {
-           showError("Errore nel caricamento dell'inventario");
-            this.selectedUserItems = new ArrayList<>();
-            updateItemsGrid();
-        }
-       
-    }
-
-    private void updateItemsGrid() {
-        itemsGridPanel.removeAll();
-
-        if (selectedUser == null) {
-            // Nessun utente selezionato
-            for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-                itemsGridPanel.add(createEmptySlotPanel("Seleziona un utente"));
-            }
-        } else if (selectedUserItems.isEmpty()) {
-            // Utente selezionato ma senza item
-            JPanel emptyPanel = createEmptyItemPanel("Nessun item nell'inventario");
-            itemsGridPanel.add(emptyPanel);
+            List<Item> userItems = itemDAO.getItemsByUserId(user.getUserId());
+            System.out.println("Utente " + user.getUsername() + " ha " + userItems.size() + " items");
             
-            for (int i = 1; i < ITEMS_PER_PAGE; i++) {
-                itemsGridPanel.add(createEmptySlotPanel(""));
-            }
-        } else {
-            // Mostra gli item dell'utente
-            int startIndex = currentPage * ITEMS_PER_PAGE;
-            int endIndex = Math.min(startIndex + ITEMS_PER_PAGE, selectedUserItems.size());
+            if (userItems.isEmpty()) {
+                JPanel emptyPanel = new JPanel(new BorderLayout());
+                emptyPanel.setBackground(new Color(255, 248, 220));
+                emptyPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+                emptyPanel.setPreferredSize(new Dimension(0, 80));
+                
+                JLabel emptyLabel = new JLabel("Nessun item nell'inventario", SwingConstants.CENTER);
+                emptyLabel.setForeground(new Color(184, 134, 11));
+                emptyLabel.setFont(new Font("Roboto", Font.ITALIC, 12));
+                emptyPanel.add(emptyLabel, BorderLayout.CENTER);
+                
+                inventoryContainer.add(emptyPanel, BorderLayout.CENTER);
+            } else {
+                // Calcola il numero di righe necessarie
+                int rows = (int) Math.ceil((double) userItems.size() / GRID_COLUMNS);
+                
+                JPanel itemsGrid = new JPanel(new GridLayout(rows, GRID_COLUMNS, 8, 8));
+                itemsGrid.setBackground(Color.WHITE);
+                itemsGrid.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-            for (int i = startIndex; i < endIndex; i++) {
-                JPanel itemPanel = createItemPanel(selectedUserItems.get(i));
-                itemsGridPanel.add(itemPanel);
-            }
+                // Aggiungi tutti gli item
+                for (Item item : userItems) {
+                    try {
+                        JPanel itemPanel = createItemPanel(item, user);
+                        itemsGrid.add(itemPanel);
+                    } catch (Exception e) {
+                        System.err.println("Errore creazione panel per item " + item.getItemId() + ": " + e.getMessage());
+                        // Aggiungi un panel di errore invece di bloccare tutto
+                        JPanel errorPanel = createErrorItemPanel("Errore item " + item.getItemId());
+                        itemsGrid.add(errorPanel);
+                    }
+                }
 
-            // Riempie gli slot vuoti
-            for (int i = endIndex - startIndex; i < ITEMS_PER_PAGE; i++) {
-                itemsGridPanel.add(createEmptySlotPanel(""));
+                // Riempie gli slot vuoti nell'ultima riga se necessario
+                int totalSlots = rows * GRID_COLUMNS;
+                for (int i = userItems.size(); i < totalSlots; i++) {
+                    itemsGrid.add(createEmptySlotPanel());
+                }
+
+                inventoryContainer.add(itemsGrid, BorderLayout.CENTER);
             }
+            
+        } catch (SQLException e) {
+            System.err.println("Errore SQL per utente " + user.getUsername() + ": " + e.getMessage());
+            JPanel errorPanel = new JPanel(new BorderLayout());
+            errorPanel.setBackground(new Color(248, 215, 218));
+            errorPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+            errorPanel.setPreferredSize(new Dimension(0, 80));
+            
+            JLabel errorLabel = new JLabel("Errore nel caricamento dell'inventario", SwingConstants.CENTER);
+            errorLabel.setForeground(new Color(220, 53, 69));
+            errorLabel.setFont(new Font("Roboto", Font.BOLD, 12));
+            errorPanel.add(errorLabel, BorderLayout.CENTER);
+            
+            inventoryContainer.add(errorPanel, BorderLayout.CENTER);
+        } catch (Exception e) {
+            System.err.println("Errore generico per utente " + user.getUsername() + ": " + e.getMessage());
+            e.printStackTrace();
+            inventoryContainer.add(createErrorItemPanel("Errore caricamento inventario"), BorderLayout.CENTER);
         }
 
-        updateNavigationControls();
-        itemsGridPanel.revalidate();
-        itemsGridPanel.repaint();
+        return inventoryContainer;
     }
 
-    private JPanel createItemPanel(Item item) {
+    private JPanel createItemPanel(Item item, User owner) {
         JPanel panel = new JPanel(new BorderLayout(3, 3));
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createRaisedBevelBorder(),
@@ -351,16 +287,17 @@ public class UsersInventoryPanel extends JPanel {
                 addInfoRow(infoPanel, "Note:", truncateText(item.getNote(), 12));
             }
 
-            String formattedDate = item.getData_acquisizione()
-                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            addInfoRow(infoPanel, "Acquisito:", formattedDate);
+            if (item.getData_acquisizione() != null) {
+                String formattedDate = item.getData_acquisizione()
+                        .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                addInfoRow(infoPanel, "Acquisito:", formattedDate);
+            }
 
             panel.add(infoPanel, BorderLayout.CENTER);
 
-            // Tooltip
-            panel.setToolTipText(createTooltipText(item, mediaTitle));
 
         } catch (Exception e) {
+            System.err.println("Errore creazione item panel: " + e.getMessage());
             JLabel errorLabel = new JLabel("<html><center>Errore<br>Item ID: " + item.getItemId() + "</center></html>");
             errorLabel.setForeground(Color.RED);
             errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -388,7 +325,7 @@ public class UsersInventoryPanel extends JPanel {
         parent.add(Box.createVerticalStrut(1));
     }
 
-    private JPanel createEmptySlotPanel(String message) {
+    private JPanel createEmptySlotPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLoweredBevelBorder(),
@@ -397,37 +334,37 @@ public class UsersInventoryPanel extends JPanel {
         panel.setBackground(new Color(248, 249, 250));
         panel.setPreferredSize(new Dimension(150, 120));
 
-        if (!message.isEmpty()) {
-            JLabel emptyLabel = new JLabel("<html><center>" + message + "</center></html>");
-            emptyLabel.setForeground(Color.LIGHT_GRAY);
-            emptyLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            emptyLabel.setFont(new Font("Roboto", Font.ITALIC, 11));
-            panel.add(emptyLabel, BorderLayout.CENTER);
-        }
-
         return panel;
     }
 
-    private JPanel createEmptyItemPanel(String message) {
+    private JPanel createErrorItemPanel(String message) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createRaisedBevelBorder(),
-            new EmptyBorder(5, 5, 5, 5)
+            BorderFactory.createLineBorder(Color.RED),
+            new EmptyBorder(10, 10, 10, 10)
         ));
-        panel.setBackground(new Color(255, 248, 220));
+        panel.setBackground(new Color(248, 215, 218)); 
         panel.setPreferredSize(new Dimension(150, 120));
 
-        JLabel messageLabel = new JLabel("<html><center>" + message + "</center></html>");
-        messageLabel.setForeground(new Color(184, 134, 11));
-        messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        messageLabel.setFont(new Font("Roboto", Font.BOLD, 11));
+        JLabel errorLabel = new JLabel("<html><center>" + message + "</center></html>");
+        errorLabel.setForeground(new Color(220, 53, 69));
+        errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        errorLabel.setFont(new Font("Roboto", Font.BOLD, 10));
+        panel.add(errorLabel, BorderLayout.CENTER);
 
-        panel.add(messageLabel, BorderLayout.CENTER);
         return panel;
     }
 
-    private String getMediaTitle(int mediaId) throws SQLException {
-        return mediaDAO.getTitleById(mediaId);
+    private String getMediaTitle(int mediaId) {
+        try {
+            return mediaDAO.getTitleById(mediaId);
+        } catch (SQLException e) {
+            System.err.println("Errore recupero titolo media " + mediaId + ": " + e.getMessage());
+            return "Titolo non disponibile";
+        } catch (Exception e) {
+            System.err.println("Errore generico recupero titolo media " + mediaId + ": " + e.getMessage());
+            return "Errore titolo";
+        }
     }
 
     private String truncateText(String text, int maxLength) {
@@ -435,16 +372,6 @@ public class UsersInventoryPanel extends JPanel {
         return text.length() > maxLength ? text.substring(0, maxLength - 3) + "..." : text;
     }
 
-    private String createTooltipText(Item item, String mediaTitle) {
-        return "<html>" +
-                "<b>Titolo:</b> " + mediaTitle + "<br>" +
-                "<b>Item ID:</b> " + item.getItemId() + "<br>" +
-                "<b>Proprietario:</b> " + (selectedUser != null ? selectedUser.getUsername() : "N/A") + "<br>" +
-                "<b>Condizioni:</b> " + (item.getCondizioni() != null ? item.getCondizioni() : "N/A") + "<br>" +
-                "<b>Note:</b> " + (item.getNote() != null && !item.getNote().isEmpty() ? item.getNote() : "Nessuna nota") + "<br>" +
-                "<b>Data Acquisizione:</b> " + item.getData_acquisizione().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) +
-                "</html>";
-    }
 
     private void requestTrade(User targetUser) {
         if (tradeRequestListener != null) {
@@ -458,43 +385,8 @@ public class UsersInventoryPanel extends JPanel {
         }
     }
 
-    private void updateNavigationControls() {
-        if (selectedUserItems == null || selectedUserItems.isEmpty()) {
-            pageLabel.setText("Pagina 1 di 1");
-            prevButton.setEnabled(false);
-            nextButton.setEnabled(false);
-            return;
-        }
-
-        int totalPages = Math.max(1, (int) Math.ceil((double) selectedUserItems.size() / ITEMS_PER_PAGE));
-        pageLabel.setText("Pagina " + (currentPage + 1) + " di " + totalPages);
-        prevButton.setEnabled(currentPage > 0);
-        nextButton.setEnabled((currentPage + 1) * ITEMS_PER_PAGE < selectedUserItems.size());
-    }
-
-    private void previousPage() {
-        if (currentPage > 0) {
-            currentPage--;
-            updateItemsGrid();
-        }
-    }
-
-    private void nextPage() {
-        if (selectedUserItems != null && (currentPage + 1) * ITEMS_PER_PAGE < selectedUserItems.size()) {
-            currentPage++;
-            updateItemsGrid();
-        }
-    }
-
     private void refreshData() {
-        currentPage = 0;
-        selectedUser = null;
-        selectedUserItems.clear();
-        selectedUserLabel.setText("Nessun utente selezionato");
-        selectedUserLabel.setForeground(new Color(108, 117, 125));
-        
-        loadAllUsers();
-        updateItemsGrid();
+        loadAllUsersWithInventories();
     }
 
     private void showError(String message) {
@@ -505,17 +397,9 @@ public class UsersInventoryPanel extends JPanel {
         void onTradeRequest(User targetUser);
     }
 
-     public interface UserActionListener {
-       
+    public interface UserActionListener {
         void refreshData();
-
         void onViewInventory();
-
         void onTradeRequest();
     }
-
 }
-
-    
-
-
