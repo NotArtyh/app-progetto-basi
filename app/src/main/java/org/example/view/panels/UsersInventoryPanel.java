@@ -160,7 +160,7 @@ public class UsersInventoryPanel extends JPanel {
         JButton tradeRequestBtn = new JButton("Richiedi Scambio");
         tradeRequestBtn.setFont(new Font("Roboto", Font.BOLD, 12));
         tradeRequestBtn.setBackground(new Color(40, 167, 69));
-        tradeRequestBtn.setForeground(Color.WHITE);
+        tradeRequestBtn.setForeground(Color.BLACK);
         tradeRequestBtn.setPreferredSize(new Dimension(150, 35));
         tradeRequestBtn.addActionListener(e -> requestTrade(user));
 
