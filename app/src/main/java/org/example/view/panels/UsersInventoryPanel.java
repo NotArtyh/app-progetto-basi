@@ -6,7 +6,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -45,6 +47,11 @@ public class UsersInventoryPanel extends JPanel {
     // consturct the pannels once the
     public UsersInventoryPanel(ServiceResult viewData) {
         initializePanel();
+        if (viewData.getViewDataPayload() != null) {
+            Map<Item, String> titletItemsMap = (Map<Item, String>) viewData.getViewDataPayload();
+            this.userItems = new ArrayList<>(titletItemsMap.keySet());
+            this.userItemsTitles = new ArrayList<>(titletItemsMap.values());
+        }
         updateGrid();
     }
 
@@ -71,9 +78,7 @@ public class UsersInventoryPanel extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
 
-      
-    }
-
+}
 
     private void updateGrid() {
         gridPanel.removeAll();
