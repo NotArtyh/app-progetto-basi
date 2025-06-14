@@ -66,18 +66,4 @@ public class InventoryService {
             return new ServiceResult(false, "Unexpected error: " + e.getMessage());
         }
     }
-
-    public ServiceResult getUserItemsByID() {
-        try {
-
-            List<Item> items = itemDAO.getItemsByUserId(userId);
-            
-
-
-        } catch (SQLException e) {
-            return new ServiceResult(false, "Error: " + e.getMessage());
-        } catch (Exception e) {
-            return new ServiceResult(false, "Unexpected error: " + e.getMessage());
-        }
-    }
 }
