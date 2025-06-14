@@ -1,5 +1,7 @@
 package org.example.view;
 
+import javax.swing.JPanel;
+
 import org.example.view.components.UserBar;
 import org.example.view.panels.HomePanel;
 import org.example.view.panels.OperationsPanel;
@@ -19,13 +21,6 @@ public class DynamicPanelManager {
 
     public DynamicPanelManager(ViewManager viewManager) {
         this.viewManager = viewManager;
-
-        this.userBar = new UserBar();
-        this.usersInventoryPanel = new UsersInventoryPanel();
-        this.operationsPanel = new OperationsPanel();
-        this.homePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel);
-
-        this.personalInventoryPanel = new PersonalInventoryPanel();
     }
 
     // ------ Home panel
@@ -59,15 +54,5 @@ public class DynamicPanelManager {
 
     public void updatePersonalInventoryPanel() {
         viewManager.updatePanel("inventory", personalInventoryPanel);
-    }
-
-    // ------ Users inventory panel
-
-    public void setusersInventoryPanel(UsersInventoryPanel usersInventoryPanel) {
-        this.usersInventoryPanel = usersInventoryPanel;
-    }
-
-    public void updateUsersInventoryPanel() {
-        viewManager.updatePanel("usersinv", usersInventoryPanel);
     }
 }
