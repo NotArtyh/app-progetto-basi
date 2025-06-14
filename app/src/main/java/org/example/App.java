@@ -6,6 +6,7 @@ import org.example.controller.AppController;
 import org.example.controller.InventoryController;
 import org.example.controller.ItemController;
 import org.example.controller.UserController;
+import org.example.controller.UsersInventoryController;
 import org.example.database.InventoryDAO;
 import org.example.database.ItemDAO;
 import org.example.database.MediaDAO;
@@ -46,12 +47,14 @@ public class App {
             dynamicPanelManager, usersInventoryService);
             UserController userController = new UserController(userService, viewManager, dynamicPanelManager, inventoryController);
             ItemController itemController = new ItemController(itemService, viewManager);
+            UsersInventoryController usersInventoryController = new UsersInventoryController(usersInventoryService, viewManager, dynamicPanelManager);
+
+
             
 
             // Create the final App controller that manages everything
             // could have a return for validation but ok for now
-            AppController appController = new AppController(viewManager, userController, itemController,
-                    inventoryController, dynamicPanelManager);
+            AppController appController = new AppController(viewManager, userController, itemController, inventoryController, dynamicPanelManager, usersInventoryController);
 
             mainFrame.setVisible(true);
         });

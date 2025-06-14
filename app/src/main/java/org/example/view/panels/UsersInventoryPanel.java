@@ -397,7 +397,7 @@ public class UsersInventoryPanel extends JPanel {
         void onTradeRequest(User targetUser);
     }
 
-    public interface UserActionListener {
+public interface UserActionListener {
         void refreshData();
         void onViewInventory();
         void onTradeRequest();

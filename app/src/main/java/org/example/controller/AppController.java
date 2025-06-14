@@ -14,14 +14,16 @@ public class AppController {
     private final UserController userController;
     private final ItemController itemController;
     private final InventoryController inventoryController;
+    private final UsersInventoryController usersInventoryController;
 
     public AppController(ViewManager viewManager, UserController userController, ItemController itemController,
-            InventoryController inventoryController, DynamicPanelManager dynamicPanelManager) {
+            InventoryController inventoryController, DynamicPanelManager dynamicPanelManager, UsersInventoryController usersInventoryController) {
         this.viewManager = viewManager;
         this.dynamicPanelManager = dynamicPanelManager;
         this.userController = userController;
         this.itemController = itemController;
         this.inventoryController = inventoryController;
+        this.usersInventoryController = usersInventoryController;
         setupViews();
     }
 
@@ -50,6 +52,7 @@ public class AppController {
             public void onLoginSubmit(String username, String password) {
                 // Call the UserController for handling the auth
                 userController.handleUserAuthentication(username, password);
+                
             }
 
             public void onLoginCancel() {
