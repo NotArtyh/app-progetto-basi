@@ -14,17 +14,14 @@ public class AppController {
     private final UserController userController;
     private final ItemController itemController;
     private final InventoryController inventoryController;
-    private final UsersInventoryController usersInventoryController;
 
     public AppController(ViewManager viewManager, UserController userController, ItemController itemController,
-            InventoryController inventoryController, DynamicPanelManager dynamicPanelManager,
-            UsersInventoryController usersInventoryController) {
+            InventoryController inventoryController, DynamicPanelManager dynamicPanelManager) {
         this.viewManager = viewManager;
         this.dynamicPanelManager = dynamicPanelManager;
         this.userController = userController;
         this.itemController = itemController;
         this.inventoryController = inventoryController;
-        this.usersInventoryController = usersInventoryController;
         setupViews();
     }
 
