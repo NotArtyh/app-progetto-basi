@@ -381,9 +381,6 @@ public class UsersInventoryPanel extends JPanel {
         }
     }
 
-    private void refreshData() {
-        loadAllUsersWithInventories();
-    }
 
     private void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
