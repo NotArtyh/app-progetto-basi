@@ -19,7 +19,7 @@ public class TradeService {
     ItemDAO itemDAO;
     UserDAO userDAO;
 
-    public ServiceResult registerTradeRequest(List<Item> offeredItems, List<Item> receiverItems,
+    public ServiceResult registerTradeRequest(List<Item> offeredItems, List<Item> wantedItems,
             String receiverUsername) {
         try {
             if (!SessionManager.getInstance().isUserLoggedIn()) {
@@ -37,7 +37,7 @@ public class TradeService {
 
             // check if receiver items are in his inventory
             List<Item> allReceiverUserItems = itemDAO.getItemsByUserId(receiverUserId);
-            boolean validReceive = allReceiverUserItems.contains(receiverItems);
+            boolean validReceive = allReceiverUserItems.contains(wantedItems);
             if (!validReceive) {
                 return new ServiceResult(false, "The receiver user doesn't have the proposed items.");
             }
