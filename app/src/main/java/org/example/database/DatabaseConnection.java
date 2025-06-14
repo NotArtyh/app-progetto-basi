@@ -8,7 +8,7 @@ public class DatabaseConnection {
     
     private static final String URL = "jdbc:mysql://100.66.102.13:3306/BEL";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "cazzineri";
+    private static final String PASSWORD = "muffin1234!";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
