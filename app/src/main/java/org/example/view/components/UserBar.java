@@ -1,16 +1,27 @@
 package org.example.view.components;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.example.SessionManager;
 import org.example.model.User;
 import org.example.services.ServiceResult;
-
-import java.awt.*;
 
 public class UserBar extends JPanel {
     private UserActionListener actionListener;
     private String username;
+    private int level;
 
     public UserBar() {
     }
@@ -18,6 +29,7 @@ public class UserBar extends JPanel {
     public UserBar(ServiceResult viewData) {
         User user = (User) viewData.getViewDataPayload();
         this.username = user.getUsername();
+        this.level = SessionManager.getInstance().getCurrenUser().getLivello(); // Assicurati che User abbia getLevel()
         createUserBar();
     }
 
@@ -29,23 +41,39 @@ public class UserBar extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(210, 213, 221));
 
-        // right panel elements
+        // Right panel elements
         JPanel rightPanel = new JPanel(new GridBagLayout());
         rightPanel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 8, 0, 8);
+        gbc.anchor = GridBagConstraints.CENTER;
 
+        // Username label
         JLabel userLabel = new JLabel(username);
         userLabel.setFont(new Font("Roboto", Font.BOLD, 18));
         userLabel.setForeground(Color.BLACK);
-        rightPanel.add(userLabel);
+        gbc.gridx = 0;
+        rightPanel.add(userLabel, gbc);
 
-        rightPanel.add(Box.createRigidArea(new Dimension(16, 0)));
+        // Level label
+        JLabel levelLabel = new JLabel("Level: " + level);
+        levelLabel.setFont(new Font("Roboto", Font.PLAIN, 16));
+        levelLabel.setForeground(Color.DARK_GRAY);
+        gbc.gridx = 1;
+        rightPanel.add(levelLabel, gbc);
 
+        // Spacing before profile picture
+        gbc.gridx = 2;
+        rightPanel.add(Box.createRigidArea(new Dimension(16, 0)), gbc);
+
+        // Profile picture
         JPanel profilePicture = new SquareImagePanel("pfp1.png");
-        rightPanel.add(profilePicture);
+        gbc.gridx = 3;
+        rightPanel.add(profilePicture, gbc);
 
-        // left panel elements
+        // Left panel elements
         JPanel leftPanel = new JPanel(new GridBagLayout());
-        leftPanel.setOpaque(false); // Let parent background show through
+        leftPanel.setOpaque(false);
 
         JButton logoutButton = new StyledButton("🚪", "Logout");
         logoutButton.addActionListener(e -> {
@@ -56,7 +84,7 @@ public class UserBar extends JPanel {
 
         leftPanel.add(logoutButton);
 
-        // Add some padding to the user label
+        // Padding
         rightPanel.setBorder(new EmptyBorder(0, 0, 0, 32));
         leftPanel.setBorder(new EmptyBorder(0, 32, 0, 0));
 

@@ -26,19 +26,19 @@ public class HomePanel extends JPanel {
         gbc.insets = new Insets(0, 0, 0, 0);
         add(userBar, gbc);
 
-        // UsersInventoryPanel panel (2/3 width)
+        // UsersInventoryPanel panel (80% width)
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
-        gbc.weightx = 0.66;
+        gbc.weightx = 0.8;
         gbc.weighty = 0.8;
-        gbc.insets = new Insets(10, 10, 5, 10); // bottom spacing reduced
+        gbc.insets = new Insets(10, 10, 5, 10);
         add(usersInventoryPanel, gbc);
 
-        // Operations panel (1/3 width)
+        // Operations panel (20% width)
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.weightx = 0.34;
+        gbc.weightx = 0.2;
         gbc.weighty = 0.8;
         gbc.insets = new Insets(10, 5, 5, 10);
         add(operationsPanel, gbc);
