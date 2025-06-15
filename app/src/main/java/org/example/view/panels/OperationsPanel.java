@@ -1,7 +1,13 @@
 package org.example.view.panels;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import org.example.view.components.StyledButton;
 
@@ -29,7 +35,6 @@ public class OperationsPanel extends JPanel {
         // Create buttons
         JButton addItemButton = new StyledButton("➕", "Add Item");
         JButton viewInventoryButton = new StyledButton("👀", "View Inventory");
-        JButton tradeButton = new StyledButton("🤝", "Trade");
 
         // Add action listeners
         addItemButton.addActionListener(e -> {
@@ -40,17 +45,13 @@ public class OperationsPanel extends JPanel {
             if (actionListener != null)
                 actionListener.onViewInventory();
         });
-        tradeButton.addActionListener(e -> {
-            if (actionListener != null)
-                actionListener.onTradeItem();
-        });
+        
 
         // Add buttons as veritcal "list"
         buttonPanel.add(addItemButton);
         buttonPanel.add(Box.createVerticalStrut(10));
         buttonPanel.add(viewInventoryButton);
         buttonPanel.add(Box.createVerticalStrut(10));
-        buttonPanel.add(tradeButton);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;
