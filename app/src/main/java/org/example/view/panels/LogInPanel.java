@@ -2,10 +2,10 @@ package org.example.view.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class LogInPanel extends JPanel {
     private UserActionListener actionListener;
@@ -28,71 +30,59 @@ public class LogInPanel extends JPanel {
     }
 
     private void createLogInPanel() {
-        JPanel logInPanel = new JPanel();
-        logInPanel.setLayout(new BorderLayout(10, 10));
-        logInPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setLayout(new BorderLayout(20, 20));
+        setBorder(new EmptyBorder(40, 40, 40, 40));
+        setBackground(new Color(245, 247, 250));
 
-        // Call the headerComponent for adding a header to this section
+        JLabel titleLabel = new JLabel("Login");
+        titleLabel.setFont(new Font("Roboto", Font.BOLD, 26));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(titleLabel, BorderLayout.NORTH);
 
-        // Form area of panel
         JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBackground(new Color(245, 247, 250));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(12, 12, 12, 12);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Text Fields
         JTextField usernameField = new JTextField(20);
         JPasswordField passwordField = new JPasswordField(20);
 
-        // Username
         gbc.gridx = 0;
         gbc.gridy = 0;
-        JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
-        formPanel.add(usernameLabel, gbc);
+        formPanel.add(new JLabel("Username:"), gbc);
 
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
         formPanel.add(usernameField, gbc);
 
-        // Password
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0;
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
-        formPanel.add(passwordLabel, gbc);
+        formPanel.add(new JLabel("Password:"), gbc);
 
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
         formPanel.add(passwordField, gbc);
 
-        // Button panel for logIn and cancel
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        // Add button panel immediately after form fields
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         JButton loginButton = new JButton("Login");
         JButton cancelButton = new JButton("Cancel");
 
-        loginButton.setBackground(new Color(40, 167, 69)); // change
-        loginButton.setForeground(Color.BLACK);
-        loginButton.setFont(new Font("Roboto", Font.BOLD, 12));
-
-        cancelButton.setBackground(new Color(220, 53, 69)); // change
-        cancelButton.setForeground(Color.BLACK);
-        cancelButton.setFont(new Font("Roboto", Font.BOLD, 12));
+        styleButton(loginButton, new Color(40, 167, 69));
+        styleButton(cancelButton, new Color(220, 53, 69));
 
         loginButton.addActionListener(e -> {
-            // Get input of text fields
             String username = usernameField.getText().trim();
             String password = new String(passwordField.getPassword());
 
-            // validate fields input
             if (username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Username and Password are required!",
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Username and Password are required!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -109,16 +99,21 @@ public class LogInPanel extends JPanel {
         buttonPanel.add(cancelButton);
         buttonPanel.add(loginButton);
 
-        setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        formPanel.add(buttonPanel, gbc);
 
         add(formPanel, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void styleButton(JButton button, Color bgColor) {
+        button.setBackground(bgColor);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Roboto", Font.BOLD, 14));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
     }
 
     public interface UserActionListener {
         void onLoginSubmit(String username, String password);
-
         void onLoginCancel();
     }
 }
