@@ -8,8 +8,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,6 +16,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import org.example.view.components.StyledButton;
 
 public class LogInPanel extends JPanel {
     private UserActionListener actionListener;
@@ -41,7 +41,7 @@ public class LogInPanel extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
 
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBackground(new Color(245, 247, 250));
+       
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(12, 12, 12, 12);
         gbc.anchor = GridBagConstraints.WEST;
@@ -72,11 +72,8 @@ public class LogInPanel extends JPanel {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.EAST;
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        JButton loginButton = new JButton("Login");
-        JButton cancelButton = new JButton("Cancel");
-
-        styleButton(loginButton, new Color(40, 167, 69));
-        styleButton(cancelButton, new Color(220, 53, 69));
+        JButton loginButton = new StyledButton("","Login");
+        JButton cancelButton = new StyledButton("", "Cancel");
 
         loginButton.addActionListener(e -> {
             String username = usernameField.getText().trim();
@@ -105,25 +102,7 @@ public class LogInPanel extends JPanel {
         add(formPanel, BorderLayout.CENTER);
     }
 
-    private void styleButton(JButton button, Color bgColor) {
-        button.setOpaque(true);
-        button.setBorderPainted(false);
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Roboto", Font.BOLD, 14));
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Feedback su pressione
-        button.getModel().addChangeListener(e -> {
-            ButtonModel model = button.getModel();
-            if (model.isPressed()) {
-                button.setBackground(bgColor.darker());
-            } else {
-                button.setBackground(bgColor);
-            }
-        });
-    }
 
     public interface UserActionListener {
         void onLoginSubmit(String username, String password);
