@@ -180,8 +180,8 @@ public class TradePanel extends JPanel {
         // Mostra messaggio di conferma
         JOptionPane.showMessageDialog(
             TradePanel.this,
-            "Richiesta di scambio inviata!",
-            "Conferma",
+            "Trade request sent successfully!",
+            "Confirmation",
             JOptionPane.INFORMATION_MESSAGE
         );
 

@@ -34,8 +34,8 @@ public class TradeRequestsPanel extends JPanel {
 
     // Colonne della tabella
     private static final String[] COLUMN_NAMES = {
-            "ID Scambio", "Utente Richiedente", "Item Offerti", "Item Richiesti",
-            "Data Richiesta", "Stato", "Azioni"
+            "Trade ID", "Recieving user", "Offered items", "Wanted items",
+            "Request date", "Status", "Actions"
     };
 
     public TradeRequestsPanel(int currentUserId) {
@@ -48,7 +48,7 @@ public class TradeRequestsPanel extends JPanel {
 
     private void initializeComponents() {
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createTitledBorder("Richieste di Scambio"));
+        setBorder(BorderFactory.createTitledBorder("Trade Requests"));
 
         // Inizializza il modello della tabella
         tableModel = new TradeTableModel();
@@ -60,8 +60,8 @@ public class TradeRequestsPanel extends JPanel {
         tradeTable.getTableHeader().setReorderingAllowed(false);
 
         // Imposta renderer personalizzato per la colonna delle azioni
-        tradeTable.getColumn("Azioni").setCellRenderer(new ButtonRenderer());
-        tradeTable.getColumn("Azioni").setCellEditor(new ButtonEditor(new JCheckBox()));
+        tradeTable.getColumn("Actions").setCellRenderer(new ButtonRenderer());
+        tradeTable.getColumn("Actions").setCellEditor(new ButtonEditor(new JCheckBox()));
 
         // Imposta larghezze delle colonne
         tradeTable.getColumnModel().getColumn(0).setPreferredWidth(80); // ID
@@ -76,7 +76,7 @@ public class TradeRequestsPanel extends JPanel {
     private void setupLayout() {
         // Pannello superiore con titolo e pulsante refresh
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Le tue richieste di scambio ricevute", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("Trade requests you received", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
         topPanel.add(titleLabel, BorderLayout.CENTER);
@@ -104,7 +104,7 @@ public class TradeRequestsPanel extends JPanel {
         add(new JScrollPane(tradeTable), BorderLayout.CENTER);
 
         // Pannello informativo in basso
-        JLabel infoLabel = new JLabel("Puoi accettare o rifiutare le richieste in stato 'In Attesa'");
+        JLabel infoLabel = new JLabel("You can accept or reject trade requests by clicking the buttons in the Actions column.");
         infoLabel.setHorizontalAlignment(JLabel.CENTER);
         infoLabel.setFont(new Font("Arial", Font.ITALIC, 12));
         add(infoLabel, BorderLayout.SOUTH);
@@ -117,8 +117,8 @@ public class TradeRequestsPanel extends JPanel {
             tableModel.setTradeRequests(requests);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                    "Errore nel caricamento delle richieste di scambio: " + e.getMessage(),
-                    "Errore", JOptionPane.ERROR_MESSAGE);
+                    "Error in loading trade requests: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -128,59 +128,59 @@ public class TradeRequestsPanel extends JPanel {
 
         // Dati di esempio - sostituisci con chiamata al database
         requests.add(new TradeRequestInfo(1, "dariaa34", "In the End", "Billie Jean",
-                LocalDateTime.now().minusDays(2), "In Attesa"));
+                LocalDateTime.now().minusDays(2), "Pending..."));
         requests.add(new TradeRequestInfo(2, "luca_red", "Take On Me", "Thriller, Wonderwall",
-                LocalDateTime.now().minusDays(1), "Accettato"));
+                LocalDateTime.now().minusDays(1), "Accepted"));
         requests.add(new TradeRequestInfo(3, "celinee.d", "Karma Police", "Wonderwall",
-                LocalDateTime.now().minusHours(3), "In Attesa"));
+                LocalDateTime.now().minusHours(3), "Pending..."));
 
         return requests;
     }
 
     private void acceptTradeRequest(int tradeId) {
         int result = JOptionPane.showConfirmDialog(this,
-                "Sei sicuro di voler accettare questa richiesta di scambio?",
-                "Conferma Accettazione", JOptionPane.YES_NO_OPTION);
+                "Are you sure you want to accept this trade request?",
+                "Confirm Accept", JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
             try {
                 // Implementa la logica per accettare lo scambio
-                updateTradeStatus(tradeId, "Accettato");
+                updateTradeStatus(tradeId, "Accepted");
 
                 // Aggiorna lo stato nella lista locale
-                updateLocalTradeStatus(tradeId, "Accettato");
+                updateLocalTradeStatus(tradeId, "Accepted");
 
                 JOptionPane.showMessageDialog(this,
-                        "Richiesta di scambio accettata con successo!",
-                        "Successo", JOptionPane.INFORMATION_MESSAGE);
+                        "Trade request accepted successfully.",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
-                        "Errore nell'accettare la richiesta: " + e.getMessage(),
-                        "Errore", JOptionPane.ERROR_MESSAGE);
+                        "Error accepting the trade request: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     private void rejectTradeRequest(int tradeId) {
         int result = JOptionPane.showConfirmDialog(this,
-                "Sei sicuro di voler rifiutare questa richiesta di scambio?",
-                "Conferma Rifiuto", JOptionPane.YES_NO_OPTION);
+                "Are you sure you want to reject this trade request?",
+                "Confirm Reject", JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
             try {
                 // Implementa la logica per rifiutare lo scambio
-                updateTradeStatus(tradeId, "Rifiutato");
+                updateTradeStatus(tradeId, "Rejected");
 
                 // Aggiorna lo stato nella lista locale
-                updateLocalTradeStatus(tradeId, "Rifiutato");
+                updateLocalTradeStatus(tradeId, "Rejected");
 
                 JOptionPane.showMessageDialog(this,
-                        "Richiesta di scambio rifiutata.",
-                        "Successo", JOptionPane.INFORMATION_MESSAGE);
+                        "Trade request rejected successfully.",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
-                        "Errore nel rifiutare la richiesta: " + e.getMessage(),
-                        "Errore", JOptionPane.ERROR_MESSAGE);
+                        "Error rejecting the trade request: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -189,7 +189,7 @@ public class TradeRequestsPanel extends JPanel {
     private void updateTradeStatus(int tradeId, String newStatus) throws SQLException {
         // Implementa la logica per aggiornare lo stato nel database
         // tradeDAO.updateTradeStatus(tradeId, newStatus);
-        System.out.println("Aggiornamento stato scambio " + tradeId + " a: " + newStatus);
+        System.out.println("Updapdating status for trade " + tradeId + " in: " + newStatus);
     }
 
     // Metodo per aggiornare lo stato nella lista locale e rinfrescare la tabella
@@ -337,14 +337,14 @@ public class TradeRequestsPanel extends JPanel {
                 boolean isSelected, boolean hasFocus, int row, int column) {
 
             TradeRequestInfo request = tableModel.getRequestAt(row);
-            boolean isPending = "In Attesa".equals(request.getStatus());
+            boolean isPending = "Pending...".equals(request.getStatus());
 
             if (isPending) {
                 // Crea pannello con pulsanti per richieste in attesa
                 JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-                JButton acceptButton = new JButton("Accetta");
-                JButton rejectButton = new JButton("Rifiuta");
+                JButton acceptButton = new JButton("Accept");
+                JButton rejectButton = new JButton("Reject");
 
                 acceptButton.setPreferredSize(new Dimension(70, 25));
                 rejectButton.setPreferredSize(new Dimension(70, 25));
@@ -364,10 +364,10 @@ public class TradeRequestsPanel extends JPanel {
                 JLabel statusLabel = new JLabel(request.getStatus());
                 statusLabel.setHorizontalAlignment(JLabel.CENTER);
 
-                if ("Accettato".equals(request.getStatus())) {
+                if ("Accepted".equals(request.getStatus())) {
                     statusLabel.setForeground(new Color(46, 125, 50));
                     statusLabel.setFont(statusLabel.getFont().deriveFont(Font.BOLD));
-                } else if ("Rifiutato".equals(request.getStatus())) {
+                } else if ("Rejejected".equals(request.getStatus())) {
                     statusLabel.setForeground(new Color(211, 47, 47));
                     statusLabel.setFont(statusLabel.getFont().deriveFont(Font.BOLD));
                 }
@@ -389,8 +389,8 @@ public class TradeRequestsPanel extends JPanel {
             super(checkBox);
 
             buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-            acceptButton = new JButton("Accetta");
-            rejectButton = new JButton("Rifiuta");
+            acceptButton = new JButton("Accept");
+            rejectButton = new JButton("Reject");
 
             acceptButton.setPreferredSize(new Dimension(70, 25));
             rejectButton.setPreferredSize(new Dimension(70, 25));
@@ -428,7 +428,7 @@ public class TradeRequestsPanel extends JPanel {
             currentRow = row;
 
             TradeRequestInfo request = tableModel.getRequestAt(row);
-            boolean isPending = "In Attesa".equals(request.getStatus());
+            boolean isPending = "Pending...".equals(request.getStatus());
 
             if (isPending) {
                 return buttonPanel;
@@ -438,10 +438,10 @@ public class TradeRequestsPanel extends JPanel {
                 JLabel statusLabel = new JLabel(request.getStatus());
                 statusLabel.setHorizontalAlignment(JLabel.CENTER);
 
-                if ("Accettato".equals(request.getStatus())) {
+                if ("Accepted".equals(request.getStatus())) {
                     statusLabel.setForeground(new Color(46, 125, 50));
                     statusLabel.setFont(statusLabel.getFont().deriveFont(Font.BOLD));
-                } else if ("Rifiutato".equals(request.getStatus())) {
+                } else if ("Rejected".equals(request.getStatus())) {
                     statusLabel.setForeground(new Color(211, 47, 47));
                     statusLabel.setFont(statusLabel.getFont().deriveFont(Font.BOLD));
                 }

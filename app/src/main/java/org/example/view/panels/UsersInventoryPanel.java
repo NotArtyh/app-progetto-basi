@@ -68,7 +68,7 @@ public class UsersInventoryPanel extends JPanel {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250));
         
-        JLabel titleLabel = new JLabel("Vetrina", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Inventory Showcase", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Roboto", Font.BOLD, 20));
         titleLabel.setBorder(new EmptyBorder(0, 0, 15, 0));
         titleLabel.setForeground(new Color(33, 37, 41));
@@ -100,16 +100,16 @@ public class UsersInventoryPanel extends JPanel {
             ma siccome il pannello viene inizializzato prima che l'utente sia loggato, non possiamo usare session manager
             * Quindi per ora usiamo un id fittizio di 1, che è l'admin
             */
-            System.out.println("Caricati " + allUsers.size() + " utenti");
+            System.out.println("Loaded " + allUsers.size() + " users");
             updateMainPanel();
         } catch (SQLException e) {
-            System.err.println("Errore SQL: " + e.getMessage());
+            System.err.println("SQL Error: " + e.getMessage());
             e.printStackTrace();
-            showError("Errore nel caricamento degli utenti: " + e.getMessage());
+            showError("Error loading users: " + e.getMessage());
             this.allUsers = new ArrayList<>();
             updateMainPanel();
         } catch (Exception e) {
-            System.err.println("Errore generico: " + e.getMessage());
+            System.err.println("Error generic: " + e.getMessage());
             e.printStackTrace();
             showError("Errore imprevisto: " + e.getMessage());
             this.allUsers = new ArrayList<>();  
@@ -128,7 +128,7 @@ public class UsersInventoryPanel extends JPanel {
                 new EmptyBorder(20, 20, 20, 20)
             ));
             
-            JLabel noUsersLabel = new JLabel("Nessun altro utente trovato", SwingConstants.CENTER);
+            JLabel noUsersLabel = new JLabel("No users found", SwingConstants.CENTER);
             noUsersLabel.setForeground(Color.GRAY);
             noUsersLabel.setFont(new Font("Roboto", Font.ITALIC, 14));
             noUsersPanel.add(noUsersLabel, BorderLayout.CENTER);
@@ -162,7 +162,7 @@ public class UsersInventoryPanel extends JPanel {
         userLabel.setFont(new Font("Roboto", Font.BOLD, 16));
         userLabel.setForeground(new Color(33, 37, 41));
 
-        JButton tradeRequestBtn = new JButton("Richiedi Scambio");
+        JButton tradeRequestBtn = new JButton("Request Trade");
         tradeRequestBtn.setFont(new Font("Roboto", Font.BOLD, 12));
         tradeRequestBtn.setBackground(new Color(40, 167, 69));
         tradeRequestBtn.setForeground(Color.BLACK);
@@ -188,7 +188,7 @@ public class UsersInventoryPanel extends JPanel {
         //questa logica andrebbe spostata in un metodo di caricamento dell'inventario fuori dalla view (Handle in UsersInventoryController)
         try {
             List<Item> userItems = itemDAO.getItemsByUserId(user.getUserId());
-            System.out.println("Utente " + user.getUsername() + " ha " + userItems.size() + " items");
+            System.out.println("User " + user.getUsername() + " have " + userItems.size() + " items");
             
             if (userItems.isEmpty()) {
                 JPanel emptyPanel = new JPanel(new BorderLayout());
@@ -196,7 +196,7 @@ public class UsersInventoryPanel extends JPanel {
                 emptyPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
                 emptyPanel.setPreferredSize(new Dimension(0, 80));
                 
-                JLabel emptyLabel = new JLabel("Nessun item nell'inventario", SwingConstants.CENTER);
+                JLabel emptyLabel = new JLabel("No items in inventory", SwingConstants.CENTER);
                 emptyLabel.setForeground(new Color(184, 134, 11));
                 emptyLabel.setFont(new Font("Roboto", Font.ITALIC, 12));
                 emptyPanel.add(emptyLabel, BorderLayout.CENTER);
@@ -216,9 +216,9 @@ public class UsersInventoryPanel extends JPanel {
                         JPanel itemPanel = createItemPanel(item, user);
                         itemsGrid.add(itemPanel);
                     } catch (Exception e) {
-                        System.err.println("Errore creazione panel per item " + item.getItemId() + ": " + e.getMessage());
+                        System.err.println("Error creating item panel for item " + item.getItemId() + ": " + e.getMessage());
                         // Aggiungi un panel di errore invece di bloccare tutto
-                        JPanel errorPanel = createErrorItemPanel("Errore item " + item.getItemId());
+                        JPanel errorPanel = createErrorItemPanel("Error item " + item.getItemId());
                         itemsGrid.add(errorPanel);
                     }
                 }
@@ -233,22 +233,22 @@ public class UsersInventoryPanel extends JPanel {
             }
             
         } catch (SQLException e) {
-            System.err.println("Errore SQL per utente " + user.getUsername() + ": " + e.getMessage());
+            System.err.println("SQL Error for user" + user.getUsername() + ": " + e.getMessage());
             JPanel errorPanel = new JPanel(new BorderLayout());
             errorPanel.setBackground(new Color(248, 215, 218));
             errorPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
             errorPanel.setPreferredSize(new Dimension(0, 80));
             
-            JLabel errorLabel = new JLabel("Errore nel caricamento dell'inventario", SwingConstants.CENTER);
+            JLabel errorLabel = new JLabel("Error loading inventory", SwingConstants.CENTER);
             errorLabel.setForeground(new Color(220, 53, 69));
             errorLabel.setFont(new Font("Roboto", Font.BOLD, 12));
             errorPanel.add(errorLabel, BorderLayout.CENTER);
             
             inventoryContainer.add(errorPanel, BorderLayout.CENTER);
         } catch (Exception e) {
-            System.err.println("Errore generico per utente " + user.getUsername() + ": " + e.getMessage());
+            System.err.println("Error generic for user " + user.getUsername() + ": " + e.getMessage());
             e.printStackTrace();
-            inventoryContainer.add(createErrorItemPanel("Errore caricamento inventario"), BorderLayout.CENTER);
+            inventoryContainer.add(createErrorItemPanel("Error loading inventory"), BorderLayout.CENTER);
         }
 
         return inventoryContainer;
@@ -283,24 +283,24 @@ public class UsersInventoryPanel extends JPanel {
             infoPanel.setBackground(Color.WHITE);
             infoPanel.setBorder(new EmptyBorder(3, 3, 3, 3));
 
-            addInfoRow(infoPanel, "Condizioni:", truncateText(item.getCondizioni(), 12));
+            addInfoRow(infoPanel, "Conditions:", truncateText(item.getCondizioni(), 12));
             
             if (item.getNote() != null && !item.getNote().trim().isEmpty()) {
-                addInfoRow(infoPanel, "Note:", truncateText(item.getNote(), 12));
+                addInfoRow(infoPanel, "Notes:", truncateText(item.getNote(), 12));
             }
 
             if (item.getData_acquisizione() != null) {
                 String formattedDate = item.getData_acquisizione()
                         .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                addInfoRow(infoPanel, "Acquisito:", formattedDate);
+                addInfoRow(infoPanel, "Acquired:", formattedDate);
             }
 
             panel.add(infoPanel, BorderLayout.CENTER);
 
 
         } catch (Exception e) {
-            System.err.println("Errore creazione item panel: " + e.getMessage());
-            JLabel errorLabel = new JLabel("<html><center>Errore<br>Item ID: " + item.getItemId() + "</center></html>");
+            System.err.println("Error creating panel: " + e.getMessage());
+            JLabel errorLabel = new JLabel("<html><center>Error<br>Item ID: " + item.getItemId() + "</center></html>");
             errorLabel.setForeground(Color.RED);
             errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
             panel.add(errorLabel, BorderLayout.CENTER);
@@ -361,11 +361,11 @@ public class UsersInventoryPanel extends JPanel {
         try {
             return mediaDAO.getTitleById(mediaId);
         } catch (SQLException e) {
-            System.err.println("Errore recupero titolo media " + mediaId + ": " + e.getMessage());
-            return "Titolo non disponibile";
+            System.err.println("Error loading title for media" + mediaId + ": " + e.getMessage());
+            return "Title not found";
         } catch (Exception e) {
-            System.err.println("Errore generico recupero titolo media " + mediaId + ": " + e.getMessage());
-            return "Errore titolo";
+            System.err.println("Error generic loading title for media" + mediaId + ": " + e.getMessage());
+            return "Error title";
         }
     }
 
@@ -378,13 +378,7 @@ public class UsersInventoryPanel extends JPanel {
     private void requestTrade(User targetUser) {
         if (tradeRequestListener != null) {
             tradeRequestListener.onTradeRequest(targetUser);
-        } else {
-            // Fallback: mostra un semplice messaggio
-            JOptionPane.showMessageDialog(this, 
-                "Funzionalità di scambio non ancora implementata.\nRichiesta per user id: " + targetUser.getUserId(),
-                "Richiesta Scambio", 
-                JOptionPane.INFORMATION_MESSAGE);
-        }
+        } 
     }
 
 

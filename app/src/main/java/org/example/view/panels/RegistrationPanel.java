@@ -53,8 +53,8 @@ public class RegistrationPanel extends JPanel {
         JPasswordField passwordField = new JPasswordField(20);
 
         // Add fields to form
-        String[] labels = { "Nome:", "Cognome:", "Sesso (M/F):", "Telefono:", "Stato Residenza:",
-                "Provincia:", "CAP:", "Via:", "Civico:", "Username:", "Email:", "Password:" };
+        String[] labels = { "Name:", "Surname:", "Sex (M/F):", "Phone:", "State of residence:",
+                "Province:", "CAP:", "Street:", "Civic number :", "Username:", "Email:", "Password:" };
         JTextField[] fields = { nomeField, cognomeField, sessoField, telefonoField, statoResidenzaField,
                 provinciaField, capField, viaField, civicoField, usernameField, emailField, passwordField };
 
@@ -95,13 +95,13 @@ public class RegistrationPanel extends JPanel {
             for (int i = 0; i < fields.length; i++) {
                 if (fields[i].getText().trim().isEmpty()) {
                     valid = false;
-                    errors.append("- ").append(labels[i].replace(":", "")).append(" è obbligatorio\n");
+                    errors.append("- ").append(labels[i].replace(":", "")).append(" s required.\n");
                 }
             }
 
             if (!valid) {
                 JOptionPane.showMessageDialog(this,
-                        "Compila tutti i campi obbligatori:\n" + errors.toString(),
+                        "Insert the following fields:\n" + errors.toString(),
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
