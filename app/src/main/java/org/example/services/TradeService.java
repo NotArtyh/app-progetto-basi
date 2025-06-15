@@ -39,22 +39,22 @@ public class TradeService {
             int targetUserId = targetUser.getUserId();
 
             // check if offered items are in the current user inventory
-            if (!offeredItems.isEmpty()) {
-                List<Item> allCurrenUserItems = itemDAO.getItemsByUserId(currentUserId);
-                Boolean validOffer = allCurrenUserItems.contains(offeredItems);
-                if (!validOffer) {
-                    return new ServiceResult(false, "The current user doesn't have the proposed items.");
-                }
-            }
+            // if (!offeredItems.isEmpty()) {
+            //     List<Item> allCurrenUserItems = itemDAO.getItemsByUserId(currentUserId);
+            //     Boolean validOffer = allCurrenUserItems.contains(offeredItems);
+            //     if (!validOffer) {
+            //         return new ServiceResult(false, "The current user doesn't have the proposed items.");
+            //     }
+            // }
 
             // check if receiver items are in his inventory
-            if (!wantedItems.isEmpty()) {
-                List<Item> allTargetUserItems = itemDAO.getItemsByUserId(targetUserId);
-                boolean validReceive = allTargetUserItems.contains(wantedItems);
-                if (!validReceive) {
-                    return new ServiceResult(false, "The receiver user doesn't have the proposed items.");
-                }
-            }
+            // if (!wantedItems.isEmpty()) {
+            //     List<Item> allTargetUserItems = itemDAO.getItemsByUserId(targetUserId);
+            //     boolean validReceive = allTargetUserItems.contains(wantedItems);
+            //     if (!validReceive) {
+            //         return new ServiceResult(false, "The receiver user doesn't have the proposed items.");
+            //     }
+            // }
 
             // Create the trade - each trade has the current time and date and is set to
             // Pending by default
