@@ -84,7 +84,7 @@ public class TradeRequestsPanel extends JPanel {
         // exit button listener
         JButton exitButton = new JButton("Exit");
         exitButton.setBackground(Color.GRAY);
-        exitButton.setForeground(Color.WHITE);
+        exitButton.setForeground(Color.BLACK);
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -350,9 +350,9 @@ public class TradeRequestsPanel extends JPanel {
                 rejectButton.setPreferredSize(new Dimension(70, 25));
 
                 acceptButton.setBackground(new Color(46, 125, 50));
-                acceptButton.setForeground(Color.WHITE);
+                acceptButton.setForeground(Color.BLACK);
                 rejectButton.setBackground(new Color(211, 47, 47));
-                rejectButton.setForeground(Color.WHITE);
+                rejectButton.setForeground(Color.BLACK);
 
                 buttonPanel.add(acceptButton);
                 buttonPanel.add(rejectButton);
@@ -396,9 +396,9 @@ public class TradeRequestsPanel extends JPanel {
             rejectButton.setPreferredSize(new Dimension(70, 25));
 
             acceptButton.setBackground(new Color(46, 125, 50));
-            acceptButton.setForeground(Color.WHITE);
+            acceptButton.setForeground(Color.BLACK);
             rejectButton.setBackground(new Color(211, 47, 47));
-            rejectButton.setForeground(Color.WHITE);
+            rejectButton.setForeground(Color.BLACK);
 
             acceptButton.addActionListener(new ActionListener() {
                 @Override
