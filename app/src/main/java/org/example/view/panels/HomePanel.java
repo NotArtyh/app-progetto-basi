@@ -8,12 +8,12 @@ import javax.swing.JPanel;
 
 public class HomePanel extends JPanel {
 
-    public HomePanel(JPanel userBar, JPanel usersInventoryPanel, JPanel operationsPanel, JPanel tradeRequestsPanel) {
+    public HomePanel(JPanel userBar, JPanel usersInventoryPanel, JPanel operationsPanel) {
         setLayout(new GridBagLayout());
-        createHomePanel(userBar, usersInventoryPanel, operationsPanel, tradeRequestsPanel);
+        createHomePanel(userBar, usersInventoryPanel, operationsPanel);
     }
 
-    private void createHomePanel(JPanel userBar, JPanel usersInventoryPanel, JPanel operationsPanel, JPanel tradeRequestsPanel) {
+    private void createHomePanel(JPanel userBar, JPanel usersInventoryPanel, JPanel operationsPanel) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
 
@@ -42,15 +42,5 @@ public class HomePanel extends JPanel {
         gbc.weighty = 0.8;
         gbc.insets = new Insets(10, 5, 5, 10);
         add(operationsPanel, gbc);
-
-        //Trade request panel
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.weightx = 0.34;
-        gbc.weighty = 0.1;
-        gbc.insets = new Insets(5, 5, 10, 10); // space between panels
-       // add(tradeRequestsPanel, gbc); appena metti questo esplode tutto
-        
     }
-
 }
