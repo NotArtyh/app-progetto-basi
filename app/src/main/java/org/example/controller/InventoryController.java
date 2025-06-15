@@ -13,6 +13,7 @@ import org.example.view.ViewManager;
 import org.example.view.panels.PersonalInventoryPanel;
 import org.example.view.panels.UsersInventoryPanel;
 import org.example.view.panels.TradePanel;
+import org.example.view.panels.TradeRequestsPanel;
 
 /**
  * Inventory Controller Class
@@ -62,8 +63,6 @@ public class InventoryController {
 
             dynamicPanelManager.setPersonalInventoryPanel(updatedPersonalInventoryPanel);
             dynamicPanelManager.updatePersonalInventoryPanel();
-
-            handleUsersInventoryUpdate();
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());
             e.printStackTrace();
@@ -124,7 +123,7 @@ public class InventoryController {
                      * uncomment below, its commented for now as the db is broken
                      * 
                      */
-                    // handleTradeProposalRegistration(offeredItems, wantedItems, targetUser);
+                    handleTradeProposalRegistration(offeredItems, wantedItems, targetUser);
                 }
 
                 public void onExit() {
@@ -153,6 +152,25 @@ public class InventoryController {
                 // View displays an error and doesn't go forwards
                 System.out.println(result.getMessage());
             }
+        } catch (Exception e) {
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void handleTradeRequestStatusUpdate() {
+        try {
+            TradeRequestsPanel updatedTradeRequestsPanel = new TradeRequestsPanel(1); // temp needs update
+            updatedTradeRequestsPanel.setActionListener(new TradeRequestsPanel.UserActionListener() {
+                public void onExit() {
+                    viewManager.show("home"); // go back to home view
+                }
+            });
+
+            dynamicPanelManager.setTradeRequestsPanel(updatedTradeRequestsPanel);
+            dynamicPanelManager.updateTradeRequestsPanel();
+
+            handleUsersInventoryUpdate();
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());
             e.printStackTrace();
