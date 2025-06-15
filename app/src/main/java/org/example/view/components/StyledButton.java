@@ -1,7 +1,9 @@
 package org.example.view.components;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.JButton;
 
 public class StyledButton extends JButton {
     public StyledButton(String icon, String text) {
@@ -10,4 +12,8 @@ public class StyledButton extends JButton {
         this.setPreferredSize(new Dimension(120, 40));
         this.setFocusPainted(false);
     }
+
+
+
+
 }

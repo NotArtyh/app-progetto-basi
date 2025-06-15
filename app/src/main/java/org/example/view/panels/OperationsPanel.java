@@ -2,6 +2,7 @@ package org.example.view.panels;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -34,8 +35,16 @@ public class OperationsPanel extends JPanel {
 
         // Create buttons
         JButton addItemButton = new StyledButton("➕", "Add Item");
-        JButton viewInventoryButton = new StyledButton("👀", "View Inventory");
-        JButton tradeStatusButton = new StyledButton("🤝", "Trade Status");
+styleLargeButton(addItemButton);
+
+JButton viewInventoryButton = new StyledButton("👀", "View Inventory");
+styleLargeButton(viewInventoryButton);
+
+JButton tradeStatusButton = new StyledButton("🤝", "Trade Status");
+styleLargeButton(tradeStatusButton);
+
+
+
 
         // Add action listeners
         addItemButton.addActionListener(e -> {
@@ -64,6 +73,12 @@ public class OperationsPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         add(buttonPanel, gbc);
     }
+
+  // Metodo per applicare stile più grande
+public void styleLargeButton(JButton button) {
+    button.setFont(button.getFont().deriveFont(16f)); // Font più grande
+    button.setMargin(new Insets(10, 20, 10, 20));     // Padding interno
+}
 
     public interface UserActionListener {
         void onAddItem();
