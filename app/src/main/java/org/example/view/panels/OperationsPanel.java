@@ -35,16 +35,13 @@ public class OperationsPanel extends JPanel {
 
         // Create buttons
         JButton addItemButton = new StyledButton("➕", "Add Item");
-styleLargeButton(addItemButton);
+        styleLargeButton(addItemButton);
 
-JButton viewInventoryButton = new StyledButton("👀", "View Inventory");
-styleLargeButton(viewInventoryButton);
+        JButton viewInventoryButton = new StyledButton("👀", "View Inventory");
+        styleLargeButton(viewInventoryButton);
 
-JButton tradeStatusButton = new StyledButton("🤝", "Trade Status");
-styleLargeButton(tradeStatusButton);
-
-
-
+        JButton tradeStatusButton = new StyledButton("🤝", "Trade Status");
+        styleLargeButton(tradeStatusButton);
 
         // Add action listeners
         addItemButton.addActionListener(e -> {
@@ -74,11 +71,10 @@ styleLargeButton(tradeStatusButton);
         add(buttonPanel, gbc);
     }
 
-  // Metodo per applicare stile più grande
-public void styleLargeButton(JButton button) {
-    button.setFont(button.getFont().deriveFont(16f)); // Font più grande
-    button.setMargin(new Insets(10, 20, 10, 20));     // Padding interno
-}
+    // Metodo per applicare stile più grande
+    public void styleLargeButton(JButton button) {
+        button.setMargin(new Insets(10, 20, 10, 20)); // Padding interno
+    }
 
     public interface UserActionListener {
         void onAddItem();
