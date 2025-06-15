@@ -6,6 +6,7 @@ import org.example.model.Item;
 import org.example.model.User;
 import org.example.services.InventoryService;
 import org.example.services.ServiceResult;
+import org.example.services.TradeService;
 import org.example.services.UsersInventoryService;
 import org.example.view.DynamicPanelManager;
 import org.example.view.ViewManager;
@@ -22,13 +23,16 @@ public class InventoryController {
     private ViewManager viewManager;
     private DynamicPanelManager dynamicPanelManager;
     private UsersInventoryService usersInventoryService;
+    private TradeService tradeService;
 
     public InventoryController(InventoryService inventoryService, ViewManager viewManager,
-            DynamicPanelManager dynamicPanelManager, UsersInventoryService usersInventoryService) {
+            DynamicPanelManager dynamicPanelManager, UsersInventoryService usersInventoryService,
+            TradeService tradeService) {
         this.inventoryService = inventoryService;
         this.viewManager = viewManager;
         this.dynamicPanelManager = dynamicPanelManager;
         this.usersInventoryService = usersInventoryService;
+        this.tradeService = tradeService;
     }
 
     /**
@@ -113,7 +117,7 @@ public class InventoryController {
             TradePanel updatedTradePanel = new TradePanel(currentUserResult, receiverUserData, targetUser);
             updatedTradePanel.setActionListener(new TradePanel.UserActionListener() {
                 public void onTrade(List<Item> offeredItems, List<Item> wantedItems) {
-                    System.out.println(offeredItems);
+                    handleTradeProposalRegistration(offeredItems, wantedItems, targetUser);
                     viewManager.show("home");
                 }
 
@@ -125,6 +129,24 @@ public class InventoryController {
             dynamicPanelManager.setTradePanel(updatedTradePanel);
             dynamicPanelManager.updateTradePanel();
 
+        } catch (Exception e) {
+            System.out.println("Fatal error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void handleTradeProposalRegistration(List<Item> offeredItems, List<Item> wantedItems, User targetUser) {
+        try {
+            ServiceResult result = tradeService.registerTradeRequest(offeredItems, wantedItems, targetUser);
+
+            if (result.isSuccess()) {
+                System.out.println(result.getMessage());
+                // maybe show minipanel with the success of the proposal
+                viewManager.show("home");
+            } else {
+                // View displays an error and doesn't go forwards
+                System.out.println(result.getMessage());
+            }
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());
             e.printStackTrace();
