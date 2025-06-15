@@ -67,7 +67,7 @@ public class UserBar extends JPanel {
         rightPanel.add(Box.createRigidArea(new Dimension(16, 0)), gbc);
 
         // Profile picture
-        JPanel profilePicture = new SquareImagePanel("pfp1.png");
+        JPanel profilePicture = new SquareImagePanel("pfp3.png");
         gbc.gridx = 3;
         rightPanel.add(profilePicture, gbc);
 
