@@ -106,6 +106,7 @@ public class UserController {
 
             dynamicPanelManager.setUserBar(updatedUserBar);
             inventoryController.handlePersonalInventoryUpdate();
+            inventoryController.handleUsersInventoryUpdate();
             dynamicPanelManager.updateHomePanel();
 
         } catch (Exception e) {
