@@ -9,7 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,6 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import org.example.view.components.StyledButton;
 
 public class RegistrationPanel extends JPanel {
     private UserActionListener actionListener;
@@ -42,10 +43,10 @@ public class RegistrationPanel extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
 
         JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBackground(new Color(245, 247, 250));
+        
 
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBackground(new Color(245, 247, 250));
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.anchor = GridBagConstraints.WEST;
@@ -69,12 +70,10 @@ public class RegistrationPanel extends JPanel {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.EAST;
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        JButton submitButton = new JButton("Register");
-        JButton cancelButton = new JButton("Cancel");
+        JButton submitButton = new StyledButton("","Register");
+        JButton cancelButton = new StyledButton("","Cancel");
 
-        styleButton(submitButton, new Color(40, 167, 69));
-        styleButton(cancelButton, new Color(220, 53, 69));
-
+        
         submitButton.addActionListener(e -> {
             boolean valid = true;
             StringBuilder errors = new StringBuilder();
@@ -119,13 +118,7 @@ public class RegistrationPanel extends JPanel {
         add(contentPanel, BorderLayout.CENTER);
     }
 
-    private void styleButton(JButton button, Color bgColor) {
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Roboto", Font.BOLD, 14));
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-    }
+    
 
     public interface UserActionListener {
         void onRegisterSubmit(String name, String surname, String sex, String phoneNumber, String stateResidency,
