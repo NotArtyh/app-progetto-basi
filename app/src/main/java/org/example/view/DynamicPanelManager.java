@@ -1,12 +1,11 @@
 package org.example.view;
 
-import javax.swing.JPanel;
-
 import org.example.view.components.UserBar;
 import org.example.view.panels.HomePanel;
 import org.example.view.panels.OperationsPanel;
 import org.example.view.panels.PersonalInventoryPanel;
 import org.example.view.panels.TradePanel;
+import org.example.view.panels.TradeRequestsPanel;
 import org.example.view.panels.UsersInventoryPanel;
 
 public class DynamicPanelManager {
@@ -14,6 +13,7 @@ public class DynamicPanelManager {
 
     private UserBar userBar;
     private OperationsPanel operationsPanel;
+    private TradeRequestsPanel tradeRequestsPanel;
     private HomePanel homePanel;
 
     private PersonalInventoryPanel personalInventoryPanel;
