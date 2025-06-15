@@ -117,8 +117,14 @@ public class InventoryController {
             TradePanel updatedTradePanel = new TradePanel(currentUserResult, receiverUserData, targetUser);
             updatedTradePanel.setActionListener(new TradePanel.UserActionListener() {
                 public void onTrade(List<Item> offeredItems, List<Item> wantedItems) {
-                    handleTradeProposalRegistration(offeredItems, wantedItems, targetUser);
-                    viewManager.show("home");
+
+                    /*
+                     * IMPORTANT
+                     * 
+                     * uncomment below, its commented for now as the db is broken
+                     * 
+                     */
+                    // handleTradeProposalRegistration(offeredItems, wantedItems, targetUser);
                 }
 
                 public void onExit() {
