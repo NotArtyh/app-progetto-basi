@@ -40,27 +40,30 @@ public class TradeService {
 
             // check if offered items are in the current user inventory
             // if (!offeredItems.isEmpty()) {
-            //     List<Item> allCurrenUserItems = itemDAO.getItemsByUserId(currentUserId);
-            //     Boolean validOffer = allCurrenUserItems.contains(offeredItems);
-            //     if (!validOffer) {
-            //         return new ServiceResult(false, "The current user doesn't have the proposed items.");
-            //     }
+            // List<Item> allCurrenUserItems = itemDAO.getItemsByUserId(currentUserId);
+            // Boolean validOffer = allCurrenUserItems.contains(offeredItems);
+            // if (!validOffer) {
+            // return new ServiceResult(false, "The current user doesn't have the proposed
+            // items.");
+            // }
             // }
 
             // check if receiver items are in his inventory
             // if (!wantedItems.isEmpty()) {
-            //     List<Item> allTargetUserItems = itemDAO.getItemsByUserId(targetUserId);
-            //     boolean validReceive = allTargetUserItems.contains(wantedItems);
-            //     if (!validReceive) {
-            //         return new ServiceResult(false, "The receiver user doesn't have the proposed items.");
-            //     }
+            // List<Item> allTargetUserItems = itemDAO.getItemsByUserId(targetUserId);
+            // boolean validReceive = allTargetUserItems.contains(wantedItems);
+            // if (!validReceive) {
+            // return new ServiceResult(false, "The receiver user doesn't have the proposed
+            // items.");
+            // }
             // }
 
             // Create the trade - each trade has the current time and date and is set to
             // Pending by default
             LocalDateTime dateCurrent = LocalDateTime.now();
             DAOResult tradeResult = tradeDAO
-                    .createTrade(new Trade(targetUserId, currentUserId, dateCurrent, "Pending"));
+                    .createTrade(new Trade(targetUser.getInventoryId(), currentUser.getInventoryId(), dateCurrent,
+                            "Pending"));
             if (!tradeResult.isSuccess()) {
                 return new ServiceResult(false, "Failed to register the trade");
             }
