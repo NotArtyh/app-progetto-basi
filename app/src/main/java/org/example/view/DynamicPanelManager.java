@@ -38,8 +38,12 @@ public class DynamicPanelManager {
         this.operationsPanel = operationsPanel;
     }
 
+     public void setTradeRequestsPanel(TradeRequestsPanel tradeRequestsPanel) {
+        this.tradeRequestsPanel = tradeRequestsPanel;
+    }
+
     public void updateHomePanel() {
-        HomePanel updatedHomePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel);
+        HomePanel updatedHomePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel, tradeRequestsPanel);
         viewManager.updatePanel("home", updatedHomePanel);
     }
 

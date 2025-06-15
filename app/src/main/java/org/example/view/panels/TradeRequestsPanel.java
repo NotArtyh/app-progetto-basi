@@ -408,7 +408,7 @@ public class TradeRequestsPanel extends JPanel {
         }
     }
     
-    // Metodo per testare il pannello
+    /*  Metodo per testare il pannello
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Test Trade Requests Panel");
@@ -421,6 +421,6 @@ public class TradeRequestsPanel extends JPanel {
             
             frame.setVisible(true);
         });
-    }
+    }*/
         
 }
