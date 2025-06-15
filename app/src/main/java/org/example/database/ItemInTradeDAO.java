@@ -10,15 +10,15 @@ import org.example.model.ItemInTrade;
 
 public class ItemInTradeDAO {
     public DAOResult createItem(ItemInTrade itemInTrade) throws SQLException {
-        String sql = "INSERT INTO ITEM_IN_SCAMBIO (Scambio_id, Ricevente_inventory_id, Richiedente_inventory_id, Item_id, Media_id, Data_scambio) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ITEM_IN_SCAMBIO (Media_id, Item_id, Scambio_id, Richiedente_inventory_id, Ricevente_inventory_id, DataScambio) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1, itemInTrade.getScambioId());
-            stmt.setInt(2, itemInTrade.getRiceventeInventoryId());
-            stmt.setInt(3, itemInTrade.getRichiedenteInventoryId());
-            stmt.setInt(4, itemInTrade.getItemId());
-            stmt.setInt(5, itemInTrade.getMediaId());
+            stmt.setInt(1, itemInTrade.getMediaId());
+            stmt.setInt(2, itemInTrade.getItemId());
+            stmt.setInt(3, itemInTrade.getScambioId());
+            stmt.setInt(4, itemInTrade.getRichiedenteInventoryId());
+            stmt.setInt(5, itemInTrade.getRiceventeInventoryId());
             stmt.setTimestamp(6, Timestamp.valueOf(itemInTrade.getDataScambio()));
 
             int rowsAffected = stmt.executeUpdate();
