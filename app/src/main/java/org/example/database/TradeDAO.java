@@ -18,7 +18,7 @@ public class TradeDAO {
 
             stmt.setInt(1, trade.getRiceventeInventoryId());
             stmt.setInt(2, trade.getRichiedenteInventoryId());
-            stmt.setTimestamp(5, Timestamp.valueOf(trade.getDataScambio()));
+            stmt.setTimestamp(3, Timestamp.valueOf(trade.getDataScambio()));
             stmt.setString(4, trade.getStato());
 
             int rowsAffected = stmt.executeUpdate();
@@ -33,6 +33,5 @@ public class TradeDAO {
                 return new DAOResult(false);
         }
     }
-
 
 }
