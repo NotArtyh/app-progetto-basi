@@ -30,7 +30,7 @@ public class HomePanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
-        gbc.weightx = 0.8;
+        gbc.weightx = 0.9;
         gbc.weighty = 0.8;
         gbc.insets = new Insets(10, 10, 5, 10);
         add(usersInventoryPanel, gbc);
@@ -38,7 +38,7 @@ public class HomePanel extends JPanel {
         // Operations panel (20% width)
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.weightx = 0.2;
+        gbc.weightx = 0.1;
         gbc.weighty = 0.8;
         gbc.insets = new Insets(10, 5, 5, 10);
         add(operationsPanel, gbc);
