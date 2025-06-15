@@ -9,12 +9,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import org.example.SessionManager;
 import org.example.model.User;
 import org.example.services.ServiceResult;
 
@@ -29,7 +29,7 @@ public class UserBar extends JPanel {
     public UserBar(ServiceResult viewData) {
         User user = (User) viewData.getViewDataPayload();
         this.username = user.getUsername();
-        this.level = SessionManager.getInstance().getCurrenUser().getLivello(); // Assicurati che User abbia getLevel()
+        this.level = user.getLivello();
         createUserBar();
     }
 
@@ -52,15 +52,21 @@ public class UserBar extends JPanel {
         JLabel userLabel = new JLabel(username);
         userLabel.setFont(new Font("Roboto", Font.BOLD, 18));
         userLabel.setForeground(Color.BLACK);
-        gbc.gridx = 0;
-        rightPanel.add(userLabel, gbc);
 
         // Level label
         JLabel levelLabel = new JLabel("Level: " + level);
         levelLabel.setFont(new Font("Roboto", Font.PLAIN, 16));
         levelLabel.setForeground(Color.DARK_GRAY);
-        gbc.gridx = 1;
-        rightPanel.add(levelLabel, gbc);
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setOpaque(false);
+        infoPanel.add(userLabel);
+        infoPanel.add(levelLabel);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        rightPanel.add(infoPanel, gbc);
 
         // Spacing before profile picture
         gbc.gridx = 2;
