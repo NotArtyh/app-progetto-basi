@@ -169,8 +169,6 @@ public class InventoryController {
 
             dynamicPanelManager.setTradeRequestsPanel(updatedTradeRequestsPanel);
             dynamicPanelManager.updateTradeRequestsPanel();
-
-            handleUsersInventoryUpdate();
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());
             e.printStackTrace();
