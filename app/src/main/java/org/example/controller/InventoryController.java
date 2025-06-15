@@ -1,5 +1,8 @@
 package org.example.controller;
 
+import java.util.List;
+
+import org.example.model.Item;
 import org.example.model.User;
 import org.example.services.InventoryService;
 import org.example.services.ServiceResult;
@@ -78,6 +81,7 @@ public class InventoryController {
             UsersInventoryPanel updatedUsersInventoryPanel = new UsersInventoryPanel();
             updatedUsersInventoryPanel.setTradeRequestListener(new UsersInventoryPanel.TradeRequestListener() {
                 public void onTradeRequest(User targetUser) {
+                    handleTradeRequestUpdate(targetUser);
                     viewManager.show("trade");
                 }
             });
@@ -93,18 +97,33 @@ public class InventoryController {
 
     // call this method inside the handler for the view of the users inventories
     // when the trade button is sent for that user
-    public void handleTradeRequestUpdate(ServiceResult receiverUserData) {
+    public void handleTradeRequestUpdate(User targetUser) {
         try {
             ServiceResult currentUserResult = inventoryService.getCurrentUserItems();
             if (!currentUserResult.isSuccess()) {
                 System.out.println(currentUserResult.getMessage());
             }
 
+            ServiceResult receiverUserData = usersInventoryService.getUserInventoryById(targetUser.getUserId());
+
             // the service result passed to this handle should already have the info about
             // the user we want to trade with, we simply have to pass it to the view which
             // will handle the two types of result
 
-            TradePanel updatedTradePanel = new TradePanel(currentUserResult, receiverUserData);
+            TradePanel updatedTradePanel = new TradePanel(currentUserResult, receiverUserData, targetUser);
+            updatedTradePanel.setActionListener(new TradePanel.UserActionListener() {
+                public void onTrade(List<Item> offeredItems, List<Item> wantedItems) {
+                    System.out.println(offeredItems);
+                    viewManager.show("home");
+                }
+
+                public void onExit() {
+                    viewManager.show("home");
+                }
+            });
+
+            dynamicPanelManager.setTradePanel(updatedTradePanel);
+            dynamicPanelManager.updateTradePanel();
 
         } catch (Exception e) {
             System.out.println("Fatal error: " + e.getMessage());

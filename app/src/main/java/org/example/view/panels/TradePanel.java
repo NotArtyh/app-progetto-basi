@@ -1,7 +1,6 @@
 package org.example.view.panels;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,6 @@ import javax.swing.border.EmptyBorder;
 import org.example.model.Item;
 import org.example.model.User;
 import org.example.services.ServiceResult;
-import org.example.view.components.StyledButton;
 import java.awt.event.MouseEvent;
 
 public class TradePanel extends JPanel {
@@ -30,14 +28,9 @@ public class TradePanel extends JPanel {
     private List<Item> currentUserItems;
     private List<String> currentUserItemsTitles;
 
-    private User receiverUser;
-    private List<Item> receiverUserItems;
-    private List<String> receiverUserItemsTitles;
-
-    private JPanel gridPanel;
-    private JLabel pageLabel;
-    private JButton prevButton;
-    private JButton nextButton;
+    private User targetUser;
+    private List<Item> targetUserItems;
+    private List<String> targetUserItemsTitles;
 
     private List<Item> offeredItems;
     private List<Item> wantedItems;
@@ -47,11 +40,14 @@ public class TradePanel extends JPanel {
     public TradePanel() {
     }
 
-    public TradePanel(ServiceResult currentUserData, ServiceResult receivingUserData) {
-        initializePanel();
-        handleCurrentUserData(currentUserData);
-        handleReceivingUserData(receivingUserData);
+    public TradePanel(ServiceResult currentUserData, ServiceResult targetUserDataResult, User targetUser) {
+        this.targetUser = targetUser;
+        this.offeredItems = new ArrayList<>();
+        this.wantedItems = new ArrayList<>();
 
+        handleCurrentUserData(currentUserData);
+        handletargetUserDataResult(targetUserDataResult);
+        initializePanel();
     }
 
     private void handleCurrentUserData(ServiceResult currentUserData) {
@@ -62,19 +58,11 @@ public class TradePanel extends JPanel {
         }
     }
 
-    private void handleReceivingUserData(ServiceResult receivingUserData) {
-        if (receivingUserData.getViewDataPayload() != null) {
-            Map<User, Map<Item, String>> userInventoriesMap = (Map<User, Map<Item, String>>) receivingUserData
-                    .getViewDataPayload();
-
-            // Get the single entry
-            Map.Entry<User, Map<Item, String>> entry = userInventoriesMap.entrySet().iterator().next();
-
-            this.receiverUser = entry.getKey();
-            Map<Item, String> titleItemsMap = entry.getValue();
-
-            this.receiverUserItems = new ArrayList<>(titleItemsMap.keySet());
-            this.receiverUserItemsTitles = new ArrayList<>(titleItemsMap.values());
+    private void handletargetUserDataResult(ServiceResult targetUserDataResult) {
+        if (targetUserDataResult.getViewDataPayload() != null) {
+            Map<Item, String> titletItemsMap = (Map<Item, String>) targetUserDataResult.getViewDataPayload();
+            this.targetUserItems = new ArrayList<>(titletItemsMap.keySet());
+            this.targetUserItemsTitles = new ArrayList<>(titletItemsMap.values());
         }
     }
 
@@ -83,8 +71,8 @@ public class TradePanel extends JPanel {
         contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         contentPanel.add(createItemPanel("Your Items", currentUserItems, currentUserItemsTitles, true));
-        contentPanel.add(createItemPanel(receiverUser.getUsername() + " Items", receiverUserItems,
-                receiverUserItemsTitles, false));
+        contentPanel.add(createItemPanel(targetUser.getUsername() + " Items", targetUserItems,
+                targetUserItemsTitles, false));
 
         add(contentPanel, BorderLayout.CENTER);
         add(createControlPanel(), BorderLayout.SOUTH);
@@ -180,7 +168,7 @@ public class TradePanel extends JPanel {
         tradeButton = new JButton("Trade");
         tradeButton.setEnabled(false);
         tradeButton.setBackground(new Color(40, 167, 69));
-        tradeButton.setForeground(Color.WHITE);
+        tradeButton.setForeground(Color.BLACK);
         tradeButton.setFocusPainted(false);
         tradeButton.addActionListener(e -> {
             if (actionListener != null)
@@ -193,7 +181,7 @@ public class TradePanel extends JPanel {
     }
 
     private void updateTradeButtonState() {
-        tradeButton.setEnabled(!offeredItems.isEmpty() && !wantedItems.isEmpty());
+        tradeButton.setEnabled(!offeredItems.isEmpty());
     }
 
     public void setActionListener(UserActionListener actionListener) {
