@@ -13,10 +13,10 @@ public class Trade {
     }
 
     public Trade(int RiceventeInventoryId, int RichiedenteInventoryId, LocalDateTime dataScambio, String stato) {
-        RiceventeInventoryId = RiceventeInventoryId;
-        RichiedenteInventoryId = RichiedenteInventoryId;
-        DataScambio = dataScambio;
-        Stato = stato;
+        this.RiceventeInventoryId = RiceventeInventoryId;
+        this.RichiedenteInventoryId = RichiedenteInventoryId;
+        this.DataScambio = dataScambio;
+        this.Stato = stato;
     }
 
     public int getScambioId() {
