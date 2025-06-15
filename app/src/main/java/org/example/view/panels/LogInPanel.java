@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -105,11 +106,23 @@ public class LogInPanel extends JPanel {
     }
 
     private void styleButton(JButton button, Color bgColor) {
+        button.setOpaque(true);
+        button.setBorderPainted(false);
         button.setBackground(bgColor);
         button.setForeground(Color.WHITE);
         button.setFont(new Font("Roboto", Font.BOLD, 14));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        // Feedback su pressione
+        button.getModel().addChangeListener(e -> {
+            ButtonModel model = button.getModel();
+            if (model.isPressed()) {
+                button.setBackground(bgColor.darker());
+            } else {
+                button.setBackground(bgColor);
+            }
+        });
     }
 
     public interface UserActionListener {
