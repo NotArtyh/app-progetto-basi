@@ -35,6 +35,7 @@ public class OperationsPanel extends JPanel {
         // Create buttons
         JButton addItemButton = new StyledButton("➕", "Add Item");
         JButton viewInventoryButton = new StyledButton("👀", "View Inventory");
+        JButton tradeStatusButton = new StyledButton("🤝", "Trade Status");
 
         // Add action listeners
         addItemButton.addActionListener(e -> {
@@ -45,13 +46,17 @@ public class OperationsPanel extends JPanel {
             if (actionListener != null)
                 actionListener.onViewInventory();
         });
-        
+        tradeStatusButton.addActionListener(e -> {
+            if (actionListener != null)
+                actionListener.onTradeStatus();
+        });
 
         // Add buttons as veritcal "list"
         buttonPanel.add(addItemButton);
         buttonPanel.add(Box.createVerticalStrut(10));
         buttonPanel.add(viewInventoryButton);
         buttonPanel.add(Box.createVerticalStrut(10));
+        buttonPanel.add(tradeStatusButton);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;
@@ -65,6 +70,6 @@ public class OperationsPanel extends JPanel {
 
         void onViewInventory();
 
-        void onTradeItem();
+        void onTradeStatus();
     }
 }
