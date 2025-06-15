@@ -116,4 +116,39 @@ public class ItemDAO {
 
         return null;
     }
+
+    public List<Item> getItemsPreviewByUserId(int userId) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT i.Item_id, i.Media_id, i.Inventory_id, i.Condizioni, i.Note, i.Data_acquisizione " +
+                "FROM ITEM_INVENTARIO i, DATI_UTENTE u " +
+                "WHERE u.Inventory_id = i.Inventory_id " +
+                "AND u.User_id = ? " +
+                "ORDER BY i.Data_acquisizione DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Item item = new Item();
+                    item.setItemId(rs.getInt("Item_id"));
+                    item.setMediaId(rs.getInt("Media_id"));
+                    item.setInventoryId(rs.getInt("Inventory_id"));
+                    item.setCondizioni(rs.getString("Condizioni"));
+                    item.setNote(rs.getString("Note"));
+
+                    Timestamp timestamp = rs.getTimestamp("Data_acquisizione");
+                    if (timestamp != null) {
+                        item.setData_acquisizione(timestamp.toLocalDateTime());
+                    }
+
+                    items.add(item);
+                }
+            }
+        }
+
+        return items;
+    }
 }

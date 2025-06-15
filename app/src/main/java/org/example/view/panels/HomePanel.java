@@ -1,20 +1,15 @@
 package org.example.view.panels;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-/*
- * This should be the main pannel of the app where we see everything,
- * it should be a composition of the other pannels:
- * - User Bar component - top 
- * - Users Inventory panel - 2/3 left
- * - Operations panel - 1/3 right
- */
+import javax.swing.JPanel;
+
 public class HomePanel extends JPanel {
 
     public HomePanel(JPanel userBar, JPanel usersInventoryPanel, JPanel operationsPanel) {
         setLayout(new GridBagLayout());
-        // setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         createHomePanel(userBar, usersInventoryPanel, operationsPanel);
     }
 
@@ -31,21 +26,21 @@ public class HomePanel extends JPanel {
         gbc.insets = new Insets(0, 0, 0, 0);
         add(userBar, gbc);
 
-        // UsersInventoryPanel panel (2/3 width)
+        // UsersInventoryPanel panel (80% width)
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
-        gbc.weightx = 0.66;
-        gbc.weighty = 0.9;
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.weightx = 0.9;
+        gbc.weighty = 0.8;
+        gbc.insets = new Insets(10, 10, 5, 10);
         add(usersInventoryPanel, gbc);
 
-        // Operations panel (1/3 width)
+        // Operations panel (20% width)
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.weightx = 0.34;
-        gbc.weighty = 0.9;
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.weightx = 0.1;
+        gbc.weighty = 0.8;
+        gbc.insets = new Insets(10, 5, 5, 10);
         add(operationsPanel, gbc);
     }
 }

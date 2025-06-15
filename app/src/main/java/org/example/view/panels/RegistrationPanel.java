@@ -1,11 +1,12 @@
+// RegistrationPanel styled similarly
 package org.example.view.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
@@ -15,7 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import org.example.view.components.StyledButton;
 
 public class RegistrationPanel extends JPanel {
     private UserActionListener actionListener;
@@ -29,100 +33,70 @@ public class RegistrationPanel extends JPanel {
     }
 
     private void createRegisterPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        setLayout(new BorderLayout(20, 20));
+        setBorder(new EmptyBorder(30, 30, 30, 30));
+        setBackground(new Color(245, 247, 250));
 
-        // Form panel
+        JLabel titleLabel = new JLabel("Register");
+        titleLabel.setFont(new Font("Roboto", Font.BOLD, 24));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(titleLabel, BorderLayout.NORTH);
+
+        JPanel contentPanel = new JPanel(new BorderLayout());
+
         JPanel formPanel = new JPanel(new GridBagLayout());
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(8, 8, 8, 8);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Create form fields
-        JTextField nomeField = new JTextField(20);
-        JTextField cognomeField = new JTextField(20);
-        JTextField sessoField = new JTextField(20);
-        JTextField telefonoField = new JTextField(20);
-        JTextField statoResidenzaField = new JTextField(20);
-        JTextField provinciaField = new JTextField(20);
-        JTextField capField = new JTextField(20);
-        JTextField viaField = new JTextField(20);
-        JTextField civicoField = new JTextField(20);
-        JTextField usernameField = new JTextField(20);
-        JTextField emailField = new JTextField(20);
-        JPasswordField passwordField = new JPasswordField(20);
-
-        // Add fields to form
-        String[] labels = { "Nome:", "Cognome:", "Sesso (M/F):", "Telefono:", "Stato Residenza:",
-                "Provincia:", "CAP:", "Via:", "Civico:", "Username:", "Email:", "Password:" };
-        JTextField[] fields = { nomeField, cognomeField, sessoField, telefonoField, statoResidenzaField,
-                provinciaField, capField, viaField, civicoField, usernameField, emailField, passwordField };
+        String[] labels = { "Name:", "Surname:", "Sex (M/F):", "Phone:", "State:", "Province:", "CAP:", "Street:",
+                "Civic No:", "Username:", "Email:", "Password:" };
+        JTextField[] fields = new JTextField[labels.length];
 
         for (int i = 0; i < labels.length; i++) {
             gbc.gridx = 0;
             gbc.gridy = i;
-            gbc.gridwidth = 1;
-            JLabel label = new JLabel(labels[i]);
-            label.setFont(new Font("Arial", Font.PLAIN, 12));
-            formPanel.add(label, gbc);
+            formPanel.add(new JLabel(labels[i]), gbc);
 
             gbc.gridx = 1;
             gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.weightx = 1.0;
+            fields[i] = (i == labels.length - 1) ? new JPasswordField(20) : new JTextField(20);
             formPanel.add(fields[i], gbc);
-            gbc.weightx = 0;
-            gbc.fill = GridBagConstraints.NONE;
         }
 
-        // Button panel
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
-        JButton submitButton = new JButton("Register");
-        JButton cancelButton = new JButton("Cancel");
-
-        submitButton.setBackground(new Color(40, 167, 69));
-        submitButton.setForeground(Color.BLACK);
-        submitButton.setFont(new Font("Roboto", Font.BOLD, 12));
-
-        cancelButton.setBackground(new Color(220, 53, 69));
-        cancelButton.setForeground(Color.BLACK);
-        cancelButton.setFont(new Font("Roboto", Font.BOLD, 12));
+        gbc.gridx = 0;
+        gbc.gridy = labels.length;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        JButton submitButton = new StyledButton("", "Register");
+        JButton cancelButton = new StyledButton("", "Cancel");
 
         submitButton.addActionListener(e -> {
-            // Validate fields
             boolean valid = true;
             StringBuilder errors = new StringBuilder();
 
             for (int i = 0; i < fields.length; i++) {
                 if (fields[i].getText().trim().isEmpty()) {
                     valid = false;
-                    errors.append("- ").append(labels[i].replace(":", "")).append(" è obbligatorio\n");
+                    errors.append("- ").append(labels[i]).append("\n");
                 }
             }
 
             if (!valid) {
-                JOptionPane.showMessageDialog(this,
-                        "Compila tutti i campi obbligatori:\n" + errors.toString(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Insert the following fields:\n" + errors, "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Create registration data and submit
-            String name = nomeField.getText().trim();
-            String surname = cognomeField.getText().trim();
-            String sex = sessoField.getText().trim();
-            String phoneNumber = telefonoField.getText().trim();
-            String stateResidency = statoResidenzaField.getText().trim();
-            String province = provinciaField.getText().trim();
-            String cap = capField.getText().trim();
-            String street = viaField.getText().trim();
-            String streetCode = civicoField.getText().trim();
-            String username = usernameField.getText().trim();
-            String email = emailField.getText().trim();
-            String password = new String(passwordField.getPassword());
-
             if (actionListener != null) {
-                actionListener.onRegisterSubmit(name, surname, sex, phoneNumber, stateResidency, province, cap, street,
-                        streetCode, username, email, password);
+                actionListener.onRegisterSubmit(
+                        fields[0].getText().trim(), fields[1].getText().trim(), fields[2].getText().trim(),
+                        fields[3].getText().trim(), fields[4].getText().trim(), fields[5].getText().trim(),
+                        fields[6].getText().trim(), fields[7].getText().trim(), fields[8].getText().trim(),
+                        fields[9].getText().trim(), fields[10].getText().trim(),
+                        new String(((JPasswordField) fields[11]).getPassword()));
             }
         });
 
@@ -134,12 +108,14 @@ public class RegistrationPanel extends JPanel {
         buttonPanel.add(cancelButton);
         buttonPanel.add(submitButton);
 
+        formPanel.add(buttonPanel, gbc);
+
         JScrollPane scrollPane = new JScrollPane(formPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        scrollPane.setBorder(null);
 
-        add(mainPanel);
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
+        add(contentPanel, BorderLayout.CENTER);
     }
 
     public interface UserActionListener {

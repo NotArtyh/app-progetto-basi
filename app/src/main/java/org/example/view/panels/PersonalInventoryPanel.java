@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +23,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import org.example.view.components.StyledButton;
 import org.example.model.Item;
 import org.example.services.ServiceResult;
+import org.example.view.components.StyledButton;
 
 public class PersonalInventoryPanel extends JPanel {
     private UserActionListener actionListener;
 
-    private static final int GRID_SIZE = 5;
+    private static final int GRID_SIZE = 4;
     private static final int ITEMS_PER_PAGE = GRID_SIZE * GRID_SIZE;
     private int currentPage = 0;
     private List<Item> userItems;
@@ -67,7 +66,7 @@ public class PersonalInventoryPanel extends JPanel {
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
         // Titolo del pannello
-        JLabel titleLabel = new JLabel("Il Mio Inventario Personale", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("My Personal Inventory", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Roboto", Font.BOLD, 24));
         titleLabel.setBorder(new EmptyBorder(0, 0, 20, 0));
         add(titleLabel, BorderLayout.NORTH);
@@ -92,15 +91,15 @@ public class PersonalInventoryPanel extends JPanel {
         // Pannello pulsanti navigazione
         JPanel navigationPanel = new JPanel(new FlowLayout());
 
-        prevButton = new JButton("◀ Precedente");
+        prevButton = new JButton("◀ Back");
         prevButton.setFont(new Font("Roboto", Font.BOLD, 12));
         prevButton.addActionListener(e -> previousPage());
 
-        nextButton = new JButton("Successivo ▶");
+        nextButton = new JButton("Next ▶");
         nextButton.setFont(new Font("Roboto", Font.BOLD, 12));
         nextButton.addActionListener(e -> nextPage());
 
-        pageLabel = new JLabel("Pagina 1 di 1", SwingConstants.CENTER);
+        pageLabel = new JLabel("Page 1 of 1", SwingConstants.CENTER);
         pageLabel.setFont(new Font("Roboto", Font.PLAIN, 12));
 
         navigationPanel.add(prevButton);
@@ -136,7 +135,7 @@ public class PersonalInventoryPanel extends JPanel {
 
         if (userItems == null || userItems.isEmpty()) {
             // Mostra un messaggio se non ci sono item
-            JPanel emptyPanel = createEmptyItemPanel("Nessun item nell'inventario");
+            JPanel emptyPanel = createEmptyItemPanel("No items found in your inventory.");
             gridPanel.add(emptyPanel);
 
             // Riempie il resto della griglia con pannelli vuoti
@@ -196,17 +195,17 @@ public class PersonalInventoryPanel extends JPanel {
             infoPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
             // Condizioni
-            addInfoRow(infoPanel, "Condizioni:", truncateText(item.getCondizioni(), 15));
+            addInfoRow(infoPanel, "Conditions:", truncateText(item.getCondizioni(), 15));
 
             // Note (se presenti)
             if (item.getNote() != null && !item.getNote().trim().isEmpty()) {
-                addInfoRow(infoPanel, "Note:", truncateText(item.getNote(), 15));
+                addInfoRow(infoPanel, "Notes:", truncateText(item.getNote(), 15));
             }
 
             // Data acquisizione
             String formattedDate = item.getData_acquisizione()
                     .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            addInfoRow(infoPanel, "Acquisito:", formattedDate);
+            addInfoRow(infoPanel, "Acquired:", formattedDate);
 
             panel.add(infoPanel, BorderLayout.CENTER);
 
@@ -215,7 +214,7 @@ public class PersonalInventoryPanel extends JPanel {
 
         } catch (Exception e) {
             // In caso di errore, mostra un pannello con errore
-            JLabel errorLabel = new JLabel("<html><center>Errore<br>Item ID: " + item.getItemId() + "</center></html>");
+            JLabel errorLabel = new JLabel("<html><center>Error<br>Item ID: " + item.getItemId() + "</center></html>");
             errorLabel.setForeground(Color.RED);
             errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
             panel.add(errorLabel, BorderLayout.CENTER);
@@ -248,7 +247,7 @@ public class PersonalInventoryPanel extends JPanel {
         panel.setBackground(new Color(250, 250, 250));
         panel.setPreferredSize(new Dimension(200, 150));
 
-        JLabel emptyLabel = new JLabel("Slot vuoto");
+        JLabel emptyLabel = new JLabel("Slot Empty");
         emptyLabel.setForeground(Color.LIGHT_GRAY);
         emptyLabel.setHorizontalAlignment(SwingConstants.CENTER);
         emptyLabel.setFont(new Font("Roboto", Font.ITALIC, 12));
@@ -297,13 +296,13 @@ public class PersonalInventoryPanel extends JPanel {
 
     private String createTooltipText(Item item, String mediaTitle) {
         return "<html>" +
-                "<b>Titolo:</b> " + mediaTitle + "<br>" +
+                "<b>Title:</b> " + mediaTitle + "<br>" +
                 "<b>Item ID:</b> " + item.getItemId() + "<br>" +
                 "<b>Media ID:</b> " + item.getMediaId() + "<br>" +
-                "<b>Condizioni:</b> " + (item.getCondizioni() != null ? item.getCondizioni() : "N/A") + "<br>" +
+                "<b>Conditions:</b> " + (item.getCondizioni() != null ? item.getCondizioni() : "N/A") + "<br>" +
                 "<b>Note:</b> "
-                + (item.getNote() != null && !item.getNote().isEmpty() ? item.getNote() : "Nessuna nota") + "<br>" +
-                "<b>Data Acquisizione:</b> "
+                + (item.getNote() != null && !item.getNote().isEmpty() ? item.getNote() : "No notes") + "<br>" +
+                "<b>Acquired date:</b> "
                 + item.getData_acquisizione().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) +
                 "</html>";
     }
@@ -312,7 +311,7 @@ public class PersonalInventoryPanel extends JPanel {
         int totalPages = userItems != null ? (int) Math.ceil((double) userItems.size() / ITEMS_PER_PAGE) : 1;
         totalPages = Math.max(1, totalPages); // Almeno 1 pagina
 
-        pageLabel.setText("Pagina " + (currentPage + 1) + " di " + totalPages);
+        pageLabel.setText("Page " + (currentPage + 1) + " of " + totalPages);
         prevButton.setEnabled(currentPage > 0);
         nextButton.setEnabled(userItems != null && (currentPage + 1) * ITEMS_PER_PAGE < userItems.size());
     }
@@ -337,7 +336,7 @@ public class PersonalInventoryPanel extends JPanel {
     }
 
     private void showError(String message) {
-        JOptionPane.showMessageDialog(this, message, "Errore", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     // Metodo pubblico per aggiornare l'inventario dall'esterno

@@ -1,10 +1,26 @@
 package org.example.view.panels;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.sql.SQLException;
 import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
 import org.example.database.MediaDAO;
 
 public class AddItemPanel extends JPanel {
@@ -40,7 +56,7 @@ public class AddItemPanel extends JPanel {
         JScrollPane noteScrollPane = new JScrollPane(noteArea);
         noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        String[] labels = { "Title:", "Condition:", "Note:" };
+        String[] labels = { "Title:", "Condition:", "Notes:" };
         Component[] components = { titleComboBox, conditionField, noteScrollPane };
 
         for (int i = 0; i < labels.length; i++) {
@@ -124,7 +140,7 @@ public class AddItemPanel extends JPanel {
             List<String> titles = mediaDAO.getAllTitles();
 
             // Aggiungi un'opzione vuota per default
-            comboBox.addItem("-- Seleziona un titolo --");
+            comboBox.addItem("-- Select a media title --");
 
             // Aggiungi tutti i titoli al combobox
             for (String title : titles) {
@@ -134,12 +150,12 @@ public class AddItemPanel extends JPanel {
         } catch (SQLException e) {
             // Gestisci l'errore mostrando un messaggio
             JOptionPane.showMessageDialog(this,
-                    "Errore nel caricamento dei titoli: " + e.getMessage(),
-                    "Errore Database",
+                    "Error in loading titles: " + e.getMessage(),
+                    "Database Error",
                     JOptionPane.ERROR_MESSAGE);
 
             // Aggiungi almeno un'opzione di default
-            comboBox.addItem("-- Errore nel caricamento --");
+            comboBox.addItem("-- Loading error --");
         }
     }
 

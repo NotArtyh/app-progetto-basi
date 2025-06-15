@@ -1,7 +1,14 @@
 package org.example.view.panels;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import org.example.view.components.StyledButton;
 
@@ -28,8 +35,13 @@ public class OperationsPanel extends JPanel {
 
         // Create buttons
         JButton addItemButton = new StyledButton("➕", "Add Item");
+        styleLargeButton(addItemButton);
+
         JButton viewInventoryButton = new StyledButton("👀", "View Inventory");
-        JButton tradeButton = new StyledButton("🤝", "Trade");
+        styleLargeButton(viewInventoryButton);
+
+        JButton tradeStatusButton = new StyledButton("🤝", "Trade Status");
+        styleLargeButton(tradeStatusButton);
 
         // Add action listeners
         addItemButton.addActionListener(e -> {
@@ -40,9 +52,9 @@ public class OperationsPanel extends JPanel {
             if (actionListener != null)
                 actionListener.onViewInventory();
         });
-        tradeButton.addActionListener(e -> {
+        tradeStatusButton.addActionListener(e -> {
             if (actionListener != null)
-                actionListener.onTradeItem();
+                actionListener.onTradeStatus();
         });
 
         // Add buttons as veritcal "list"
@@ -50,7 +62,7 @@ public class OperationsPanel extends JPanel {
         buttonPanel.add(Box.createVerticalStrut(10));
         buttonPanel.add(viewInventoryButton);
         buttonPanel.add(Box.createVerticalStrut(10));
-        buttonPanel.add(tradeButton);
+        buttonPanel.add(tradeStatusButton);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;
@@ -59,11 +71,16 @@ public class OperationsPanel extends JPanel {
         add(buttonPanel, gbc);
     }
 
+    // Metodo per applicare stile più grande
+    public void styleLargeButton(JButton button) {
+        button.setMargin(new Insets(10, 20, 10, 20)); // Padding interno
+    }
+
     public interface UserActionListener {
         void onAddItem();
 
         void onViewInventory();
 
-        void onTradeItem();
+        void onTradeStatus();
     }
 }

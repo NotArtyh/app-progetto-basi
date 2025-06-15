@@ -5,9 +5,9 @@ import org.example.view.ViewManager;
 import org.example.view.panels.AddItemPanel;
 import org.example.view.panels.LogInPanel;
 import org.example.view.panels.OperationsPanel;
-import org.example.view.panels.PersonalInventoryPanel;
 import org.example.view.panels.RegistrationPanel;
 import org.example.view.panels.SignInPanel;
+import org.example.view.panels.TradeRequestsPanel;
 
 public class AppController {
     private final ViewManager viewManager;
@@ -51,6 +51,7 @@ public class AppController {
             public void onLoginSubmit(String username, String password) {
                 // Call the UserController for handling the auth
                 userController.handleUserAuthentication(username, password);
+
             }
 
             public void onLoginCancel() {
@@ -91,8 +92,10 @@ public class AppController {
                 // inventoryController.handleInventoryDisplay(SessionManager.getInstance().getCurrenUser().getUserId());
             }
 
-            public void onTradeItem() {
-                // change view to trade panel
+            public void onTradeStatus() {
+                // change view to trade status panel
+                inventoryController.handleTradeRequestStatusUpdate();
+                viewManager.show("tradeRequests");
             }
         });
 

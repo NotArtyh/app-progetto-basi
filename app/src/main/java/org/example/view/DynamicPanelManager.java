@@ -4,27 +4,24 @@ import org.example.view.components.UserBar;
 import org.example.view.panels.HomePanel;
 import org.example.view.panels.OperationsPanel;
 import org.example.view.panels.PersonalInventoryPanel;
+import org.example.view.panels.TradePanel;
+import org.example.view.panels.TradeRequestsPanel;
 import org.example.view.panels.UsersInventoryPanel;
 
 public class DynamicPanelManager {
     private ViewManager viewManager;
 
     private UserBar userBar;
-    private UsersInventoryPanel usersInventoryPanel;
     private OperationsPanel operationsPanel;
     private HomePanel homePanel;
 
+    private TradeRequestsPanel tradeRequestsPanel;
     private PersonalInventoryPanel personalInventoryPanel;
+    private UsersInventoryPanel usersInventoryPanel;
+    private TradePanel tradePanel;
 
     public DynamicPanelManager(ViewManager viewManager) {
         this.viewManager = viewManager;
-
-        this.userBar = new UserBar();
-        this.usersInventoryPanel = new UsersInventoryPanel();
-        this.operationsPanel = new OperationsPanel();
-        this.homePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel);
-
-        this.personalInventoryPanel = new PersonalInventoryPanel();
     }
 
     // ------ Home panel
@@ -58,5 +55,25 @@ public class DynamicPanelManager {
 
     public void updatePersonalInventoryPanel() {
         viewManager.updatePanel("inventory", personalInventoryPanel);
+    }
+
+    // ------ Trade panel
+
+    public void setTradePanel(TradePanel tradePanel) {
+        this.tradePanel = tradePanel;
+    }
+
+    public void updateTradePanel() {
+        viewManager.updatePanel("trade", tradePanel);
+    }
+
+    // ----- Trade requests panel
+
+    public void setTradeRequestsPanel(TradeRequestsPanel tradeRequestsPanel) {
+        this.tradeRequestsPanel = tradeRequestsPanel;
+    }
+
+    public void updateTradeRequestsPanel() {
+        viewManager.updatePanel("tradeRequests", tradeRequestsPanel);
     }
 }

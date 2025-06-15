@@ -13,11 +13,15 @@ public class MainFrame extends JFrame {
     }
 
     private void initializeFrame() {
-        setTitle("👨‍🌾");
+        setTitle("💿");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1024, 800);
         setLocationRelativeTo(null);
         setResizable(true);
+
+        // Set icon image
+        ImageIcon icon = new ImageIcon(getClass().getResource("/images/icon.png"));
+        setIconImage(icon.getImage());
     }
 
     private void setupLayout() {
