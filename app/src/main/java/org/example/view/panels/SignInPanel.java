@@ -3,6 +3,7 @@ package org.example.view.panels;
 import javax.swing.*;
 import java.awt.*;
 
+import org.example.view.components.ImagePanel;
 import org.example.view.components.StyledButton;
 
 /*
@@ -13,7 +14,7 @@ public class SignInPanel extends JPanel {
     private UserActionListener actionListener;
 
     public SignInPanel() {
-        setLayout(new GridBagLayout());
+        setLayout(new GridLayout(1, 2));
         createSignInPanel();
     }
 
@@ -23,11 +24,15 @@ public class SignInPanel extends JPanel {
 
     private void createSignInPanel() {
         // Main button panel with vertical layout
+        JPanel rightPanel = new JPanel(new GridBagLayout());
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Call the headerComponent for adding a header to this button section
+        // call the image panel to set the left side immage
+        JPanel landingPanel = new ImagePanel("landing.png");
+        landingPanel.setLayout(new GridBagLayout()); // To center the image
+        add(landingPanel);
 
         // Create buttons
         JButton registrationButton = new StyledButton("👤", "Registration");
@@ -66,8 +71,9 @@ public class SignInPanel extends JPanel {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.CENTER;
-        add(buttonPanel, gbc);
-        // Here we should implement the imagePanel to have the view as 
+        rightPanel.add(buttonPanel, gbc);
+        add(rightPanel);
+        // Here we should implement the imagePanel to have the view as
         // we used to but it isn't really important as of now
     }
 
