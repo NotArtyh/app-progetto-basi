@@ -13,9 +13,9 @@ public class DynamicPanelManager {
 
     private UserBar userBar;
     private OperationsPanel operationsPanel;
-    private TradeRequestsPanel tradeRequestsPanel;
     private HomePanel homePanel;
 
+    private TradeRequestsPanel tradeRequestsPanel;
     private PersonalInventoryPanel personalInventoryPanel;
     private UsersInventoryPanel usersInventoryPanel;
     private TradePanel tradePanel;
@@ -38,12 +38,8 @@ public class DynamicPanelManager {
         this.operationsPanel = operationsPanel;
     }
 
-     public void setTradeRequestsPanel(TradeRequestsPanel tradeRequestsPanel) {
-        this.tradeRequestsPanel = tradeRequestsPanel;
-    }
-
     public void updateHomePanel() {
-        HomePanel updatedHomePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel, tradeRequestsPanel);
+        HomePanel updatedHomePanel = new HomePanel(userBar, usersInventoryPanel, operationsPanel);
         viewManager.updatePanel("home", updatedHomePanel);
     }
 
@@ -71,4 +67,13 @@ public class DynamicPanelManager {
         viewManager.updatePanel("trade", tradePanel);
     }
 
+    // ----- Trade requests panel
+
+    public void setTradeRequestsPanel(TradeRequestsPanel tradeRequestsPanel) {
+        this.tradeRequestsPanel = tradeRequestsPanel;
+    }
+
+    public void updateTradeRequestsPanel() {
+        viewManager.updatePanel("tradeRequests", tradeRequestsPanel);
+    }
 }
