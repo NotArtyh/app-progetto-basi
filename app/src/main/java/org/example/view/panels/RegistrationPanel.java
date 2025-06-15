@@ -43,15 +43,15 @@ public class RegistrationPanel extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
 
         JPanel contentPanel = new JPanel(new BorderLayout());
-        
 
         JPanel formPanel = new JPanel(new GridBagLayout());
-        
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.anchor = GridBagConstraints.WEST;
 
-        String[] labels = { "Name:", "Surname:", "Sex (M/F):", "Phone:", "State:", "Province:", "CAP:", "Street:", "Civic No:", "Username:", "Email:", "Password:" };
+        String[] labels = { "Name:", "Surname:", "Sex (M/F):", "Phone:", "State:", "Province:", "CAP:", "Street:",
+                "Civic No:", "Username:", "Email:", "Password:" };
         JTextField[] fields = new JTextField[labels.length];
 
         for (int i = 0; i < labels.length; i++) {
@@ -70,10 +70,9 @@ public class RegistrationPanel extends JPanel {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.EAST;
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        JButton submitButton = new StyledButton("","Register");
-        JButton cancelButton = new StyledButton("","Cancel");
+        JButton submitButton = new StyledButton("", "Register");
+        JButton cancelButton = new StyledButton("", "Cancel");
 
-        
         submitButton.addActionListener(e -> {
             boolean valid = true;
             StringBuilder errors = new StringBuilder();
@@ -86,7 +85,8 @@ public class RegistrationPanel extends JPanel {
             }
 
             if (!valid) {
-                JOptionPane.showMessageDialog(this, "Insert the following fields:\n" + errors, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Insert the following fields:\n" + errors, "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -96,13 +96,13 @@ public class RegistrationPanel extends JPanel {
                         fields[3].getText().trim(), fields[4].getText().trim(), fields[5].getText().trim(),
                         fields[6].getText().trim(), fields[7].getText().trim(), fields[8].getText().trim(),
                         fields[9].getText().trim(), fields[10].getText().trim(),
-                        new String(((JPasswordField) fields[11]).getPassword())
-                );
+                        new String(((JPasswordField) fields[11]).getPassword()));
             }
         });
 
         cancelButton.addActionListener(e -> {
-            if (actionListener != null) actionListener.onRegisterCancel();
+            if (actionListener != null)
+                actionListener.onRegisterCancel();
         });
 
         buttonPanel.add(cancelButton);
@@ -118,12 +118,10 @@ public class RegistrationPanel extends JPanel {
         add(contentPanel, BorderLayout.CENTER);
     }
 
-    
-
     public interface UserActionListener {
         void onRegisterSubmit(String name, String surname, String sex, String phoneNumber, String stateResidency,
-                              String province, String cap, String street, String streetCode, String username, String email,
-                              String password);
+                String province, String cap, String street, String streetCode, String username, String email,
+                String password);
 
         void onRegisterCancel();
     }
