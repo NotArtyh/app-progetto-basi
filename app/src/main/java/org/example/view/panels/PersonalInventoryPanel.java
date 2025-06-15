@@ -30,7 +30,7 @@ import org.example.view.components.StyledButton;
 public class PersonalInventoryPanel extends JPanel {
     private UserActionListener actionListener;
 
-    private static final int GRID_SIZE = 5;
+    private static final int GRID_SIZE = 4;
     private static final int ITEMS_PER_PAGE = GRID_SIZE * GRID_SIZE;
     private int currentPage = 0;
     private List<Item> userItems;
