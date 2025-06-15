@@ -1,17 +1,21 @@
 package org.example.view.panels;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import java.awt.*;
-import java.awt.event.MouseAdapter;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -20,7 +24,6 @@ import javax.swing.border.EmptyBorder;
 import org.example.model.Item;
 import org.example.model.User;
 import org.example.services.ServiceResult;
-import java.awt.event.MouseEvent;
 
 public class TradePanel extends JPanel {
     private UserActionListener actionListener;
@@ -171,9 +174,21 @@ public class TradePanel extends JPanel {
         tradeButton.setForeground(Color.BLACK);
         tradeButton.setFocusPainted(false);
         tradeButton.addActionListener(e -> {
-            if (actionListener != null)
-                actionListener.onTrade(offeredItems, wantedItems);
-        });
+        if (actionListener != null) {
+        actionListener.onTrade(offeredItems, wantedItems);
+        
+        // Mostra messaggio di conferma
+        JOptionPane.showMessageDialog(
+            TradePanel.this,
+            "Richiesta di scambio inviata!",
+            "Conferma",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+
+        // Torna alla home
+        actionListener.onExit();
+    }
+});
 
         controlPanel.add(exitButton, BorderLayout.WEST);
         controlPanel.add(tradeButton, BorderLayout.EAST);
