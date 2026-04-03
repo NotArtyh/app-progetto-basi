@@ -1,0 +1,63 @@
+Ecco l'elenco delle caratteristiche implementative e logiche di questa app:
+
+## Caratteristiche Implementative
+
+### Architettura
+- **Pattern MVC** con separazione tra Model, View e Controller
+- **Struttura a layer**: DAO → Service → Controller → View
+- **Singleton Pattern**: `SessionManager` per gestire la sessione utente
+- **Dependency Injection**: I controller ricevono i service come dipendenze
+
+### Database
+- **MySQL** con JDBC connector
+- **Connection Pooling** tramite `DatabaseConnection`
+- **PreparedStatement** per prevenire SQL injection
+- **Transazioni** per operazioni atomiche (es. registrazione utente)
+
+### UI (Java Swing)
+- **CardLayout** per navigazione tra pannelli
+- **Componenti riutilizzabili**: `StyledButton`, `UserBar`, `SquareImagePanel`, `CircularImagePanel`
+- **Dynamic Panel Management**: i pannelli vengono creati on-demand
+
+### Autenticazione e Gestione Utenti
+- **Registrazione** con validazione email (regex)
+- **Login** con verifica username/password
+- **Sessione utente** tracciata globalmente
+- **Logout** con cleanup della sessione
+- **Dati personali**: nome, cognome, sesso, telefono, indirizzo
+
+### Sistema di Inventario
+- Ogni utente ha un **inventario personale**
+- Inventari **pubblici/privati**
+- **Aggiunta item** al proprio inventario
+- **Visualizzazione** inventari di altri utenti
+
+### Sistema di Scambio (Trade)
+- Richieste di scambio tra utenti
+- Selezione **item offerti** e **item richiesti**
+- Stato dello scambio: "Pending"
+- Tracciamento **data dello scambio**
+
+## Caratteristiche Logiche
+
+### Gestione Utenti
+- Livelli utente (`livello` field)
+- Un utente è legato a: `PersonalData` + `Inventory`
+- Validazione campi obbligatori
+
+### Gestione Item/Media
+- Ogni item è legato a un `Media` (titolo, formato, foto)
+- **Condizioni** e **note** per ogni item
+- **Data acquisizione** automatica
+
+### Flusso Applicativo
+1. **SignIn** → Login o Registrazione
+2. **Home** → Dashboard con inventari + operazioni
+3. Operazioni: Aggiungi item, Visualizza inventario personale, Visualizza richieste scambio
+
+### Servizi
+- `UserService`: autenticazione, registrazione, logout
+- `ItemService`: gestione item
+- `InventoryService`: gestione inventari
+- `TradeService`: gestione scambi
+- `UsersInventoryService`: visualizzazione inventari altrui
